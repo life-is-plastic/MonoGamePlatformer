@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 
 namespace Engine.Core;
@@ -38,5 +39,28 @@ public abstract partial class Component
     protected Entity StageCreate(string name)
     {
         return Scene.EntityChangelist.StageCreate(name);
+    }
+
+    /// <summary>
+    /// Finds an entity containing all the given component types (and at the default component
+    /// index), and returns a handle to it. If there are multiple candidate entities, there is no
+    /// guarantee which one is chosen.
+    /// </summary>
+    protected EntityHandle? FindEntity(params ReadOnlySpan<Type> componentTypes)
+    {
+        foreach (var entity in Scene.Entities)
+        {
+            foreach (var type in componentTypes)
+            {
+                if (!entity.Has(type, DefaultIndex))
+                {
+                    goto NextEntity;
+                }
+            }
+            return new(entity);
+            NextEntity:
+            ;
+        }
+        return null;
     }
 }

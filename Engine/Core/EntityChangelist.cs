@@ -11,7 +11,9 @@ namespace Engine.Core;
 /// </summary>
 public class EntityChangelist
 {
-    private int _nextEntityId = 1;
+    public const int FirstEntityId = 1;
+
+    private int _nextEntityId = FirstEntityId;
     private readonly Scene _scene;
     private readonly IndexedSet<IEntitySyncer> _syncers = new();
 
@@ -85,6 +87,7 @@ public class EntityChangelist
         ProcessRemovals(entities, entityUpdater);
         ProcessAdditions(entities, entityUpdater);
         Sync();
+        DisposeDestroyed();
         Clear();
     }
 
@@ -141,6 +144,14 @@ public class EntityChangelist
         foreach (var syncer in _syncers)
         {
             syncer.Sync(this);
+        }
+    }
+
+    private void DisposeDestroyed()
+    {
+        foreach (IDisposable entity in _destroyed)
+        {
+            entity.Dispose();
         }
     }
 

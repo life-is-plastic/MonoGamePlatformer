@@ -5,7 +5,7 @@ namespace Engine.Core;
 
 public class Game : Microsoft.Xna.Framework.Game
 {
-    private Scene _scene = null!;
+    private Scene? _scene;
 
     public Scene? NextScene { get; set; }
 
@@ -28,19 +28,18 @@ public class Game : Microsoft.Xna.Framework.Game
 
         if (NextScene is not null)
         {
-            var nextScene = NextScene;
-            NextScene = null;
-            _scene?.Dispose();
-            _scene = nextScene;
+            IDisposable? oldScene = _scene;
+            (_scene, NextScene) = (NextScene, null);
+            oldScene?.Dispose();
             GC.Collect();
             _scene.Initialize(this, gameTime);
         }
-        _scene.Update(gameTime);
+        _scene!.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
     {
         base.Draw(gameTime);
-        _scene.Draw();
+        _scene!.Draw();
     }
 }

@@ -7,29 +7,32 @@ namespace Engine.Core;
 
 /// <summary>
 /// A dictionary of components, keyed by (concrete type, index) pairs. Index facilitates attaching
-/// multiple instances of the same component type. Avoid attaching/detaching/lookups with index if a
-/// component should only appear at most once per entity.
+/// multiple instances of the same component type.
+/// <para>Avoid attaches/detaches/lookups with index if a component is intended to only appear once
+/// per entity.</para>
+/// <para>Note that after an entity is destroyed, its internal fields will all be set to null, so
+/// its methods will stop working.</para>
 /// </summary>
-public class Entity
+public partial class Entity
 {
-    private readonly Dictionary<(Type, int), IComponent> _components = new();
+    private Dictionary<(Type, int), IComponent> _components = new();
 
     public Dictionary<(Type, int), IComponent>.ValueCollection Components => _components.Values;
 
     /// <summary>
     /// The scene owning this entity.
     /// </summary>
-    public Scene Scene { get; }
+    public Scene Scene { get; private set; }
 
     /// <summary>
     /// Uniquely identifies this entity within its containing scene.
     /// </summary>
-    public int Id { get; }
+    public int Id { get; private set; }
 
     /// <summary>
     /// Human readable name for debugging.
     /// </summary>
-    public string Name { get; }
+    public string Name { get; private set; }
 
     public Entity(Scene scene, int id, string name)
     {
@@ -159,5 +162,17 @@ public class Entity
     {
         Debug.Assert(Get(component.GetType(), component.ComponentIndex) == component);
         _components.RemoveOrDie((component.GetType(), component.ComponentIndex));
+    }
+}
+
+public partial class Entity : IDisposable
+{
+    void IDisposable.Dispose()
+    {
+        _components = null!;
+        Scene = null!;
+        Id = EntityChangelist.FirstEntityId - 1;
+        Name = null!;
+        GC.SuppressFinalize(this);
     }
 }

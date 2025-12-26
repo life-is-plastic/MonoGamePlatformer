@@ -103,7 +103,7 @@ public abstract partial class Scene : IDisposable
         Dispose(false);
     }
 
-    public void Dispose()
+    void IDisposable.Dispose()
     {
         Dispose(true);
         GC.SuppressFinalize(this);
