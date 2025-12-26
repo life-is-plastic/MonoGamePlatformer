@@ -42,15 +42,15 @@ public class EntityChangelist
     }
 
     /// <summary>
-    /// Stages an entity to be destroyed at the beginning of the next frame. Within a frame, this
-    /// method is idempotent.
+    /// Stages an entity to be destroyed at the beginning of the next frame. This method is
+    /// idempotent when called multiple times in the same frame.
     /// </summary>
     public void StageDestroy(Entity entity)
     {
         _destroyed.Add(entity);
-        foreach (var ((_, index), component) in entity)
+        foreach (var (_, component) in entity)
         {
-            StageDetach(entity, component.GetType(), index);
+            StageDetach(entity, component);
         }
     }
 
@@ -59,20 +59,21 @@ public class EntityChangelist
     /// components of the same (type, index) are staged during the same frame, the final component
     /// will be the one actually attached.
     /// </summary>
-    public void StageAttach(Entity entity, IComponent component, int index)
+    public void StageAttach(Entity entity, IComponent component)
     {
-        Debug.Assert(!entity.Has(component.GetType(), index));
-        _attached[(entity, component.GetType(), index)] = component;
+        Debug.Assert(!entity.Has(component.GetType(), component.ComponentIndex));
+        _attached[(entity, component.GetType(), component.ComponentIndex)] = component;
         component.SetEntity(entity);
     }
 
     /// <summary>
-    /// Stages the given component to be detached at the beginning of the next frame. Within a
-    /// frame, this method is idempotent.
+    /// Stages the given component to be detached at the beginning of the next frame. This method is
+    /// idempotent when called multiple times in the same frame.
     /// </summary>
-    public void StageDetach(Entity entity, Type type, int index)
+    public void StageDetach(Entity entity, IComponent component)
     {
-        _detached[(entity, type, index)] = entity.Get(type, index);
+        Debug.Assert(entity.Get(component.GetType(), component.ComponentIndex) == component);
+        _detached[(entity, component.GetType(), component.ComponentIndex)] = component;
     }
 
     /// <summary>
@@ -93,9 +94,9 @@ public class EntityChangelist
         {
             entities.AddOrDie(entity);
         }
-        foreach (var ((entity, _, index), component) in _attached)
+        foreach (var ((entity, _, _), component) in _attached)
         {
-            entity.ImmediatelyAttach(component, index);
+            entity.ImmediatelyAttach(component);
         }
         foreach (var component in _attached.Values)
         {
@@ -125,9 +126,9 @@ public class EntityChangelist
                 _syncers.RemoveOrDie(syncer);
             }
         }
-        foreach (var (entity, type, index) in _detached.Keys)
+        foreach (var ((entity, _, _), component) in _detached)
         {
-            entity.ImmediatelyDetach(type, index);
+            entity.ImmediatelyDetach(component);
         }
         foreach (var entity in _destroyed)
         {

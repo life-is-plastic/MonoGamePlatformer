@@ -12,6 +12,12 @@ public interface IComponent
     public Entity Entity { get; }
 
     /// <summary>
+    /// Forms, together with component type, a composite key that uniquely identifies this component
+    /// within its owning entity.
+    /// </summary>
+    public int ComponentIndex { get; }
+
+    /// <summary>
     /// This gets called on staging the component for attachment, and should not be called again
     /// from thereon.
     /// </summary>

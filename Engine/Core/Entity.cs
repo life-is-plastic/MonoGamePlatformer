@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Engine.Util.Extensions;
 
 namespace Engine.Core;
 
@@ -11,8 +12,6 @@ namespace Engine.Core;
 /// </summary>
 public class Entity
 {
-    private const int DefaultIndex = int.MinValue;
-
     private readonly Dictionary<(Type, int), IComponent> _components = new();
 
     public Dictionary<(Type, int), IComponent>.ValueCollection Components => _components.Values;
@@ -52,7 +51,7 @@ public class Entity
     public bool Has<T>()
         where T : IComponent
     {
-        return Has<T>(DefaultIndex);
+        return Has<T>(Component.DefaultIndex);
     }
 
     public bool Has<T>(int index)
@@ -70,7 +69,7 @@ public class Entity
     public T Get<T>()
         where T : IComponent
     {
-        return Get<T>(DefaultIndex);
+        return Get<T>(Component.DefaultIndex);
     }
 
     public T Get<T>(int index)
@@ -86,14 +85,14 @@ public class Entity
             return component;
         }
         throw new ArgumentException(
-            $"{this} does not have a component of type {type}{(index == DefaultIndex ? "" : $" at index {index}")}"
+            $"{this} does not have a component of type {type}{(index == Component.DefaultIndex ? "" : $" at index {index}")}"
         );
     }
 
     public T? MaybeGet<T>()
         where T : IComponent
     {
-        return MaybeGet<T>(DefaultIndex);
+        return MaybeGet<T>(Component.DefaultIndex);
     }
 
     public T? MaybeGet<T>(int index)
@@ -108,29 +107,15 @@ public class Entity
         return _components.TryGetValue((type, index), out var component) ? component : null;
     }
 
-    public Entity StageAttach<T>(T component)
-        where T : IComponent
+    public Entity StageAttach(IComponent component)
     {
-        return StageAttach(component, DefaultIndex);
-    }
-
-    public Entity StageAttach<T>(T component, int index)
-        where T : IComponent
-    {
-        Scene.EntityChangelist.StageAttach(this, component, index);
+        Scene.EntityChangelist.StageAttach(this, component);
         return this;
     }
 
-    public Entity StageDetach<T>()
-        where T : IComponent
+    public Entity StageDetach(IComponent component)
     {
-        return StageDetach<T>(DefaultIndex);
-    }
-
-    public Entity StageDetach<T>(int index)
-        where T : IComponent
-    {
-        Scene.EntityChangelist.StageDetach(this, typeof(T), index);
+        Scene.EntityChangelist.StageDetach(this, component);
         return this;
     }
 
@@ -156,13 +141,13 @@ public class Entity
     /// Immediately attaches a component to this entity without integrating the component with the
     /// scene.
     /// </summary>
-    public void ImmediatelyAttach(IComponent component, int index)
+    public void ImmediatelyAttach(IComponent component)
     {
         Debug.Assert(component.Entity == this);
-        var added = _components.TryAdd((component.GetType(), index), component);
+        var added = _components.TryAdd((component.GetType(), component.ComponentIndex), component);
         Debug.Assert(
             added,
-            $"{this} already has a component of type {component.GetType()}{(index == DefaultIndex ? "" : $" at index {index}")}"
+            $"{this} already has a component of type {component.GetType()}{(component.ComponentIndex == Component.DefaultIndex ? "" : $" at index {component.ComponentIndex}")}"
         );
     }
 
@@ -170,12 +155,9 @@ public class Entity
     /// Immediately attaches a component to this entity without cleaning up the component from the
     /// scene.
     /// </summary>
-    public void ImmediatelyDetach(Type type, int index)
+    public void ImmediatelyDetach(IComponent component)
     {
-        var removed = _components.Remove((type, index));
-        Debug.Assert(
-            removed,
-            $"{this} does not have a component of type {type}{(index == DefaultIndex ? "" : $" at index {index}")}"
-        );
+        Debug.Assert(Get(component.GetType(), component.ComponentIndex) == component);
+        _components.RemoveOrDie((component.GetType(), component.ComponentIndex));
     }
 }

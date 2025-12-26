@@ -7,18 +7,16 @@ namespace Engine.Core;
 /// </summary>
 public abstract partial class Component : IComponent
 {
-    public Entity Entity { get; private set; } = null!;
+    public const int DefaultIndex = int.MinValue;
 
-    // Only allow setting once.
-    protected virtual void SetEntity(Entity entity)
-    {
-        Debug.Assert(Entity is null);
-        Entity = entity;
-    }
+    public Entity Entity { get; private set; } = null!;
+    public int ComponentIndex { get; init; } = DefaultIndex;
 
     void IComponent.SetEntity(Entity entity)
     {
-        SetEntity(entity);
+        // Only allow setting once.
+        Debug.Assert(Entity is null);
+        Entity = entity;
     }
 
     public virtual void Begin() { }

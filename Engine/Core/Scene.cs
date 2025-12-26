@@ -52,6 +52,8 @@ public abstract partial class Scene
     /// </summary>
     public float DeltaTime => (float)GameTime.ElapsedGameTime.TotalSeconds;
 
+    public float TotalTime => (float)GameTime.TotalGameTime.TotalSeconds;
+
     /// <summary>
     /// Initializes scene fields and creates required singleton components.
     /// </summary>

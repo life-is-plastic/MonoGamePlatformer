@@ -18,7 +18,10 @@ public class DevScene : Scene
     {
         Singletons.StageAttach(new DevSceneController());
 
-        EntityChangelist.StageCreate(nameof(RectRenderer)).StageAttach(new RectRenderer());
+        EntityChangelist
+            .StageCreate(nameof(RectRenderer))
+            .StageAttach(new RectRenderer(new Rectangle(100, 100, 60, 80)))
+            .StageAttach(new RectRenderer(new Rectangle(200, 100, 50, 90)) { ComponentIndex = 0 });
 
         Singletons.Get<AudioManager>().Play(Content.Load<SoundEffect>("Audio/Theme"), loop: true);
     }
@@ -44,9 +47,15 @@ internal class DevSceneController : Component, IUpdatable
 internal class RectRenderer : Component, IRenderer
 {
     private Texture2D _pixel = null!;
+    private Rectangle _dst;
 
     public int DrawOrder => 0;
     public bool IsVisible { get; set; } = true;
+
+    public RectRenderer(Rectangle dst)
+    {
+        _dst = dst;
+    }
 
     public override void Begin()
     {
@@ -58,10 +67,10 @@ internal class RectRenderer : Component, IRenderer
     {
         spriteBatch.Draw(
             _pixel,
-            destinationRectangle: new Rectangle(100, 100, 60, 80),
+            destinationRectangle: _dst,
             sourceRectangle: new Rectangle(0, 0, 1, 1),
             Color.White,
-            rotation: MathF.PI / 4,
+            rotation: Scene.TotalTime,
             origin: new(),
             SpriteEffects.None,
             layerDepth: 0
