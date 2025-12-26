@@ -1,0 +1,10 @@
+{
+    "overrides": {
+        "*/*.ogg": {
+            "processor": "SoundEffectProcessor"
+        },
+        "*/*.fnt": {
+            "copy": true
+        }
+    }
+}

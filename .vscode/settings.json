@@ -1,0 +1,8 @@
+{
+    "dotnet.defaultSolution": "Project.slnx",
+    "rewrap.wrappingColumn": 100,
+    "files.exclude": {
+        "**/bin": true,
+        "**/obj": true
+    }
+}
