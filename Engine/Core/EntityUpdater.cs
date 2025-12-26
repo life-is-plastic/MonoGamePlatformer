@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
-using Engine.Util;
+using Engine.Util.Collections;
 using Engine.Util.Extensions;
 
 namespace Engine.Core;
@@ -64,16 +64,15 @@ public class EntityUpdater
         }
         else
         {
+            foreach (var updatable in _paused)
+            {
+                _active.AddOrDie(updatable);
+            }
+            _paused.Clear();
             foreach (var updatable in _active)
             {
                 updatable.Unpause();
             }
-            foreach (var updatable in _paused)
-            {
-                updatable.Unpause();
-                _active.AddOrDie(updatable);
-            }
-            _paused.Clear();
         }
         IsPaused = shouldPause;
     }

@@ -6,7 +6,7 @@ namespace Engine.Util;
 /// <summary>
 /// Converts between 1D coordinates and row-major 2D coordinates.
 /// </summary>
-public readonly record struct GridUtil
+public readonly record struct GridHelper
 {
     public int Rows { get; }
     public int Columns { get; }
@@ -39,7 +39,7 @@ public readonly record struct GridUtil
 
     public int this[(int Row, int Column) rc] => this[rc.Row, rc.Column];
 
-    public GridUtil(int rows, int columns)
+    public GridHelper(int rows, int columns)
     {
         Debug.Assert(rows > 0);
         Debug.Assert(columns > 0);

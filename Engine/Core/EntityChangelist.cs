@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Engine.Util;
+using Engine.Util.Collections;
 
 namespace Engine.Core;
 
+/// <summary>
+/// A staging area for entity/component additions/removals, which are applied at the beginning of
+/// the next frame.
+/// </summary>
 public class EntityChangelist
 {
     private int _nextEntityId = 1;
@@ -71,6 +75,10 @@ public class EntityChangelist
         _detached[(entity, type, index)] = entity.Get(type, index);
     }
 
+    /// <summary>
+    /// Writes staged changes to the given entity set and entity updater, then clears the internal
+    /// staging areas.
+    /// </summary>
     public void Apply(in IndexedSet<Entity> entities, EntityUpdater entityUpdater)
     {
         ProcessRemovals(entities, entityUpdater);

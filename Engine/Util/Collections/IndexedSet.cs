@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Engine.Util;
+namespace Engine.Util.Collections;
 
 /// <summary>
 /// A set where insertion, deletion, lookup by item, and lookup by index all perform in O(1). Items

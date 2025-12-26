@@ -5,20 +5,20 @@ namespace Engine.Graphics;
 
 public readonly record struct TextureSheet
 {
-    private readonly GridUtil _gridUtil;
+    private readonly GridHelper _gridHelper;
 
     public TextureRegion TextureRegion { get; }
-    public int Rows => _gridUtil.Rows;
-    public int Columns => _gridUtil.Columns;
-    public int FrameCount => _gridUtil.Count;
-    public int FrameWidth => TextureRegion.Region.Width / _gridUtil.Columns;
-    public int FrameHeight => TextureRegion.Region.Height / _gridUtil.Rows;
+    public int Rows => _gridHelper.Rows;
+    public int Columns => _gridHelper.Columns;
+    public int FrameCount => _gridHelper.Count;
+    public int FrameWidth => TextureRegion.Region.Width / _gridHelper.Columns;
+    public int FrameHeight => TextureRegion.Region.Height / _gridHelper.Rows;
     public Point FrameSize => new(FrameWidth, FrameHeight);
 
     /// <summary>
     /// Gets the frame at the given index.
     /// </summary>
-    public TextureRegion this[int index] => this[_gridUtil[index]];
+    public TextureRegion this[int index] => this[_gridHelper[index]];
 
     /// <summary>
     /// Gets the frame at the given row-column pair.
@@ -31,7 +31,7 @@ public readonly record struct TextureSheet
 
     public TextureSheet(in TextureRegion textureRegion, int rows, int columns)
     {
-        _gridUtil = new(rows, columns);
+        _gridHelper = new(rows, columns);
         TextureRegion = textureRegion;
     }
 }

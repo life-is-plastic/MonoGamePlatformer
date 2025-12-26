@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using Engine.Core;
 using Engine.Graphics;
 using Engine.Input;
-using Engine.Util;
+using Engine.Util.Collections;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;

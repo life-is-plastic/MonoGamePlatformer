@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Engine.Core;
 using Engine.Util;
+using Engine.Util.Collections;
 using Engine.Util.Extensions;
 using Microsoft.Xna.Framework;
 

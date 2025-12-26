@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 namespace Engine.Util;
 
 /// <summary>
-/// Like <c>Microsoft.Xna.Framework.Rectangle</c> but uses float data.
+/// Like <c>Microsoft.Xna.Framework.Rectangle</c> but uses floats underneath.
 /// </summary>
 public readonly record struct RectangleF
 {

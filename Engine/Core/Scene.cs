@@ -4,7 +4,7 @@ using Engine.Graphics;
 using Engine.Input;
 using Engine.Physics;
 using Engine.UI;
-using Engine.Util;
+using Engine.Util.Collections;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 

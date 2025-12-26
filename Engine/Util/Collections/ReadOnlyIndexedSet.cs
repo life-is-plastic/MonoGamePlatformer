@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Engine.Util;
+namespace Engine.Util.Collections;
 
 /// <summary>
 /// A read-only view over an <c>IndexedSet</c>.
