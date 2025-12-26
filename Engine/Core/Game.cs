@@ -1,24 +1,17 @@
 using System;
-using Engine.Graphics;
 using Microsoft.Xna.Framework;
 
 namespace Engine.Core;
 
 public class Game : Microsoft.Xna.Framework.Game
 {
-    private readonly GraphicsDeviceManager _graphicsDeviceManager;
     private Scene _scene = null!;
 
     public Scene? NextScene { get; set; }
 
     public Game(Scene initialScene)
     {
-        _graphicsDeviceManager = new GraphicsDeviceManager(this)
-        {
-            PreferredBackBufferWidth = RenderManager.RenderWidth,
-            PreferredBackBufferHeight = RenderManager.RenderHeight,
-        };
-        _graphicsDeviceManager.ApplyChanges();
+        _ = new GraphicsDeviceManager(this);
 
         Window.Title = "MonoGame Platformer";
         Window.AllowUserResizing = true;

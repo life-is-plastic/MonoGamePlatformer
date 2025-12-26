@@ -15,6 +15,11 @@ public interface IRenderer : IComponent
         public Effect? Effect = null;
 
         public DrawOptions() { }
+
+        public readonly void Begin(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Begin(samplerState: SamplerState, effect: Effect);
+        }
     }
 
     /// <summary>

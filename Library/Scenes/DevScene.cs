@@ -1,7 +1,11 @@
+using System;
 using Engine.Audio;
 using Engine.Core;
+using Engine.Graphics;
 using Engine.Input;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace Library.Scenes;
@@ -13,6 +17,8 @@ public class DevScene : Scene
     public override void Initialize()
     {
         Singletons.StageAttach(new DevSceneController());
+
+        EntityChangelist.StageCreate(nameof(RectRenderer)).StageAttach(new RectRenderer());
 
         Singletons.Get<AudioManager>().Play(Content.Load<SoundEffect>("Audio/Theme"), loop: true);
     }
@@ -32,5 +38,33 @@ internal class DevSceneController : Component, IUpdatable
         {
             Scene.ShouldPause = !Scene.IsPaused;
         }
+    }
+}
+
+internal class RectRenderer : Component, IRenderer
+{
+    private Texture2D _pixel = null!;
+
+    public int DrawOrder => 0;
+    public bool IsVisible { get; set; } = true;
+
+    public override void Begin()
+    {
+        _pixel = new Texture2D(Scene.Game.GraphicsDevice, 1, 1);
+        _pixel.SetData([Color.DarkOrange]);
+    }
+
+    public void Draw(SpriteBatch spriteBatch)
+    {
+        spriteBatch.Draw(
+            _pixel,
+            destinationRectangle: new Rectangle(100, 100, 60, 80),
+            sourceRectangle: new Rectangle(0, 0, 1, 1),
+            Color.White,
+            rotation: MathF.PI / 4,
+            origin: new(),
+            SpriteEffects.None,
+            layerDepth: 0
+        );
     }
 }

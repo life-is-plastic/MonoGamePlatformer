@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using Engine.Core;
 using Engine.Util.Collections;
+using Engine.Util.Extensions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -8,19 +10,21 @@ namespace Engine.Graphics;
 
 public partial class RenderManager : Component
 {
-    public static int RenderWidth { get; } = 960;
-    public static int RenderHeight { get; } = 540;
-    public static Point RenderSize => new(RenderWidth, RenderHeight);
-
     private static readonly Comparer<IRenderer> s_drawOrderComparer = Comparer<IRenderer>.Create(
         (a, b) => (a.DrawOrder, a.Entity.Id).CompareTo((b.DrawOrder, b.Entity.Id))
     );
 
     private readonly IndexedSet<IRenderer> _renderers = new();
+    private RenderTarget2D _renderTarget = null!;
     private SpriteBatch _spriteBatch = null!;
+
+    public int RenderWidth { get; } = 360;
+    public int RenderHeight { get; } = 200;
+    public Point RenderSize => new(RenderWidth, RenderHeight);
 
     public override void Begin()
     {
+        _renderTarget = new(Scene.Game.GraphicsDevice, RenderWidth, RenderHeight);
         _spriteBatch = new SpriteBatch(Scene.Game.GraphicsDevice);
     }
 
@@ -31,31 +35,59 @@ public partial class RenderManager : Component
 
     public void Draw()
     {
-        Scene.Game.GraphicsDevice.Clear(Color.CornflowerBlue);
-        _renderers.Sort(s_drawOrderComparer);
+        DrawToRenderTarget();
+        DrawRenderTargetToScreen();
+    }
 
-        var spriteBatchOptions = new IRenderer.DrawOptions();
-        _spriteBatch.Begin(
-            samplerState: spriteBatchOptions.SamplerState,
-            effect: spriteBatchOptions.Effect
-        );
+    private void DrawToRenderTarget()
+    {
+        _renderers.Sort(s_drawOrderComparer);
+        var rendererDrawOptions = new IRenderer.DrawOptions();
+
+        Scene.Game.GraphicsDevice.SetRenderTarget(_renderTarget);
+        Scene.Game.GraphicsDevice.Clear(Color.CornflowerBlue);
+        _spriteBatch.Begin(rendererDrawOptions);
+
         foreach (var renderer in _renderers)
         {
             if (!renderer.IsVisible)
             {
                 continue;
             }
-            if (!renderer.DrawOpts.Batch || renderer.DrawOpts != spriteBatchOptions)
+            if (!renderer.DrawOpts.Batch || renderer.DrawOpts != rendererDrawOptions)
             {
                 _spriteBatch.End();
-                _spriteBatch.Begin(
-                    samplerState: renderer.DrawOpts.SamplerState,
-                    effect: renderer.DrawOpts.Effect
-                );
-                spriteBatchOptions = renderer.DrawOpts;
+                _spriteBatch.Begin(renderer.DrawOpts);
+                rendererDrawOptions = renderer.DrawOpts;
             }
             renderer.Draw(_spriteBatch);
         }
+
+        _spriteBatch.End();
+        Scene.Game.GraphicsDevice.SetRenderTarget(null);
+    }
+
+    private void DrawRenderTargetToScreen()
+    {
+        var screenSize = new Vector2(
+            Scene.Game.GraphicsDevice.Viewport.Width,
+            Scene.Game.GraphicsDevice.Viewport.Height
+        );
+        var scale = screenSize / RenderSize.ToVector2();
+        var renderTargetScreenSize = Math.Min(scale.X, scale.Y) * RenderSize.ToVector2();
+        var renderTargetScreenPosition = (screenSize - renderTargetScreenSize) / 2;
+
+        _spriteBatch.Begin(new IRenderer.DrawOptions());
+        _spriteBatch.Draw(
+            _renderTarget,
+            destinationRectangle: new Rectangle(
+                (int)MathF.Round(renderTargetScreenPosition.X),
+                (int)MathF.Round(renderTargetScreenPosition.Y),
+                (int)MathF.Round(renderTargetScreenSize.X),
+                (int)MathF.Round(renderTargetScreenSize.Y)
+            ),
+            Color.White
+        );
         _spriteBatch.End();
     }
 }
