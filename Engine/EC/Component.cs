@@ -13,6 +13,7 @@ public abstract partial class Component : IComponent
 {
     public const int DefaultIndex = int.MinValue;
 
+    public Scene Scene => Entity.Scene;
     public Entity Entity { get; private set; } = null!;
     public int ComponentIndex { get; init; } = DefaultIndex;
 
@@ -31,19 +32,6 @@ public abstract partial class Component : IComponent
 // Convenience utilities for implementing components.
 public abstract partial class Component
 {
-    protected Scene Scene => Entity.Scene;
-
-    protected T GetSingleton<T>()
-        where T : IComponent
-    {
-        return Scene.Singletons.Get<T>();
-    }
-
-    protected Entity StageCreate(string name)
-    {
-        return Scene.EntityChangelist.StageCreate(name);
-    }
-
     protected (T Component, Entity Entity) FindByComponent<T>()
         where T : IComponent
     {

@@ -49,7 +49,7 @@ public partial class ColliderRenderer : IUpdatable
 
     void IUpdatable.Update()
     {
-        var inputManager = GetSingleton<InputManager>();
+        var inputManager = Scene.Singletons.Get<InputManager>();
         if (inputManager.IsPressed(_toggleKey))
         {
             IsVisible = !IsVisible;
@@ -64,7 +64,7 @@ public partial class ColliderRenderer : IRenderer
 
     void IRenderer.Draw(SpriteBatch spriteBatch)
     {
-        var collisionManager = GetSingleton<CollisionManager>();
+        var collisionManager = Scene.Singletons.Get<CollisionManager>();
         foreach (var colliders in GetColliders(collisionManager).Values)
         {
             foreach (var collider in colliders)

@@ -14,18 +14,9 @@ public readonly record struct GridArray<T>
     public int Columns => _grid.Columns;
     public int Length => _grid.Count;
 
-    public ref T this[int index]
-    {
-        get => ref _array[index];
-    }
-    public ref T this[int row, int column]
-    {
-        get => ref _array[_grid[row, column]];
-    }
-    public ref T this[(int Row, int Column) rc]
-    {
-        get => ref this[rc.Row, rc.Column];
-    }
+    public ref T this[int index] => ref _array[index];
+    public ref T this[int row, int column] => ref _array[_grid[row, column]];
+    public ref T this[(int Row, int Column) rc] => ref this[rc.Row, rc.Column];
 
     public GridArray(int rows, int columns)
         : this(rows, columns, new T[rows * columns]) { }
@@ -39,15 +30,5 @@ public readonly record struct GridArray<T>
         _grid = new Grid(rows, columns);
         Debug.Assert(array.Length == Length);
         _array = array;
-    }
-
-    public bool ContainsIndex(int row, int column)
-    {
-        return _grid.ContainsIndex(row, column);
-    }
-
-    public bool ContainsIndex((int Row, int Column) rc)
-    {
-        return ContainsIndex(rc.Row, rc.Column);
     }
 }

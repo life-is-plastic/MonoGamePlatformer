@@ -42,7 +42,7 @@ internal class CameraController : Component, IUpdatable
     void IUpdatable.Update()
     {
         const float Speed = 120;
-        var inputManager = GetSingleton<InputManager>();
+        var inputManager = Scene.Singletons.Get<InputManager>();
         var transform = Entity.Get<Transform>();
         if (inputManager.IsDown(Keys.A))
         {
@@ -72,7 +72,7 @@ internal class DevSceneController : Component, IUpdatable
 
     void IUpdatable.Update()
     {
-        var inputManager = GetSingleton<InputManager>();
+        var inputManager = Scene.Singletons.Get<InputManager>();
         if (inputManager.IsPressed(Keys.Escape))
         {
             Scene.ShouldPause = !Scene.IsPaused;

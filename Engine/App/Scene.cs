@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Engine.App;
 
+// Abstract members.
 public abstract partial class Scene
 {
     /// <summary>
@@ -25,6 +26,7 @@ public abstract partial class Scene
     public abstract void Initialize();
 }
 
+// Core data and methods.
 public abstract partial class Scene
 {
     private readonly IndexedSet<Entity> _entities = new();
@@ -55,7 +57,11 @@ public abstract partial class Scene
     {
         return Name;
     }
+}
 
+// Methods invoked by `Game`.
+public abstract partial class Scene
+{
     /// <summary>
     /// Initializes scene fields and creates required entities/components.
     /// </summary>

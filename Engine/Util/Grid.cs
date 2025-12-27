@@ -32,7 +32,8 @@ public readonly record struct Grid
     {
         get
         {
-            Debug.Assert(ContainsIndex(row, column));
+            Debug.Assert(0 <= row && row < Rows);
+            Debug.Assert(0 <= column && column < Columns);
             return row * Columns + column;
         }
     }
@@ -41,19 +42,9 @@ public readonly record struct Grid
 
     public Grid(int rows, int columns)
     {
-        Debug.Assert(rows > 0);
-        Debug.Assert(columns > 0);
+        Debug.Assert(rows >= 0);
+        Debug.Assert(columns >= 0);
         Rows = rows;
         Columns = columns;
-    }
-
-    public bool ContainsIndex(int row, int column)
-    {
-        return 0 <= row && row < Rows && 0 <= column && column < Columns;
-    }
-
-    public bool ContainsIndex((int Row, int Column) rc)
-    {
-        return ContainsIndex(rc.Row, rc.Column);
     }
 }
