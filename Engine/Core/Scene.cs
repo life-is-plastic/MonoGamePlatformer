@@ -29,7 +29,7 @@ public abstract partial class Scene
     private readonly IndexedSet<Entity> _entities = new();
     private readonly EntityUpdater _entityUpdater = new();
 
-    public ReadOnlyIndexedSet<Entity> Entities => new(_entities);
+    public IndexedSetView<Entity> Entities => new(_entities);
     public bool IsPaused => _entityUpdater.IsPaused;
     public bool ShouldPause { get; set; } = false;
 

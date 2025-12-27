@@ -191,13 +191,13 @@ public partial class CollisionManager : Component
     /// <summary>
     /// Convenience method that returns an empty set if there are no handlers for the given entity.
     /// </summary>
-    private ReadOnlyIndexedSet<ICollisionHandler> GetHandlers(Entity entity)
+    private IndexedSetView<ICollisionHandler> GetHandlers(Entity entity)
     {
         if (_handlers.TryGetValue(entity, out var handlers))
         {
             return new(handlers);
         }
-        return ReadOnlyIndexedSet<ICollisionHandler>.Empty;
+        return IndexedSetView<ICollisionHandler>.Empty;
     }
 }
 
@@ -217,7 +217,7 @@ public partial class CollisionManager : IEntitySyncer
 {
     void IEntitySyncer.Sync(EntityChangelist entityChangelist)
     {
-        foreach (var component in entityChangelist.Detached)
+        foreach (var component in entityChangelist.Detached.Values)
         {
             if (component is Collider collider)
             {
@@ -228,7 +228,7 @@ public partial class CollisionManager : IEntitySyncer
                 _handlers[handler.Entity].RemoveOrDie(handler);
             }
         }
-        foreach (var component in entityChangelist.Attached)
+        foreach (var component in entityChangelist.Attached.Values)
         {
             if (component is Collider collider)
             {

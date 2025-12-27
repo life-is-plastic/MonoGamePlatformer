@@ -20,10 +20,10 @@ public class EntityChangelist
     private readonly Dictionary<(Entity, Type, int), IComponent> _attached = new();
     private readonly Dictionary<(Entity, Type, int), IComponent> _detached = new();
 
-    public ReadOnlyIndexedSet<Entity> Created => new(_created);
-    public ReadOnlyIndexedSet<Entity> Destroyed => new(_destroyed);
-    public Dictionary<(Entity, Type, int), IComponent>.ValueCollection Attached => _attached.Values;
-    public Dictionary<(Entity, Type, int), IComponent>.ValueCollection Detached => _detached.Values;
+    public IndexedSetView<Entity> Created => new(_created);
+    public IndexedSetView<Entity> Destroyed => new(_destroyed);
+    public DictionaryView<(Entity, Type, int), IComponent> Attached => new(_attached);
+    public DictionaryView<(Entity, Type, int), IComponent> Detached => new(_detached);
 
     public EntityChangelist(Scene scene)
     {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Engine.Util.Collections;
 using Engine.Util.Extensions;
 
 namespace Engine.Core;
@@ -18,8 +19,6 @@ public class Entity
 {
     private readonly Dictionary<(Type, int), IComponent> _components = new();
 
-    public Dictionary<(Type, int), IComponent>.ValueCollection Components => _components.Values;
-
     /// <summary>
     /// The scene owning this entity.
     /// </summary>
@@ -34,6 +33,11 @@ public class Entity
     /// Human readable name for debugging.
     /// </summary>
     public string Name { get; }
+
+    /// <summary>
+    /// All components attached to this entity.
+    /// </summary>
+    public DictionaryView<(Type, int), IComponent> Components => new(_components);
 
     public Entity(Scene scene, int id, string name)
     {

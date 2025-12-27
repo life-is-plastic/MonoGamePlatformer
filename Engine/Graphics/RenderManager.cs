@@ -97,14 +97,14 @@ public partial class RenderManager : IEntitySyncer
 {
     void IEntitySyncer.Sync(EntityChangelist entityChangelist)
     {
-        foreach (var component in entityChangelist.Detached)
+        foreach (var component in entityChangelist.Detached.Values)
         {
             if (component is IRenderer renderer)
             {
                 _renderers.RemoveOrDie(renderer);
             }
         }
-        foreach (var component in entityChangelist.Attached)
+        foreach (var component in entityChangelist.Attached.Values)
         {
             if (component is IRenderer renderer)
             {
