@@ -1,4 +1,4 @@
-namespace Engine.EC;
+namespace Engine.Core;
 
 /// <summary>
 /// Interface for components interested in entity create/destroy or component attach/detach events.

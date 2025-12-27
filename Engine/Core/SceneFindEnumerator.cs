@@ -3,7 +3,7 @@ using System.Buffers;
 using System.Diagnostics;
 using Engine.Util.Collections;
 
-namespace Engine.EC;
+namespace Engine.Core;
 
 public struct SceneFindEnumerator
 {

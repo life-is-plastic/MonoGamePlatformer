@@ -1,4 +1,4 @@
-namespace Engine.EC;
+namespace Engine.Core;
 
 /// <summary>
 /// Interface for components that update every frame.

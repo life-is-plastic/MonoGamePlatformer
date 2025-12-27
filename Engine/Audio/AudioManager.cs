@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Engine.EC;
+using Engine.Core;
 using Microsoft.Xna.Framework.Audio;
 
 namespace Engine.Audio;

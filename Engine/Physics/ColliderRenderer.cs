@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using Engine.EC;
+using Engine.Core;
 using Engine.Graphics;
 using Engine.Input;
 using Engine.Util.Collections;

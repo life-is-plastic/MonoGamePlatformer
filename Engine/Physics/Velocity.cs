@@ -1,4 +1,4 @@
-using Engine.EC;
+using Engine.Core;
 using Microsoft.Xna.Framework;
 
 namespace Engine.Physics;

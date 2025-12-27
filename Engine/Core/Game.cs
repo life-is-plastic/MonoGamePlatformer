@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 
-namespace Engine.App;
+namespace Engine.Core;
 
 public class Game : Microsoft.Xna.Framework.Game
 {

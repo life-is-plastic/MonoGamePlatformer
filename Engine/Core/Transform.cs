@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace Engine.EC;
+namespace Engine.Core;
 
 public class Transform : Component
 {

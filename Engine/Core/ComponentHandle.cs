@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Engine.EC;
+namespace Engine.Core;
 
 /// <summary>
 /// Container for a cached component reference.

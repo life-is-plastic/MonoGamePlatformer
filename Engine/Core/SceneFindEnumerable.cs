@@ -1,6 +1,6 @@
 using Engine.Util.Collections;
 
-namespace Engine.EC;
+namespace Engine.Core;
 
 public readonly struct SceneFindEnumerable<T>
     where T : IComponent

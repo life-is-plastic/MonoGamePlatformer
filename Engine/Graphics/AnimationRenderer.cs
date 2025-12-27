@@ -1,4 +1,4 @@
-using Engine.EC;
+using Engine.Core;
 
 namespace Engine.Graphics;
 

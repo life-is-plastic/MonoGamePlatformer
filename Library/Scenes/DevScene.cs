@@ -1,6 +1,5 @@
-using Engine.App;
 using Engine.Audio;
-using Engine.EC;
+using Engine.Core;
 using Engine.Graphics;
 using Engine.Input;
 using Engine.Util;
