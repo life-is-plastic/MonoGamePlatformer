@@ -55,6 +55,11 @@ public abstract partial class Scene
 
     public float TotalTime => (float)GameTime.TotalGameTime.TotalSeconds;
 
+    public override string ToString()
+    {
+        return Name;
+    }
+
     /// <summary>
     /// Initializes scene fields and creates required singleton components.
     /// </summary>

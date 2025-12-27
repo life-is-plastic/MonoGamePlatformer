@@ -41,11 +41,6 @@ internal class DevSceneController : Component, IUpdatable
         {
             Scene.ShouldPause = !Scene.IsPaused;
         }
-
-        if (inputManager.IsPressed(Keys.Escape))
-        {
-            GetEntityWith<Camera>().Deref().StageDestroy();
-        }
     }
 }
 

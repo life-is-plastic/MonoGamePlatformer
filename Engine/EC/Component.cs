@@ -6,6 +6,8 @@ namespace Engine.EC;
 
 /// <summary>
 /// Base class for all components.
+/// <para>Avoid caching direct references to components. Wrap them in a <c>ComponentHandle</c>
+/// instead.</para>
 /// </summary>
 public abstract partial class Component : IComponent
 {
@@ -42,25 +44,26 @@ public abstract partial class Component
         return Scene.EntityChangelist.StageCreate(name);
     }
 
-    protected EntityHandle GetEntityWith<T>()
+    protected (T Component, Entity Entity) FindByComponent<T>()
         where T : IComponent
     {
-        return GetEntityWith(typeof(T));
+        Span<IComponent> buf = [null!];
+        var entity = FindByComponent(buf, typeof(T));
+        return ((T)buf[0], entity);
     }
 
-    protected EntityHandle GetEntityWith<T1, T2>()
+    protected (T1 Component1, T2 Component2, Entity Entity) FindByComponent<T1, T2>()
+        where T1 : IComponent
+        where T2 : IComponent
     {
-        return GetEntityWith(typeof(T1), typeof(T2));
+        Span<IComponent> buf = [null!, null!];
+        var entity = FindByComponent(buf, typeof(T1), typeof(T2));
+        return ((T1)buf[0], (T2)buf[1], entity);
     }
 
-    protected EntityHandle GetEntityWith<T1, T2, T3>()
+    private Entity FindByComponent(Span<IComponent> buf, params ReadOnlySpan<Type> componentTypes)
     {
-        return GetEntityWith(typeof(T1), typeof(T2), typeof(T3));
-    }
-
-    protected EntityHandle GetEntityWith(params ReadOnlySpan<Type> componentTypes)
-    {
-        return MaybeGetEntityWith(componentTypes)
+        return MaybeFindByComponent(buf, componentTypes)
             ?? throw new ArgumentException(
                 $"no entities found with components [{string.Join(", ", componentTypes)}]"
             );
@@ -71,18 +74,26 @@ public abstract partial class Component
     /// component index). If there are multiple candidate entities, there is no guarantee which one
     /// is chosen.
     /// </summary>
-    protected EntityHandle? MaybeGetEntityWith(params ReadOnlySpan<Type> componentTypes)
+    private Entity? MaybeFindByComponent(
+        Span<IComponent> buf,
+        params ReadOnlySpan<Type> componentTypes
+    )
     {
+        Debug.Assert(buf.Length == componentTypes.Length);
         foreach (var entity in Scene.Entities)
         {
-            foreach (var type in componentTypes)
+            for (var i = 0; i < componentTypes.Length; i++)
             {
-                if (!entity.Has(type, DefaultIndex))
+                if (entity.MaybeGet(componentTypes[i], DefaultIndex) is { } component)
+                {
+                    buf[i] = component;
+                }
+                else
                 {
                     goto NextEntity;
                 }
             }
-            return new(entity);
+            return entity;
             NextEntity:
             ;
         }

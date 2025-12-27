@@ -3,7 +3,7 @@ using System;
 namespace Engine.EC;
 
 /// <summary>
-/// Store cached entity references inside this struct.
+/// Container for a cached entity reference.
 /// </summary>
 public readonly struct EntityHandle
 {
@@ -19,9 +19,7 @@ public readonly struct EntityHandle
     /// </summary>
     public Entity Deref()
     {
-        return _entity.IsAlive()
-            ? _entity
-            : throw new InvalidOperationException($"{_entity} is no longer alive");
+        return MaybeDeref() ?? throw new InvalidOperationException($"{_entity} is no longer alive");
     }
 
     /// <summary>

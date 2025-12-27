@@ -15,15 +15,19 @@ public partial class RenderManager : Component
     );
 
     private readonly IndexedSet<IRenderer> _renderers = new();
-    private EntityHandle _cameraHandle;
+    private ComponentHandle<Camera> _camera;
     private RenderTarget2D _renderTarget = null!;
     private SpriteBatch _spriteBatch = null!;
 
     public override void Begin()
     {
-        _cameraHandle = GetEntityWith<Camera>();
-        var camera = _cameraHandle.Deref().Get<Camera>();
-        _renderTarget = new(Scene.Game.GraphicsDevice, camera.Width, camera.Height);
+        var (camera, _) = FindByComponent<Camera>();
+        _camera = new(camera);
+        _renderTarget = new(
+            Scene.Game.GraphicsDevice,
+            _camera.Deref().Width,
+            _camera.Deref().Height
+        );
         _spriteBatch = new SpriteBatch(Scene.Game.GraphicsDevice);
     }
 
@@ -68,7 +72,7 @@ public partial class RenderManager : Component
 
     private void DrawRenderTargetToScreen()
     {
-        var camera = _cameraHandle.Deref().Get<Camera>();
+        var camera = _camera.Deref();
 
         var screenSize = new Vector2(
             Scene.Game.GraphicsDevice.Viewport.Width,

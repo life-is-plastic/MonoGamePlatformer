@@ -12,9 +12,8 @@ namespace Engine.EC;
 /// multiple instances of the same component type.
 /// <para>Avoid attaches/detaches/lookups with index if a component is intended to only appear once
 /// per entity.</para>
-/// <para>Avoid holding direct references to entities. Prefer wrapping them in an
-/// <c>EntityHandle</c> instead, which has builtin awareness about whether wrapped entities are
-/// alive.</para>
+/// <para>Avoid caching direct references to entities. Wrap them in an <c>EntityHandle</c>
+/// instead.</para>
 /// </summary>
 public class Entity
 {
