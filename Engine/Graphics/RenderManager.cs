@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Engine.Core;
+using Engine.EC;
 using Engine.Util.Collections;
 using Engine.Util.Extensions;
 using Microsoft.Xna.Framework;

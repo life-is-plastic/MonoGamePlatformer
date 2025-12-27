@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using Engine.Core;
+using Engine.EC;
 using Engine.Util;
 using Engine.Util.Collections;
 using Engine.Util.Extensions;

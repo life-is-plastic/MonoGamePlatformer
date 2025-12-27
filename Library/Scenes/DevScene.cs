@@ -1,6 +1,6 @@
-using System;
+using Engine.Application;
 using Engine.Audio;
-using Engine.Core;
+using Engine.EC;
 using Engine.Graphics;
 using Engine.Input;
 using Microsoft.Xna.Framework;

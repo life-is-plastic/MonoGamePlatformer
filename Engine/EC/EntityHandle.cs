@@ -1,6 +1,6 @@
 using System;
 
-namespace Engine.Core;
+namespace Engine.EC;
 
 /// <summary>
 /// Store cached entity references inside this struct.

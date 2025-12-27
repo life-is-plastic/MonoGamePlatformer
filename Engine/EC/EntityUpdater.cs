@@ -3,7 +3,7 @@ using System.Diagnostics;
 using Engine.Util.Collections;
 using Engine.Util.Extensions;
 
-namespace Engine.Core;
+namespace Engine.EC;
 
 public class EntityUpdater
 {

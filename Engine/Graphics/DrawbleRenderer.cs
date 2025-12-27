@@ -1,4 +1,4 @@
-using Engine.Core;
+using Engine.EC;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Engine.Graphics;

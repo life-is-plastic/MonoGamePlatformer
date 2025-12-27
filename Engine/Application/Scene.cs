@@ -1,5 +1,6 @@
 using System;
 using Engine.Audio;
+using Engine.EC;
 using Engine.Graphics;
 using Engine.Input;
 using Engine.Physics;
@@ -8,7 +9,7 @@ using Engine.Util.Collections;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 
-namespace Engine.Core;
+namespace Engine.Application;
 
 public abstract partial class Scene
 {

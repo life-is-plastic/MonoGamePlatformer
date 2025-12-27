@@ -1,4 +1,4 @@
-using Engine.Core;
+using Engine.EC;
 using Engine.Util;
 
 namespace Engine.Physics;

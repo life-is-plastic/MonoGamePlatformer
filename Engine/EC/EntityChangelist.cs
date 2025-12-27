@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Engine.Application;
 using Engine.Util.Collections;
 
-namespace Engine.Core;
+namespace Engine.EC;
 
 /// <summary>
 /// A staging area for entity/component additions/removals, which are applied at the beginning of

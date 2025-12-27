@@ -1,7 +1,8 @@
 using System;
 using System.Diagnostics;
+using Engine.Application;
 
-namespace Engine.Core;
+namespace Engine.EC;
 
 /// <summary>
 /// Base class for all components.
