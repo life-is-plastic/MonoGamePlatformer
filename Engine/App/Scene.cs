@@ -9,7 +9,7 @@ using Engine.Util.Collections;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 
-namespace Engine.Application;
+namespace Engine.App;
 
 public abstract partial class Scene
 {

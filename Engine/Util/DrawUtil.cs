@@ -1,5 +1,5 @@
 using System;
-using Engine.Application;
+using Engine.App;
 using Engine.Util.Extensions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
