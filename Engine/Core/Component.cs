@@ -41,12 +41,36 @@ public abstract partial class Component
         return Scene.EntityChangelist.StageCreate(name);
     }
 
+    protected EntityHandle GetEntityWith<T>()
+        where T : IComponent
+    {
+        return GetEntityWith(typeof(T));
+    }
+
+    protected EntityHandle GetEntityWith<T1, T2>()
+    {
+        return GetEntityWith(typeof(T1), typeof(T2));
+    }
+
+    protected EntityHandle GetEntityWith<T1, T2, T3>()
+    {
+        return GetEntityWith(typeof(T1), typeof(T2), typeof(T3));
+    }
+
+    protected EntityHandle GetEntityWith(params ReadOnlySpan<Type> componentTypes)
+    {
+        return MaybeGetEntityWith(componentTypes)
+            ?? throw new ArgumentException(
+                $"no entities found with components [{string.Join(", ", componentTypes)}]"
+            );
+    }
+
     /// <summary>
-    /// Finds an entity containing all the given component types (and at the default component
-    /// index), and returns a handle to it. If there are multiple candidate entities, there is no
-    /// guarantee which one is chosen.
+    /// Finds and returns an entity containing all the given component types (and at the default
+    /// component index). If there are multiple candidate entities, there is no guarantee which one
+    /// is chosen.
     /// </summary>
-    protected EntityHandle? FindEntity(params ReadOnlySpan<Type> componentTypes)
+    protected EntityHandle? MaybeGetEntityWith(params ReadOnlySpan<Type> componentTypes)
     {
         foreach (var entity in Scene.Entities)
         {

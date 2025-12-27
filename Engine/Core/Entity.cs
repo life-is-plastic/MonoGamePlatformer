@@ -10,29 +10,30 @@ namespace Engine.Core;
 /// multiple instances of the same component type.
 /// <para>Avoid attaches/detaches/lookups with index if a component is intended to only appear once
 /// per entity.</para>
-/// <para>Note that after an entity is destroyed, its internal fields will all be set to null, so
-/// its methods will stop working.</para>
+/// <para>Avoid holding direct references to entities. Prefer wrapping them in an
+/// <c>EntityHandle</c> instead, which has builtin awareness about whether wrapped entities are
+/// alive.</para>
 /// </summary>
-public partial class Entity
+public class Entity
 {
-    private Dictionary<(Type, int), IComponent> _components = new();
+    private readonly Dictionary<(Type, int), IComponent> _components = new();
 
     public Dictionary<(Type, int), IComponent>.ValueCollection Components => _components.Values;
 
     /// <summary>
     /// The scene owning this entity.
     /// </summary>
-    public Scene Scene { get; private set; }
+    public Scene Scene { get; }
 
     /// <summary>
     /// Uniquely identifies this entity within its containing scene.
     /// </summary>
-    public int Id { get; private set; }
+    public int Id { get; }
 
     /// <summary>
     /// Human readable name for debugging.
     /// </summary>
-    public string Name { get; private set; }
+    public string Name { get; }
 
     public Entity(Scene scene, int id, string name)
     {
@@ -49,6 +50,18 @@ public partial class Entity
     public Dictionary<(Type, int), IComponent>.Enumerator GetEnumerator()
     {
         return _components.GetEnumerator();
+    }
+
+    /// <summary>
+    /// Whether or not this entity is part of its containing scene.
+    /// </summary>
+    /// <returns>
+    /// True starting from the frame after <c>EntityChangelist.StageCreate()</c>. False before that
+    /// frame or starting on the frame after <c>EntityChangelist.StageDestroy()</c>.
+    /// </returns>
+    public bool IsAlive()
+    {
+        return Scene.Entities.Contains(this);
     }
 
     public bool Has<T>()
@@ -129,18 +142,6 @@ public partial class Entity
     }
 
     /// <summary>
-    /// Whether or not this entity is part of its containing scene.
-    /// </summary>
-    /// <returns>
-    /// True starting from the frame after <c>EntityChangelist.StageCreate()</c>. False before that
-    /// frame or starting on the frame after <c>EntityChangelist.StageDestroy()</c>.
-    /// </returns>
-    public bool IsAlive()
-    {
-        return Scene.Entities.Contains(this);
-    }
-
-    /// <summary>
     /// Immediately attaches a component to this entity without integrating the component with the
     /// scene.
     /// </summary>
@@ -162,17 +163,5 @@ public partial class Entity
     {
         Debug.Assert(Get(component.GetType(), component.ComponentIndex) == component);
         _components.RemoveOrDie((component.GetType(), component.ComponentIndex));
-    }
-}
-
-public partial class Entity : IDisposable
-{
-    void IDisposable.Dispose()
-    {
-        _components = null!;
-        Scene = null!;
-        Id = EntityChangelist.FirstEntityId - 1;
-        Name = null!;
-        GC.SuppressFinalize(this);
     }
 }

@@ -15,16 +15,15 @@ public partial class RenderManager : Component
     );
 
     private readonly IndexedSet<IRenderer> _renderers = new();
+    private EntityHandle _cameraHandle;
     private RenderTarget2D _renderTarget = null!;
     private SpriteBatch _spriteBatch = null!;
 
-    public int RenderWidth { get; } = 360;
-    public int RenderHeight { get; } = 200;
-    public Point RenderSize => new(RenderWidth, RenderHeight);
-
     public override void Begin()
     {
-        _renderTarget = new(Scene.Game.GraphicsDevice, RenderWidth, RenderHeight);
+        _cameraHandle = GetEntityWith<Camera>();
+        var camera = _cameraHandle.Deref().Get<Camera>();
+        _renderTarget = new(Scene.Game.GraphicsDevice, camera.Width, camera.Height);
         _spriteBatch = new SpriteBatch(Scene.Game.GraphicsDevice);
     }
 
@@ -69,12 +68,14 @@ public partial class RenderManager : Component
 
     private void DrawRenderTargetToScreen()
     {
+        var camera = _cameraHandle.Deref().Get<Camera>();
+
         var screenSize = new Vector2(
             Scene.Game.GraphicsDevice.Viewport.Width,
             Scene.Game.GraphicsDevice.Viewport.Height
         );
-        var scale = screenSize / RenderSize.ToVector2();
-        var renderTargetScreenSize = Math.Min(scale.X, scale.Y) * RenderSize.ToVector2();
+        var scale = screenSize / camera.Size.ToVector2();
+        var renderTargetScreenSize = Math.Min(scale.X, scale.Y) * camera.Size.ToVector2();
         var renderTargetScreenPosition = (screenSize - renderTargetScreenSize) / 2;
 
         _spriteBatch.Begin(new IRenderer.DrawOptions());

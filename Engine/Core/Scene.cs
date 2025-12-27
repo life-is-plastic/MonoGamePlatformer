@@ -74,6 +74,10 @@ public abstract partial class Scene
             .StageAttach(new MenuAudioManager())
             .StageAttach(new RenderManager())
             .StageAttach(new UIManager());
+        EntityChangelist
+            .StageCreate(nameof(Camera))
+            .StageAttach(new Camera())
+            .StageAttach(new Transform());
         Update(gameTime);
 
         Initialize();
