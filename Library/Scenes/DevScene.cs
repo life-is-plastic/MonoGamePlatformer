@@ -24,7 +24,42 @@ public class DevScene : Scene
             .StageAttach(new RectRenderer(new Vector2(200, 100)))
             .StageAttach(new RectRenderer(new Vector2(100, 40)) { ComponentIndex = 0 });
 
+        foreach (var entity in Entities)
+        {
+            if (entity.Has<Camera>())
+            {
+                entity.StageAttach(new CameraController());
+                break;
+            }
+        }
+
         Singletons.Get<AudioManager>().Play(Content.Load<SoundEffect>("Audio/Theme"), loop: true);
+    }
+}
+
+internal class CameraController : Component, IUpdatable
+{
+    void IUpdatable.Update()
+    {
+        const float Speed = 120;
+        var inputManager = GetSingleton<InputManager>();
+        var transform = Entity.Get<Transform>();
+        if (inputManager.IsDown(Keys.A))
+        {
+            transform.Position.X -= Speed * Scene.DeltaTime;
+        }
+        if (inputManager.IsDown(Keys.D))
+        {
+            transform.Position.X += Speed * Scene.DeltaTime;
+        }
+        if (inputManager.IsDown(Keys.W))
+        {
+            transform.Position.Y -= Speed * Scene.DeltaTime;
+        }
+        if (inputManager.IsDown(Keys.S))
+        {
+            transform.Position.Y += Speed * Scene.DeltaTime;
+        }
     }
 }
 

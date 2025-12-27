@@ -17,12 +17,12 @@ public partial class RenderManager : Component
     private readonly IndexedSet<IRenderer> _renderers = new();
     private RenderTarget2D _renderTarget = null!;
     private SpriteBatch _spriteBatch = null!;
-    private ComponentHandle<Camera> _camera;
+    private EntityHandle _cameraEntity;
 
     public override void Begin()
     {
-        var camera = FindByComponent<Camera>().Component;
-        _camera = new(camera);
+        var (camera, _, entity) = FindByComponent<Camera, Transform>();
+        _cameraEntity = new(entity);
         _renderTarget = new(Scene.Game.GraphicsDevice, camera.Width, camera.Height);
         _spriteBatch = new SpriteBatch(Scene.Game.GraphicsDevice);
     }
@@ -34,18 +34,22 @@ public partial class RenderManager : Component
 
     public void Draw()
     {
-        DrawToRenderTarget();
-        DrawRenderTargetToScreen();
+        var cameraEntity = _cameraEntity.Deref();
+        DrawToRenderTarget(cameraEntity.Get<Transform>());
+        DrawRenderTargetToScreen(cameraEntity.Get<Camera>());
     }
 
-    private void DrawToRenderTarget()
+    private void DrawToRenderTarget(Transform cameraTransform)
     {
         _renderers.Sort(s_drawOrderComparer);
         var rendererDrawOptions = new IRenderer.DrawOptions();
+        var transformMatrix =
+            Matrix.CreateScale(cameraTransform.Scale.X, cameraTransform.Scale.Y, 1)
+            * Matrix.CreateTranslation(-cameraTransform.Position.X, -cameraTransform.Position.Y, 0);
 
         Scene.Game.GraphicsDevice.SetRenderTarget(_renderTarget);
         Scene.Game.GraphicsDevice.Clear(Color.CornflowerBlue);
-        _spriteBatch.Begin(rendererDrawOptions);
+        _spriteBatch.Begin(rendererDrawOptions, transformMatrix);
 
         foreach (var renderer in _renderers)
         {
@@ -56,7 +60,7 @@ public partial class RenderManager : Component
             if (!renderer.DrawOpts.Batch || renderer.DrawOpts != rendererDrawOptions)
             {
                 _spriteBatch.End();
-                _spriteBatch.Begin(renderer.DrawOpts);
+                _spriteBatch.Begin(renderer.DrawOpts, transformMatrix);
                 rendererDrawOptions = renderer.DrawOpts;
             }
             renderer.Draw(_spriteBatch);
@@ -66,10 +70,8 @@ public partial class RenderManager : Component
         Scene.Game.GraphicsDevice.SetRenderTarget(null);
     }
 
-    private void DrawRenderTargetToScreen()
+    private void DrawRenderTargetToScreen(Camera camera)
     {
-        var camera = _camera.Deref();
-
         var screenSize = new Vector2(
             Scene.Game.GraphicsDevice.Viewport.Width,
             Scene.Game.GraphicsDevice.Viewport.Height
