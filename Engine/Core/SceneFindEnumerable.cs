@@ -2,6 +2,10 @@ using Engine.Util.Collections;
 
 namespace Engine.Core;
 
+/// <summary>
+/// Iterates over all entities with a component of type <c>T</c> (at the default component index),
+/// yielding <c>(T, entity)</c> pairs.
+/// </summary>
 public readonly struct SceneFindEnumerable<T>
     where T : IComponent
 {

@@ -56,11 +56,7 @@ public abstract partial class Scene
     {
         return Name;
     }
-}
 
-// Entity/component lookup methods.
-public abstract partial class Scene
-{
     public SceneFindEnumerable<T> Find<T>()
         where T : IComponent
     {
