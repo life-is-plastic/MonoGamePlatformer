@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
@@ -10,7 +9,7 @@ namespace Engine.Util.Collections;
 public readonly partial record struct DictionaryView<TKey, TValue>
     where TKey : notnull
 {
-    public static DictionaryView<TKey, TValue> Empty { get; } = new(new());
+    private static readonly Dictionary<TKey, TValue> s_emptyDict = new();
 
     private readonly Dictionary<TKey, TValue> _dict;
 
@@ -18,6 +17,9 @@ public readonly partial record struct DictionaryView<TKey, TValue>
     public Dictionary<TKey, TValue>.KeyCollection Keys => _dict.Keys;
     public Dictionary<TKey, TValue>.ValueCollection Values => _dict.Values;
     public TValue this[TKey key] => _dict[key];
+
+    public DictionaryView()
+        : this(s_emptyDict) { }
 
     public DictionaryView(Dictionary<TKey, TValue> dict)
     {
@@ -38,23 +40,9 @@ public readonly partial record struct DictionaryView<TKey, TValue>
     {
         return _dict.TryGetValue(key, out value);
     }
-}
 
-public readonly partial record struct DictionaryView<TKey, TValue>
-    : IEnumerable<KeyValuePair<TKey, TValue>>
-{
     public Dictionary<TKey, TValue>.Enumerator GetEnumerator()
     {
         return _dict.GetEnumerator();
-    }
-
-    IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
     }
 }

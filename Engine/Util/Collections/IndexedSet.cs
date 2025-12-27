@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -30,6 +29,11 @@ public readonly partial record struct IndexedSet<T>
     public bool Contains(in T item)
     {
         return _indices.ContainsKey(item);
+    }
+
+    public List<T>.Enumerator GetEnumerator()
+    {
+        return _items.GetEnumerator();
     }
 
     /// <summary>
@@ -103,23 +107,5 @@ public readonly partial record struct IndexedSet<T>
         {
             _indices[_items[i]] = i;
         }
-    }
-}
-
-public readonly partial record struct IndexedSet<T> : IEnumerable<T>
-{
-    public List<T>.Enumerator GetEnumerator()
-    {
-        return _items.GetEnumerator();
-    }
-
-    IEnumerator<T> IEnumerable<T>.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
     }
 }

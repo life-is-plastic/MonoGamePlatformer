@@ -1,4 +1,8 @@
 using System;
+using System.Buffers;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
 using Engine.Audio;
 using Engine.EC;
 using Engine.Graphics;
@@ -26,7 +30,7 @@ public abstract partial class Scene
     public abstract void Initialize();
 }
 
-// Core data and methods.
+// Core members.
 public abstract partial class Scene
 {
     private readonly IndexedSet<Entity> _entities = new();
@@ -57,6 +61,108 @@ public abstract partial class Scene
     {
         return Name;
     }
+}
+
+// Entity/component lookup methods.
+public abstract partial class Scene
+{
+    public SceneFindEnumerable<T> Find<T>()
+        where T : IComponent
+    {
+        return new SceneFindEnumerable<T>(Entities);
+    }
+
+    public SceneFindEnumerable<T1, T2> Find<T1, T2>()
+        where T1 : IComponent
+        where T2 : IComponent
+    {
+        return new SceneFindEnumerable<T1, T2>(Entities);
+    }
+
+    // public (T1 Component1, T2 Component2, Entity Entity) Find<T1, T2>()
+    //     where T1 : IComponent
+    //     where T2 : IComponent
+    // {
+    //     var buf = FindFirst([null!, null!], typeof(T1), typeof(T2));
+    //     return ((T1)buf[0], (T2)buf[1], buf[0].Entity);
+    // }
+
+    // private Span<IComponent> FindFirst(
+    //     Span<IComponent> buf,
+    //     params ReadOnlySpan<Type> componentTypes
+    // )
+    // {
+    //     if (TryFindFirst(buf, componentTypes))
+    //     {
+    //         return buf;
+    //     }
+    //     throw new ArgumentException(
+    //         $"no entities found with components [{string.Join(", ", componentTypes)}]"
+    //     );
+    // }
+
+    // private bool TryFindFirst(Span<IComponent> buf, params ReadOnlySpan<Type> componentTypes)
+    // {
+    //     Debug.Assert(componentTypes.Length > 0);
+    //     Debug.Assert(buf.Length == componentTypes.Length);
+    //     foreach (var entity in Entities)
+    //     {
+    //         for (var i = 0; i < componentTypes.Length; i++)
+    //         {
+    //             if (entity.MaybeGet(componentTypes[i], Component.DefaultIndex) is { } component)
+    //             {
+    //                 buf[i] = component;
+    //             }
+    //             else
+    //             {
+    //                 goto NextEntity;
+    //             }
+    //         }
+    //         return true;
+
+    //         NextEntity:
+    //         ;
+    //     }
+    //     return false;
+    // }
+
+    // private List<IComponent> FindAny(List<IComponent> buf, params ReadOnlySpan<Type> componentTypes)
+    // {
+    //     if (TryFindAny(buf, componentTypes))
+    //     {
+    //         return buf;
+    //     }
+    //     throw new ArgumentException(
+    //         $"no entities found with components [{string.Join(", ", componentTypes)}]"
+    //     );
+    // }
+
+    // private bool TryFindAny(List<IComponent> buf, params ReadOnlySpan<Type> componentTypes)
+    // {
+    //     Debug.Assert(componentTypes.Length > 0);
+    //     foreach (var entity in Entities)
+    //     {
+    //         for (var i = 0; i < componentTypes.Length; i++)
+    //         {
+    //             if (entity.MaybeGet(componentTypes[i], Component.DefaultIndex) is { } component)
+    //             {
+    //                 buf.Add(component);
+    //             }
+    //             else
+    //             {
+    //                 for (var j = i - 1; j >= 0; j--)
+    //                 {
+    //                     buf.RemoveAt(buf.Count - 1);
+    //                 }
+    //                 goto NextEntity;
+    //             }
+    //         }
+
+    //         NextEntity:
+    //         ;
+    //     }
+    //     return buf.Count > 0;
+    // }
 }
 
 // Methods invoked by `Game`.

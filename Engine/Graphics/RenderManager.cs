@@ -21,10 +21,18 @@ public partial class RenderManager : Component
 
     public override void Begin()
     {
-        var (camera, _, entity) = FindByComponent<Camera, Transform>();
-        _cameraEntity = new(entity);
-        _renderTarget = new(Scene.Game.GraphicsDevice, camera.Width, camera.Height);
-        _spriteBatch = new SpriteBatch(Scene.Game.GraphicsDevice);
+        foreach (var (camera, _, entity) in Scene.Find<Camera, Transform>())
+        {
+            _cameraEntity = new(entity);
+            _renderTarget = new(Scene.Game.GraphicsDevice, camera.Width, camera.Height);
+            _spriteBatch = new SpriteBatch(Scene.Game.GraphicsDevice);
+            return;
+        }
+        throw new InvalidOperationException();
+        // var (camera, _, entity) = Scene.Find<Camera, Transform>();
+        // _cameraEntity = new(entity);
+        // _renderTarget = new(Scene.Game.GraphicsDevice, camera.Width, camera.Height);
+        // _spriteBatch = new SpriteBatch(Scene.Game.GraphicsDevice);
     }
 
     public override void End()

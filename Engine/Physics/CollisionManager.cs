@@ -189,7 +189,8 @@ public partial class CollisionManager : Component
     }
 
     /// <summary>
-    /// Convenience method that returns an empty set if there are no handlers for the given entity.
+    /// Convenience method that returns an empty set view if there are no handlers for the given
+    /// entity.
     /// </summary>
     private IndexedSetView<ICollisionHandler> GetHandlers(Entity entity)
     {
@@ -197,7 +198,7 @@ public partial class CollisionManager : Component
         {
             return new(handlers);
         }
-        return IndexedSetView<ICollisionHandler>.Empty;
+        return new();
     }
 }
 

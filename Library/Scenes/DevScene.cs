@@ -41,7 +41,7 @@ internal class CameraController : Component, IUpdatable
 {
     void IUpdatable.Update()
     {
-        const float Speed = 120;
+        const float Speed = 240;
         var inputManager = Scene.Singletons.Get<InputManager>();
         var transform = Entity.Get<Transform>();
         if (inputManager.IsDown(Keys.A))
