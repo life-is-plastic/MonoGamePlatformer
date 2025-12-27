@@ -15,19 +15,15 @@ public partial class RenderManager : Component
     );
 
     private readonly IndexedSet<IRenderer> _renderers = new();
-    private ComponentHandle<Camera> _camera;
     private RenderTarget2D _renderTarget = null!;
     private SpriteBatch _spriteBatch = null!;
+    private ComponentHandle<Camera> _camera;
 
     public override void Begin()
     {
-        var (camera, _) = FindByComponent<Camera>();
+        var camera = FindByComponent<Camera>().Component;
         _camera = new(camera);
-        _renderTarget = new(
-            Scene.Game.GraphicsDevice,
-            _camera.Deref().Width,
-            _camera.Deref().Height
-        );
+        _renderTarget = new(Scene.Game.GraphicsDevice, camera.Width, camera.Height);
         _spriteBatch = new SpriteBatch(Scene.Game.GraphicsDevice);
     }
 

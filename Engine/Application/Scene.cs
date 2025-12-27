@@ -48,11 +48,7 @@ public abstract partial class Scene
     /// </summary>
     public GameTime GameTime { get; private set; } = null!;
 
-    /// <summary>
-    /// Seconds since the previous frame.
-    /// </summary>
     public float DeltaTime => (float)GameTime.ElapsedGameTime.TotalSeconds;
-
     public float TotalTime => (float)GameTime.TotalGameTime.TotalSeconds;
 
     public override string ToString()
@@ -61,7 +57,7 @@ public abstract partial class Scene
     }
 
     /// <summary>
-    /// Initializes scene fields and creates required singleton components.
+    /// Initializes scene fields and creates required entities/components.
     /// </summary>
     public void Initialize(Game game, GameTime gameTime)
     {
