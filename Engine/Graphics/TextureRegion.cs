@@ -43,10 +43,10 @@ public readonly record struct TextureRegion
 
     public struct DrawOptions
     {
+        public Color Color = Color.White;
         public float Rotation = 0;
-        public Vector2 Scale = Vector2.One;
         public Vector2 Origin = Vector2.Zero;
-        public Color Tint = Color.White;
+        public Vector2 Scale = Vector2.One;
         public SpriteEffects Effects = SpriteEffects.None;
         public float LayerDepth = 0;
 
@@ -64,7 +64,7 @@ public readonly record struct TextureRegion
             Texture,
             position,
             Region,
-            options.Tint,
+            options.Color,
             options.Rotation,
             options.Origin,
             options.Scale,

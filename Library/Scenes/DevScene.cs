@@ -3,6 +3,7 @@ using Engine.Audio;
 using Engine.EC;
 using Engine.Graphics;
 using Engine.Input;
+using Engine.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -20,8 +21,8 @@ public class DevScene : Scene
 
         EntityChangelist
             .StageCreate(nameof(RectRenderer))
-            .StageAttach(new RectRenderer(new Rectangle(100, 100, 60, 80)))
-            .StageAttach(new RectRenderer(new Rectangle(200, 100, 50, 90)) { ComponentIndex = 0 });
+            .StageAttach(new RectRenderer(new Vector2(200, 100)))
+            .StageAttach(new RectRenderer(new Vector2(100, 40)) { ComponentIndex = 0 });
 
         Singletons.Get<AudioManager>().Play(Content.Load<SoundEffect>("Audio/Theme"), loop: true);
     }
@@ -46,34 +47,32 @@ internal class DevSceneController : Component, IUpdatable
 
 internal class RectRenderer : Component, IRenderer
 {
-    private Texture2D _pixel = null!;
-    private Rectangle _dst;
+    private DrawUtil _drawUtil;
+    private Vector2 _position;
 
     public int DrawOrder => 0;
     public bool IsVisible { get; set; } = true;
 
-    public RectRenderer(Rectangle dst)
+    public RectRenderer(Vector2 position)
     {
-        _dst = dst;
+        _position = position;
     }
 
     public override void Begin()
     {
-        _pixel = new Texture2D(Scene.Game.GraphicsDevice, 1, 1);
-        _pixel.SetData([Color.DarkOrange]);
+        _drawUtil = new(Scene);
     }
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        spriteBatch.Draw(
-            _pixel,
-            destinationRectangle: _dst,
-            sourceRectangle: new Rectangle(0, 0, 1, 1),
-            Color.White,
-            rotation: Scene.TotalTime,
-            origin: new(),
-            SpriteEffects.None,
-            layerDepth: 0
+        _drawUtil.DrawRectangle(
+            spriteBatch,
+            Color.DarkOrange,
+            _position,
+            size: new(90, 60),
+            normalizedOrigin: new(0.5f, 0.5f),
+            rotation: Scene.TotalTime
         );
+        _drawUtil.DrawLine(spriteBatch, Color.DarkOrchid, new(2, 2), new(40, 40));
     }
 }

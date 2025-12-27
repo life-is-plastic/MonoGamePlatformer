@@ -8,7 +8,8 @@ public partial class Sprite
     public TextureRegion TextureRegion { get; }
 
     /// <summary>
-    /// Origin in pixel units.
+    /// Origin in pixel units. Note that origin refers to the top-left corner of the specified
+    /// pixel, not the center of the pixel.
     /// </summary>
     public Vector2 Origin { get; set; } = Vector2.Zero;
 

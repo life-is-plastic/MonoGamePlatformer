@@ -7,12 +7,12 @@ namespace Engine.Util.Collections;
 /// </summary>
 public readonly record struct GridArray<T>
 {
-    private readonly GridHelper _gridHelper;
+    private readonly Grid _grid;
     private readonly T[] _array;
 
-    public int Rows => _gridHelper.Rows;
-    public int Columns => _gridHelper.Columns;
-    public int Length => _gridHelper.Count;
+    public int Rows => _grid.Rows;
+    public int Columns => _grid.Columns;
+    public int Length => _grid.Count;
 
     public ref T this[int index]
     {
@@ -20,7 +20,7 @@ public readonly record struct GridArray<T>
     }
     public ref T this[int row, int column]
     {
-        get => ref _array[_gridHelper[row, column]];
+        get => ref _array[_grid[row, column]];
     }
     public ref T this[(int Row, int Column) rc]
     {
@@ -36,14 +36,14 @@ public readonly record struct GridArray<T>
     /// </summary>
     public GridArray(int rows, int columns, params T[] array)
     {
-        _gridHelper = new GridHelper(rows, columns);
+        _grid = new Grid(rows, columns);
         Debug.Assert(array.Length == Length);
         _array = array;
     }
 
     public bool ContainsIndex(int row, int column)
     {
-        return _gridHelper.ContainsIndex(row, column);
+        return _grid.ContainsIndex(row, column);
     }
 
     public bool ContainsIndex((int Row, int Column) rc)
