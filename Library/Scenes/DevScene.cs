@@ -1,4 +1,4 @@
-using System.Linq;
+using System;
 using Engine.Audio;
 using Engine.Core;
 using Engine.Graphics;
@@ -21,8 +21,8 @@ public class DevScene : Scene
 
         EntityChangelist
             .StageCreate(nameof(RectRenderer))
-            .StageAttach(new RectRenderer(new Vector2(200, 100)))
-            .StageAttach(new RectRenderer(new Vector2(100, 40)) { ComponentIndex = 0 });
+            .StageAttach(new RectRenderer())
+            .StageAttach(new RectRenderer() { ComponentIndex = 0 });
 
         foreach (var entity in Entities)
         {
@@ -65,8 +65,6 @@ internal class CameraController : Component, IUpdatable
 
 internal class DevSceneController : Component, IUpdatable
 {
-    private long[]? _array;
-
     bool IUpdatable.Pause()
     {
         return false;
@@ -78,15 +76,21 @@ internal class DevSceneController : Component, IUpdatable
         if (inputManager.IsPressed(Keys.Escape))
         {
             Scene.ShouldPause = !Scene.IsPaused;
-
-            _array = new long[100_000_000];
-            for (var i = 0; i < _array.Length; i++)
+        }
+        if (inputManager.IsPressed(Keys.D1))
+        {
+            Scene.EntityChangelist.StageCreate("rect").StageAttach(new RectRenderer());
+        }
+        if (inputManager.IsPressed(Keys.D2))
+        {
+            for (var i = 0; i < 1_000_000; i++)
             {
-                _array[i] = i;
+                foreach (var _ in Scene.Find<RectRenderer>())
+                {
+                    ;
+                }
             }
         }
-
-        if (inputManager.IsPressed(Keys.Space)) { }
     }
 }
 
@@ -94,31 +98,38 @@ internal class RectRenderer : Component, IRenderer
 {
     private DrawUtil _drawUtil;
     private Vector2 _position;
+    private float _rotation;
+    private float _rotationSpeed;
 
     public int DrawOrder => 0;
     public bool IsVisible { get; set; } = true;
 
-    public RectRenderer(Vector2 position)
-    {
-        _position = position;
-    }
+    public RectRenderer() { }
 
     public override void Begin()
     {
+        var rng = new Random();
         _drawUtil = new(Scene);
+        _rotation = rng.NextSingle() * MathF.PI * 2;
+        _rotationSpeed = (rng.NextSingle() + 1) * MathF.PI / 2 * (rng.NextSingle() < 0.5f ? 1 : -1);
+        foreach (var (camera, _) in Scene.Find<Camera>())
+        {
+            _position = new Vector2(rng.NextInt64(camera.Width), rng.NextInt64(camera.Height));
+            return;
+        }
     }
 
     public void Draw(SpriteBatch spriteBatch)
     {
+        _rotation += Scene.IsPaused ? 0 : _rotationSpeed * Scene.DeltaTime;
         _drawUtil.DrawRectangle(
             spriteBatch,
             Color.DarkOrange,
             _position,
-            size: new(90, 60),
-            normalizedOrigin: new(0.5f, 0.5f),
-            rotation: Scene.IsPaused ? 0 : Scene.TotalTime
-        // rotation: Scene.TotalTime
+            size: new Vector2(60, 40),
+            normalizedOrigin: new Vector2(0.5f, 0.5f),
+            _rotation
         );
-        _drawUtil.DrawLine(spriteBatch, Color.DarkOrchid, new(2, 2), new(40, 40));
+        _drawUtil.DrawLine(spriteBatch, Color.DarkOrchid, new Vector2(2, 2), new Vector2(40, 40));
     }
 }

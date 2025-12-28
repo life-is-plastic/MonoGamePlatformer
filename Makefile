@@ -8,11 +8,15 @@ setup_profiling:
 	dotnet tool install --global dotnet-gcdump
 	dotnet tool install --global dotnet-trace
 
+
+# See analyze commands at:
+# https://learn.microsoft.com/en-us/dotnet/framework/tools/sos-dll-sos-debugging-extension
 dump:
 	dotnet-dump collect \
 		--output .profiling/dump.dmp \
 		--name $(BIN) \
 		--type Heap
+	dotnet-dump analyze .profiling/dump.dmp --command 'dumpheap -stat'
 
 gcdump:
 	dotnet-gcdump collect \

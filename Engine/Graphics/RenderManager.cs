@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Engine.Core;
 using Engine.Util.Collections;
 using Engine.Util.Extensions;
@@ -10,9 +9,8 @@ namespace Engine.Graphics;
 
 public partial class RenderManager : Component
 {
-    private static readonly Comparer<IRenderer> s_drawOrderComparer = Comparer<IRenderer>.Create(
-        (a, b) => (a.DrawOrder, a.Entity.Id).CompareTo((b.DrawOrder, b.Entity.Id))
-    );
+    private static readonly Comparison<IRenderer> s_drawOrderComparison = (a, b) =>
+        (a.DrawOrder, a.Entity.Id).CompareTo((b.DrawOrder, b.Entity.Id));
 
     private readonly IndexedSet<IRenderer> _renderers = new();
     private RenderTarget2D _renderTarget = null!;
@@ -49,7 +47,7 @@ public partial class RenderManager : Component
 
     private void DrawToRenderTarget(Transform cameraTransform)
     {
-        _renderers.Sort(s_drawOrderComparer);
+        _renderers.Sort(s_drawOrderComparison);
         var rendererDrawOptions = new IRenderer.DrawOptions();
         var transformMatrix =
             Matrix.CreateScale(cameraTransform.Scale.X, cameraTransform.Scale.Y, 1)

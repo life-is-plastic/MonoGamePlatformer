@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Engine.Util.Collections;
@@ -7,12 +8,9 @@ namespace Engine.Core;
 
 public class EntityUpdater
 {
-    private static readonly Comparer<IUpdatable> s_updateOrderComparer =
-        Comparer<IUpdatable>.Create(
-            (a, b) =>
-                (a.UpdateOrder, a.GetType().GetHashCode()).CompareTo(
-                    (b.UpdateOrder, b.GetType().GetHashCode())
-                )
+    private static readonly Comparison<IUpdatable> s_updateOrderComparison = (a, b) =>
+        (a.UpdateOrder, a.GetType().GetHashCode()).CompareTo(
+            (b.UpdateOrder, b.GetType().GetHashCode())
         );
 
     private readonly IndexedSet<IUpdatable> _active = new();
@@ -79,7 +77,7 @@ public class EntityUpdater
 
     public void Update()
     {
-        _active.Sort(s_updateOrderComparer);
+        _active.Sort(s_updateOrderComparison);
         foreach (var updatable in _active)
         {
             updatable.Update();

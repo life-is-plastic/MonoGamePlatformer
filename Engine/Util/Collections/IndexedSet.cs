@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -89,9 +90,9 @@ public readonly partial record struct IndexedSet<T>
         _items.Clear();
     }
 
-    public void Sort(IComparer<T> comparer)
+    public void Sort(Comparison<T> comparison)
     {
-        _items.Sort(comparer);
+        _items.Sort(comparison);
         RebuildIndices();
     }
 
