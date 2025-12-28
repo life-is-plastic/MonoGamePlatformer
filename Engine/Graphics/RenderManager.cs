@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using Engine.Core;
 using Engine.Util.Collections;
 using Engine.Util.Extensions;
@@ -20,14 +19,11 @@ internal sealed partial class RenderManager : Component
 
     protected override void Begin()
     {
-        foreach (var (camera, entity) in Scene.Find<Camera>())
-        {
-            _cameraHandle = new(entity);
-            _renderTarget = new(Scene.Game.GraphicsDevice, camera.Width, camera.Height);
-            _spriteBatch = new SpriteBatch(Scene.Game.GraphicsDevice);
-            break;
-        }
-        Debug.Assert(_cameraHandle.MaybeDeref() is not null);
+        var cameraEntity = Scene.Find<Camera>().First();
+        var camera = cameraEntity.Get<Camera>();
+        _cameraHandle = new(cameraEntity);
+        _renderTarget = new(Scene.Game.GraphicsDevice, camera.Width, camera.Height);
+        _spriteBatch = new SpriteBatch(Scene.Game.GraphicsDevice);
     }
 
     protected override void End()

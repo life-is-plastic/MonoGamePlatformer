@@ -78,21 +78,25 @@ public sealed partial class Scene
         return Name;
     }
 
-    /// <summary>
-    /// Finds all entities with a component of type <c>T</c> (at the default component index) and
-    /// yields <c>(T, entity)</c> pairs.
-    /// </summary>
-    public FindEntityEnumerable<T> Find<T>()
+    public FindEntityEnumerable Find<T>()
         where T : IComponent
     {
-        return new FindEntityEnumerable<T>(_entities.AsSpan());
+        return new FindEntityEnumerable(_entities.AsSpan(), typeof(T));
     }
 
-    public FindEntityEnumerable<T1, T2> Find<T1, T2>()
+    public FindEntityEnumerable Find<T1, T2>()
         where T1 : IComponent
         where T2 : IComponent
     {
-        return new FindEntityEnumerable<T1, T2>(_entities.AsSpan());
+        return new FindEntityEnumerable(_entities.AsSpan(), typeof(T1), typeof(T2));
+    }
+
+    public FindEntityEnumerable Find<T1, T2, T3>()
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+    {
+        return new FindEntityEnumerable(_entities.AsSpan(), typeof(T1), typeof(T2), typeof(T3));
     }
 
     internal void Update(GameTime gameTime)

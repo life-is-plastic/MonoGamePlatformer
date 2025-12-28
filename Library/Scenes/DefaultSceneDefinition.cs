@@ -91,14 +91,15 @@ internal class RectRenderer : Component, IRenderer
     protected override void Begin()
     {
         _drawUtil = new(Scene);
-        _rotation = _rng.NextSingle() * MathF.PI * 2;
+        _rotation = _rng.NextSingle() * MathHelper.TwoPi;
         _rotationSpeed =
-            (_rng.NextSingle() + 1) * MathF.PI / 2 * (_rng.NextSingle() < 0.5f ? 1 : -1);
-        foreach (var (camera, _) in Scene.Find<Camera>())
-        {
-            _position = new Vector2(_rng.NextInt64(camera.Width), _rng.NextInt64(camera.Height));
-            return;
-        }
+            (_rng.NextSingle() + 1) * MathHelper.PiOver2 * (_rng.NextSingle() < 0.5f ? 1 : -1);
+
+        var cameraRect = Scene.Find<Camera>().First().Get<Camera>().AsWorldRectangleF();
+        _position = new Vector2(
+            MathHelper.Lerp(cameraRect.Left, cameraRect.Right, _rng.NextSingle()),
+            MathHelper.Lerp(cameraRect.Top, cameraRect.Bottom, _rng.NextSingle())
+        );
     }
 
     public void Draw(SpriteBatch spriteBatch)
@@ -134,7 +135,7 @@ internal class DevSceneController : Component, IUpdatable
         }
         if (inputManager.IsPressed(Keys.D2))
         {
-            foreach (var (_, entity) in Scene.Find<RectRenderer>())
+            foreach (var entity in Scene.Find<RectRenderer>())
             {
                 Console.Out.WriteLine(entity);
             }

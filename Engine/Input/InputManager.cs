@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Engine.Core;
 using Engine.Graphics;
 using Microsoft.Xna.Framework;
@@ -12,12 +11,7 @@ public partial class InputManager : Component
 
     protected override void Begin()
     {
-        foreach (var (_, entity) in Scene.Find<Camera>())
-        {
-            _cameraHandle = new(entity);
-            break;
-        }
-        Debug.Assert(_cameraHandle.MaybeDeref() is not null);
+        _cameraHandle = new(Scene.Find<Camera>().First());
     }
 }
 
