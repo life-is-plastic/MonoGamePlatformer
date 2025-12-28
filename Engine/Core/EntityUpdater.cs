@@ -6,7 +6,7 @@ using Engine.Util.Extensions;
 
 namespace Engine.Core;
 
-public class EntityUpdater
+internal sealed class EntityUpdater
 {
     private static readonly Comparison<IUpdatable> s_updateOrderComparison = (a, b) =>
         (a.UpdateOrder, a.GetType().GetHashCode()).CompareTo(

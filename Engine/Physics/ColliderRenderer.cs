@@ -23,13 +23,13 @@ public partial class ColliderRenderer : Component
         _toggleKey = toggleKey;
     }
 
-    public override void Begin()
+    protected override void Begin()
     {
         _pixel = new Texture2D(Scene.Game.GraphicsDevice, 1, 1);
         _pixel.SetData([Color.White]);
     }
 
-    public override void End()
+    protected override void End()
     {
         _pixel.Dispose();
     }

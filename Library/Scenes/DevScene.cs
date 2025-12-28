@@ -83,7 +83,7 @@ internal class RectRenderer : Component, IRenderer
     public int DrawOrder => 0;
     public bool IsVisible { get; set; } = true;
 
-    public override void Begin()
+    protected override void Begin()
     {
         _drawUtil = new(Scene);
         _rotation = _rng.NextSingle() * MathF.PI * 2;

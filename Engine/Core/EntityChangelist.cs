@@ -9,7 +9,7 @@ namespace Engine.Core;
 /// A staging area for entity/component additions/removals, which are applied at the beginning of
 /// the next frame.
 /// </summary>
-public class EntityChangelist
+public sealed class EntityChangelist
 {
     private int _nextEntityId = 1;
     private readonly Scene _scene;
@@ -80,7 +80,7 @@ public class EntityChangelist
     /// Writes staged changes to the given entity set and entity updater, then clears the internal
     /// staging areas.
     /// </summary>
-    public void Apply(IndexedSet<Entity> entities, EntityUpdater entityUpdater)
+    internal void Apply(IndexedSet<Entity> entities, EntityUpdater entityUpdater)
     {
         ProcessRemovals(entities, entityUpdater);
         ProcessAdditions(entities, entityUpdater);

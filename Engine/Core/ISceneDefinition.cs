@@ -2,6 +2,9 @@ namespace Engine.Core;
 
 public interface ISceneDefinition
 {
+    /// <summary>
+    /// Defines the scene's name.
+    /// </summary>
     public string Name();
 
     /// <summary>

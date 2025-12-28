@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace Engine.Core;
 
-public class Game : Microsoft.Xna.Framework.Game
+public sealed class Game : Microsoft.Xna.Framework.Game
 {
     private Scene? _scene;
 

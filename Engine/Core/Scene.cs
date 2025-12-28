@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Engine.Core;
 
-public partial class Scene
+public sealed partial class Scene
 {
     private readonly IndexedSet<Entity> _entities = new();
     private readonly EntityUpdater _entityUpdater = new();
@@ -82,20 +82,20 @@ public partial class Scene
     /// Finds all entities with a component of type <c>T</c> (at the default component index) and
     /// yields <c>(T, entity)</c> pairs.
     /// </summary>
-    public SceneFindEnumerable<T> Find<T>()
+    public FindEntityEnumerable<T> Find<T>()
         where T : IComponent
     {
-        return new SceneFindEnumerable<T>(_entities.AsSpan());
+        return new FindEntityEnumerable<T>(_entities.AsSpan());
     }
 
-    public SceneFindEnumerable<T1, T2> Find<T1, T2>()
+    public FindEntityEnumerable<T1, T2> Find<T1, T2>()
         where T1 : IComponent
         where T2 : IComponent
     {
-        return new SceneFindEnumerable<T1, T2>(_entities.AsSpan());
+        return new FindEntityEnumerable<T1, T2>(_entities.AsSpan());
     }
 
-    public void Update(GameTime gameTime)
+    internal void Update(GameTime gameTime)
     {
         var shouldPause = ShouldPause;
         GameTime = gameTime;
@@ -104,13 +104,13 @@ public partial class Scene
         _entityUpdater.Update();
     }
 
-    public void Draw()
+    internal void Draw()
     {
         Singletons.Get<RenderManager>().Draw();
     }
 }
 
-public partial class Scene : IDisposable
+public sealed partial class Scene : IDisposable
 {
     private bool _isDisposed = false;
 
@@ -125,7 +125,7 @@ public partial class Scene : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    protected virtual void Dispose(bool disposing)
+    internal void Dispose(bool disposing)
     {
         if (_isDisposed)
         {

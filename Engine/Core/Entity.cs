@@ -11,10 +11,10 @@ namespace Engine.Core;
 /// multiple instances of the same component type.
 /// <para>Avoid attaches/detaches/lookups with index if a component is intended to only appear once
 /// per entity.</para>
-/// <para>Avoid caching direct references to entities. Wrap them in an <c>EntityHandle</c>
+/// <para>Do not cache entity references directly. Wrap entities in <c>EntityHandle</c>
 /// instead.</para>
 /// </summary>
-public class Entity
+public sealed class Entity
 {
     private readonly Dictionary<(Type, int), IComponent> _components = new();
 
@@ -145,8 +145,7 @@ public class Entity
     }
 
     /// <summary>
-    /// Immediately attaches a component to this entity without integrating the component with the
-    /// scene.
+    /// Only called by <c>EntityChangelist.Apply()</c>.
     /// </summary>
     internal void ImmediatelyAttach(IComponent component)
     {
@@ -159,8 +158,7 @@ public class Entity
     }
 
     /// <summary>
-    /// Immediately attaches a component to this entity without cleaning up the component from the
-    /// scene.
+    /// Only called by <c>EntityChangelist.Apply()</c>.
     /// </summary>
     internal void ImmediatelyDetach(IComponent component)
     {

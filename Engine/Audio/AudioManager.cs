@@ -33,7 +33,7 @@ public partial class AudioManager : Component
         _active.Clear();
     }
 
-    public override void End()
+    protected override void End()
     {
         StopAll();
     }

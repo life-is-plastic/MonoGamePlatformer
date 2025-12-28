@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Engine.Graphics;
 
-public partial class RenderManager : Component
+internal sealed partial class RenderManager : Component
 {
     private static readonly Comparison<IRenderer> s_drawOrderComparison = (a, b) =>
         (a.DrawOrder, a.Entity.Id).CompareTo((b.DrawOrder, b.Entity.Id));
@@ -17,7 +17,7 @@ public partial class RenderManager : Component
     private SpriteBatch _spriteBatch = null!;
     private EntityHandle _cameraEntity;
 
-    public override void Begin()
+    protected override void Begin()
     {
         foreach (var (camera, _, entity) in Scene.Find<Camera, Transform>())
         {
@@ -27,13 +27,9 @@ public partial class RenderManager : Component
             return;
         }
         throw new InvalidOperationException();
-        // var (camera, _, entity) = Scene.Find<Camera, Transform>();
-        // _cameraEntity = new(entity);
-        // _renderTarget = new(Scene.Game.GraphicsDevice, camera.Width, camera.Height);
-        // _spriteBatch = new SpriteBatch(Scene.Game.GraphicsDevice);
     }
 
-    public override void End()
+    protected override void End()
     {
         _spriteBatch.Dispose();
     }
@@ -101,7 +97,7 @@ public partial class RenderManager : Component
     }
 }
 
-public partial class RenderManager : IEntitySyncer
+internal sealed partial class RenderManager : IEntitySyncer
 {
     void IEntitySyncer.Sync(EntityChangelist entityChangelist)
     {

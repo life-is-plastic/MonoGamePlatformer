@@ -26,7 +26,7 @@ public partial class UIManager : Component
         GumService.Root.Children.Add(element.Visual);
     }
 
-    public override void Begin()
+    protected override void Begin()
     {
         if (s_gumServiceInitialized)
         {
@@ -45,7 +45,7 @@ public partial class UIManager : Component
         s_gumServiceInitialized = true;
     }
 
-    public override void End()
+    protected override void End()
     {
         GumService.Root.Children.Clear();
     }
