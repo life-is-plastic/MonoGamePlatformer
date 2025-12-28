@@ -79,7 +79,9 @@ internal class DevSceneController : Component, IUpdatable
         }
         if (inputManager.IsPressed(Keys.D1))
         {
-            Scene.EntityChangelist.StageCreate("rect").StageAttach(new RectRenderer());
+            Scene
+                .EntityChangelist.StageCreate(nameof(RectRenderer))
+                .StageAttach(new RectRenderer());
         }
         if (inputManager.IsPressed(Keys.D2))
         {
@@ -96,6 +98,7 @@ internal class DevSceneController : Component, IUpdatable
 
 internal class RectRenderer : Component, IRenderer
 {
+    private readonly Random _rng = new();
     private DrawUtil _drawUtil;
     private Vector2 _position;
     private float _rotation;
@@ -104,17 +107,15 @@ internal class RectRenderer : Component, IRenderer
     public int DrawOrder => 0;
     public bool IsVisible { get; set; } = true;
 
-    public RectRenderer() { }
-
     public override void Begin()
     {
-        var rng = new Random();
         _drawUtil = new(Scene);
-        _rotation = rng.NextSingle() * MathF.PI * 2;
-        _rotationSpeed = (rng.NextSingle() + 1) * MathF.PI / 2 * (rng.NextSingle() < 0.5f ? 1 : -1);
+        _rotation = _rng.NextSingle() * MathF.PI * 2;
+        _rotationSpeed =
+            (_rng.NextSingle() + 1) * MathF.PI / 2 * (_rng.NextSingle() < 0.5f ? 1 : -1);
         foreach (var (camera, _) in Scene.Find<Camera>())
         {
-            _position = new Vector2(rng.NextInt64(camera.Width), rng.NextInt64(camera.Height));
+            _position = new Vector2(_rng.NextInt64(camera.Width), _rng.NextInt64(camera.Height));
             return;
         }
     }

@@ -1,19 +1,23 @@
 using System;
-using System.Buffers;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Threading;
 using Engine.Util.Collections;
 
 namespace Engine.Core;
 
 public struct SceneFindEnumerator
 {
+    private static readonly ThreadLocal<List<IComponent>> s_componentBuf = new(() => new());
+    private static readonly ThreadLocal<List<Type>> s_typeBuf = new(() => new());
+
     private readonly IndexedSetView<Entity> _entities;
-    private readonly int _componentCount;
-    private readonly Type[] _componentTypes;
-    private readonly IComponent[] _componentBuf;
+    private readonly List<IComponent> _componentBuf;
+    private readonly List<Type> _typeBuf;
     private int _nextEntity = 0;
 
-    public readonly ReadOnlySpan<IComponent> Current => _componentBuf.AsSpan()[.._componentCount];
+    public readonly ReadOnlySpan<IComponent> Current => CollectionsMarshal.AsSpan(_componentBuf);
 
     public SceneFindEnumerator(
         in IndexedSetView<Entity> entities,
@@ -22,29 +26,26 @@ public struct SceneFindEnumerator
     {
         Debug.Assert(componentTypes.Length > 0);
         _entities = entities;
-        _componentCount = componentTypes.Length;
-        _componentTypes = ArrayPool<Type>.Shared.Rent(_componentCount);
-        _componentBuf = ArrayPool<IComponent>.Shared.Rent(_componentCount);
-        for (var i = 0; i < _componentCount; i++)
-        {
-            Debug.Assert(componentTypes[i].IsAssignableTo(typeof(IComponent)));
-            _componentTypes[i] = componentTypes[i];
-        }
+        _componentBuf = s_componentBuf.Value!;
+        _typeBuf = s_typeBuf.Value!;
+        _typeBuf.AddRange(componentTypes);
     }
 
     public bool MoveNext()
     {
         for (var i = _nextEntity; i < _entities.Count; i++)
         {
+            _componentBuf.Clear();
             var entity = _entities[i];
-            for (var j = 0; j < _componentCount; j++)
+            foreach (var type in _typeBuf)
             {
-                if (entity.MaybeGet(_componentTypes[j], Component.DefaultIndex) is { } component)
+                if (entity.MaybeGet(type, Component.DefaultIndex) is { } component)
                 {
-                    _componentBuf[j] = component;
+                    _componentBuf.Add(component);
                 }
                 else
                 {
+                    _componentBuf.Clear();
                     goto NextEntity;
                 }
             }
@@ -59,7 +60,7 @@ public struct SceneFindEnumerator
 
     public readonly void Dispose()
     {
-        ArrayPool<Type>.Shared.Return(_componentTypes);
-        ArrayPool<IComponent>.Shared.Return(_componentBuf);
+        _componentBuf.Clear();
+        _typeBuf.Clear();
     }
 }
