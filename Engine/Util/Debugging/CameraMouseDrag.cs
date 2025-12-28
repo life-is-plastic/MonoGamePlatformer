@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace Engine.Util.Debugging;
 
-public partial class MouseDragsCamera : Component
+public partial class CameraMouseDrag : Component
 {
     private readonly MouseButton _button;
     private EntityHandle _cameraHandle;
@@ -13,7 +13,7 @@ public partial class MouseDragsCamera : Component
     private Point _initialScreenPos;
     private Vector2 _initialWorldPos;
 
-    public MouseDragsCamera(MouseButton button = MouseButton.Right)
+    public CameraMouseDrag(MouseButton button = MouseButton.Right)
     {
         _button = button;
     }
@@ -24,7 +24,7 @@ public partial class MouseDragsCamera : Component
     }
 }
 
-public partial class MouseDragsCamera : IUpdatable
+public partial class CameraMouseDrag : IUpdatable
 {
     bool IUpdatable.Pause()
     {

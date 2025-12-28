@@ -29,51 +29,17 @@ public class DefaultSceneDefinition : ISceneDefinition
             .Singletons.StageAttach(new DevSceneController())
             .StageAttach(new SceneLoadOnPress(Instance))
             .StageAttach(new ScenePauseToggle())
-            .StageAttach(new MouseDragsCamera());
+            .StageAttach(new CameraKeyboardPan())
+            .StageAttach(new CameraMouseDrag());
 
         scene
             .EntityChangelist.StageCreate(nameof(RectRenderer))
             .StageAttach(new RectRenderer())
             .StageAttach(new RectRenderer() { ComponentIndex = 0 });
 
-        foreach (var entity in scene.Entities)
-        {
-            if (entity.Has<Camera>())
-            {
-                entity.StageAttach(new CameraController());
-                break;
-            }
-        }
-
         scene
             .Singletons.Get<AudioManager>()
             .Play(scene.Content.Load<SoundEffect>("Audio/Theme"), loop: true);
-    }
-}
-
-internal class CameraController : Component, IUpdatable
-{
-    void IUpdatable.Update()
-    {
-        const float Speed = 240;
-        var inputManager = Scene.Singletons.Get<InputManager>();
-        var transform = Entity.Get<Transform>();
-        if (inputManager.IsDown(Keys.A))
-        {
-            transform.Position.X -= Speed * Scene.DeltaTime;
-        }
-        if (inputManager.IsDown(Keys.D))
-        {
-            transform.Position.X += Speed * Scene.DeltaTime;
-        }
-        if (inputManager.IsDown(Keys.W))
-        {
-            transform.Position.Y -= Speed * Scene.DeltaTime;
-        }
-        if (inputManager.IsDown(Keys.S))
-        {
-            transform.Position.Y += Speed * Scene.DeltaTime;
-        }
     }
 }
 
