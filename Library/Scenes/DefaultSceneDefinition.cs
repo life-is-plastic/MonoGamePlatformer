@@ -4,6 +4,7 @@ using Engine.Core;
 using Engine.Graphics;
 using Engine.Input;
 using Engine.Util;
+using Engine.Util.Debugging;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -11,20 +12,23 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Library.Scenes;
 
-public class DevSceneDefinition : ISceneDefinition
+public class DefaultSceneDefinition : ISceneDefinition
 {
-    public static DevSceneDefinition Instance { get; } = new();
+    public static DefaultSceneDefinition Instance { get; } = new();
 
-    private DevSceneDefinition() { }
+    private DefaultSceneDefinition() { }
 
     string ISceneDefinition.Name()
     {
-        return nameof(DevSceneDefinition);
+        return "DefaultScene";
     }
 
     void ISceneDefinition.Initialize(Scene scene)
     {
-        scene.Singletons.StageAttach(new DevSceneController());
+        scene
+            .Singletons.StageAttach(new SceneLoadOnPress(Instance))
+            .StageAttach(new ScenePauseToggle())
+            .StageAttach(new DevSceneController());
 
         scene
             .EntityChangelist.StageCreate(nameof(RectRenderer))
@@ -121,14 +125,6 @@ internal class DevSceneController : Component, IUpdatable
     void IUpdatable.Update()
     {
         var inputManager = Scene.Singletons.Get<InputManager>();
-        if (inputManager.IsPressed(Keys.Escape))
-        {
-            Scene.ShouldPause = !Scene.IsPaused;
-        }
-        if (inputManager.IsPressed(Keys.R))
-        {
-            Scene.Game.NextSceneDefinition = DevSceneDefinition.Instance;
-        }
         if (inputManager.IsPressed(Keys.D1))
         {
             Scene

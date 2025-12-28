@@ -1,0 +1,33 @@
+using Engine.Core;
+using Engine.Input;
+using Microsoft.Xna.Framework.Input;
+
+namespace Engine.Util.Debugging;
+
+public partial class SceneLoadOnPress : Component
+{
+    private readonly ISceneDefinition _sceneDefinition;
+    private readonly Keys _button;
+
+    public SceneLoadOnPress(ISceneDefinition sceneDefinition, Keys button = Keys.R)
+    {
+        _sceneDefinition = sceneDefinition;
+        _button = button;
+    }
+}
+
+public partial class SceneLoadOnPress : IUpdatable
+{
+    bool IUpdatable.Pause()
+    {
+        return false;
+    }
+
+    void IUpdatable.Update()
+    {
+        if (Scene.Singletons.Get<InputManager>().IsPressed(_button))
+        {
+            Scene.Game.NextSceneDefinition = _sceneDefinition;
+        }
+    }
+}
