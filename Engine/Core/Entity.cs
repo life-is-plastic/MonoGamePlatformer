@@ -148,7 +148,7 @@ public class Entity
     /// Immediately attaches a component to this entity without integrating the component with the
     /// scene.
     /// </summary>
-    public void ImmediatelyAttach(IComponent component)
+    internal void ImmediatelyAttach(IComponent component)
     {
         Debug.Assert(component.Entity == this);
         var added = _components.TryAdd((component.GetType(), component.ComponentIndex), component);
@@ -162,7 +162,7 @@ public class Entity
     /// Immediately attaches a component to this entity without cleaning up the component from the
     /// scene.
     /// </summary>
-    public void ImmediatelyDetach(IComponent component)
+    internal void ImmediatelyDetach(IComponent component)
     {
         Debug.Assert(Get(component.GetType(), component.ComponentIndex) == component);
         _components.RemoveOrDie((component.GetType(), component.ComponentIndex));
