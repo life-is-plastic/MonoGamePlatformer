@@ -1,52 +1,54 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Threading;
+using System.Runtime.CompilerServices;
 
 namespace Engine.Core;
 
 public ref struct SceneFindEnumerator
 {
-    private static readonly ThreadLocal<List<IComponent>> s_componentBuf = new(() => new(4));
-    private static readonly ThreadLocal<List<Type>> s_typeBuf = new(() => new(4));
+    private const int BufferLength = 4;
+
+    [InlineArray(BufferLength)]
+    public struct Buffer<T>
+    {
+        private T _element0;
+    }
+
+    public Buffer<IComponent> Current;
 
     private readonly ReadOnlySpan<Entity> _entities;
-    private readonly List<IComponent> _componentBuf;
-    private readonly List<Type> _typeBuf;
+    private readonly int _bufCount;
+    private Buffer<Type> _types;
     private int _nextEntity = 0;
-
-    public readonly ReadOnlySpan<IComponent> Current => CollectionsMarshal.AsSpan(_componentBuf);
 
     public SceneFindEnumerator(
         ReadOnlySpan<Entity> entities,
         params ReadOnlySpan<Type> componentTypes
     )
     {
-        Debug.Assert(componentTypes.Length > 0);
+        Debug.Assert(componentTypes.Length > 0 && componentTypes.Length < BufferLength);
         _entities = entities;
-        _componentBuf = s_componentBuf.Value!;
-        _componentBuf.Clear();
-        _typeBuf = s_typeBuf.Value!;
-        _typeBuf.Clear();
-        _typeBuf.AddRange(componentTypes);
+        _bufCount = componentTypes.Length;
+        for (var i = 0; i < _bufCount; i++)
+        {
+            _types[i] = componentTypes[i];
+        }
     }
 
     public bool MoveNext()
     {
         for (var i = _nextEntity; i < _entities.Length; i++)
         {
-            _componentBuf.Clear();
             var entity = _entities[i];
-            foreach (var type in _typeBuf)
+            for (var j = 0; j < _bufCount; j++)
             {
+                var type = _types[j];
                 if (entity.MaybeGet(type, Component.DefaultIndex) is { } component)
                 {
-                    _componentBuf.Add(component);
+                    Current[j] = component;
                 }
                 else
                 {
-                    _componentBuf.Clear();
                     goto NextEntity;
                 }
             }

@@ -10,15 +10,15 @@ public interface ICollisionHandler : IComponent
     /// <summary>
     /// Invoked on the first frame the two colliders began overlapping.
     /// </summary>
-    public void OnCollisionEnter(ContactInfo contact) { }
+    public void OnCollisionEnter(in ContactInfo contact) { }
 
     /// <summary>
     /// Invoked starting on the second frame since the two colliders began overlapping.
     /// </summary>
-    public void OnCollisionStay(ContactInfo contact) { }
+    public void OnCollisionStay(in ContactInfo contact) { }
 
     /// <summary>
     /// Invoked on the first frame the two colliders stopped overlapping.
     /// </summary>
-    public void OnCollisionExit(ContactInfo finalContact) { }
+    public void OnCollisionExit(in ContactInfo finalContact) { }
 }
