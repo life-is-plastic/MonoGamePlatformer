@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System;
 
 namespace Engine.Util.Collections;
 
@@ -23,13 +23,18 @@ public readonly partial record struct IndexedSetView<T>
         _indexedSet = indexedSet;
     }
 
+    public ReadOnlySpan<T> AsSpan()
+    {
+        return _indexedSet.AsSpan();
+    }
+
+    public ReadOnlySpan<T>.Enumerator GetEnumerator()
+    {
+        return _indexedSet.GetEnumerator();
+    }
+
     public bool Contains(T item)
     {
         return _indexedSet.Contains(item);
-    }
-
-    public List<T>.Enumerator GetEnumerator()
-    {
-        return _indexedSet.GetEnumerator();
     }
 }

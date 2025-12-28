@@ -64,31 +64,14 @@ public abstract partial class Scene
     public SceneFindEnumerable<T> Find<T>()
         where T : IComponent
     {
-        return new SceneFindEnumerable<T>(Entities);
+        return new SceneFindEnumerable<T>(_entities.AsSpan());
     }
 
     public SceneFindEnumerable<T1, T2> Find<T1, T2>()
         where T1 : IComponent
         where T2 : IComponent
     {
-        return new SceneFindEnumerable<T1, T2>(Entities);
-    }
-
-    public SceneFindEnumerable<T1, T2, T3> Find<T1, T2, T3>()
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-    {
-        return new SceneFindEnumerable<T1, T2, T3>(Entities);
-    }
-
-    public SceneFindEnumerable<T1, T2, T3, T4> Find<T1, T2, T3, T4>()
-        where T1 : IComponent
-        where T2 : IComponent
-        where T3 : IComponent
-        where T4 : IComponent
-    {
-        return new SceneFindEnumerable<T1, T2, T3, T4>(Entities);
+        return new SceneFindEnumerable<T1, T2>(_entities.AsSpan());
     }
 }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace Engine.Util.Collections;
 
@@ -27,14 +28,20 @@ public readonly partial record struct IndexedSet<T>
         _items = new(capacity);
     }
 
+    public Span<T> AsSpan()
+    {
+        return CollectionsMarshal.AsSpan(_items);
+    }
+
+    public ReadOnlySpan<T>.Enumerator GetEnumerator()
+    {
+        ReadOnlySpan<T> span = AsSpan();
+        return span.GetEnumerator();
+    }
+
     public bool Contains(T item)
     {
         return _indices.ContainsKey(item);
-    }
-
-    public List<T>.Enumerator GetEnumerator()
-    {
-        return _items.GetEnumerator();
     }
 
     /// <summary>

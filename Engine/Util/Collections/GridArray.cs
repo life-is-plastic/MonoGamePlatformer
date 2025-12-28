@@ -40,4 +40,10 @@ public readonly record struct GridArray<T>
     {
         return _array;
     }
+
+    public ReadOnlySpan<T>.Enumerator GetEnumerator()
+    {
+        ReadOnlySpan<T> span = AsSpan();
+        return span.GetEnumerator();
+    }
 }

@@ -85,12 +85,9 @@ internal class DevSceneController : Component, IUpdatable
         }
         if (inputManager.IsPressed(Keys.D2))
         {
-            for (var i = 0; i < 1_000_000; i++)
+            foreach (var (_, entity) in Scene.Find<RectRenderer>())
             {
-                foreach (var _ in Scene.Find<RectRenderer>())
-                {
-                    ;
-                }
+                Console.Out.WriteLine(entity);
             }
         }
     }
