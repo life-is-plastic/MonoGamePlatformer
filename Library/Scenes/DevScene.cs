@@ -1,3 +1,4 @@
+using System.Linq;
 using Engine.Audio;
 using Engine.Core;
 using Engine.Graphics;
@@ -64,6 +65,8 @@ internal class CameraController : Component, IUpdatable
 
 internal class DevSceneController : Component, IUpdatable
 {
+    private long[]? _array;
+
     bool IUpdatable.Pause()
     {
         return false;
@@ -75,7 +78,15 @@ internal class DevSceneController : Component, IUpdatable
         if (inputManager.IsPressed(Keys.Escape))
         {
             Scene.ShouldPause = !Scene.IsPaused;
+
+            _array = new long[100_000_000];
+            for (var i = 0; i < _array.Length; i++)
+            {
+                _array[i] = i;
+            }
         }
+
+        if (inputManager.IsPressed(Keys.Space)) { }
     }
 }
 
@@ -105,7 +116,8 @@ internal class RectRenderer : Component, IRenderer
             _position,
             size: new(90, 60),
             normalizedOrigin: new(0.5f, 0.5f),
-            rotation: Scene.TotalTime
+            rotation: Scene.IsPaused ? 0 : Scene.TotalTime
+        // rotation: Scene.TotalTime
         );
         _drawUtil.DrawLine(spriteBatch, Color.DarkOrchid, new(2, 2), new(40, 40));
     }
