@@ -31,7 +31,7 @@ public class Collider : Component
     /// <summary>
     /// Returns the absolute, world space representation of this collider.
     /// </summary>
-    public RectangleF AsWorldRect()
+    public RectangleF AsWorldRectangleF()
     {
         var transform = Entity.Get<Transform>();
         return RectangleF
@@ -42,6 +42,6 @@ public class Collider : Component
 
     public RectangleF? GetOverlap(Collider other)
     {
-        return AsWorldRect().GetOverlap(other.AsWorldRect());
+        return AsWorldRectangleF().GetOverlap(other.AsWorldRectangleF());
     }
 }

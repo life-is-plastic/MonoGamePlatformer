@@ -69,7 +69,7 @@ public partial class ColliderRenderer : IRenderer
         {
             foreach (var collider in colliders)
             {
-                var rect = collider.AsWorldRect().ToRectangle();
+                var rect = collider.AsWorldRectangleF().ToRectangle();
                 spriteBatch.Draw(
                     _pixel,
                     new Rectangle(rect.Left, rect.Top, rect.Width, 1),

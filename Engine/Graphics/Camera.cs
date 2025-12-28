@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Engine.Core;
+using Engine.Util;
 using Microsoft.Xna.Framework;
 
 namespace Engine.Graphics;
@@ -15,9 +16,15 @@ public class Camera : Component
 
     public Camera(int width, int height)
     {
-        Debug.Assert(width > 80);
-        Debug.Assert(height > 60);
+        Debug.Assert(width > 0);
+        Debug.Assert(height > 0);
         Width = width;
         Height = height;
+    }
+
+    public RectangleF AsWorldRectangleF()
+    {
+        var transform = Entity.Get<Transform>();
+        return new RectangleF(default, Size.ToVector2()).WithCenter(transform.Position);
     }
 }

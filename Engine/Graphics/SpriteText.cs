@@ -33,12 +33,12 @@ public partial class SpriteText
     /// 0 anchors to the left/top, 0.5 anchors to the center, and 1 anchors to the right/bottom.
     /// Values outside [0, 1] are also valid.
     /// </summary>
-    public Vector2 NormalizedOrigin { get; set; } = Vector2.Zero;
+    public Vector2 NormalizedOrigin { get; set; } = default;
 
     /// <summary>
     /// Pixel offset applied on top of <c>NormalizedOrigin</c> to derive the final origin.
     /// </summary>
-    public Vector2 OriginOffset { get; set; } = Vector2.Zero;
+    public Vector2 OriginOffset { get; set; } = default;
 
     public SpriteText(SpriteFont spriteFont)
     {

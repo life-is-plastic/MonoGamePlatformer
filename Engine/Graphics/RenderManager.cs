@@ -26,7 +26,7 @@ internal sealed partial class RenderManager : Component
             _spriteBatch = new SpriteBatch(Scene.Game.GraphicsDevice);
             return;
         }
-        throw new InvalidOperationException();
+        throw new InvalidOperationException($"unable to find ${typeof(Camera)}");
     }
 
     protected override void End()
@@ -36,18 +36,17 @@ internal sealed partial class RenderManager : Component
 
     public void Draw()
     {
-        var cameraEntity = _cameraEntity.Deref();
-        DrawToRenderTarget(cameraEntity.Get<Transform>());
-        DrawRenderTargetToScreen(cameraEntity.Get<Camera>());
+        var camera = _cameraEntity.Deref().Get<Camera>();
+        DrawToRenderTarget(camera);
+        DrawRenderTargetToScreen(camera);
     }
 
-    private void DrawToRenderTarget(Transform cameraTransform)
+    private void DrawToRenderTarget(Camera camera)
     {
         _renderers.Sort(s_drawOrderComparison);
         var rendererOptions = new IRenderer.Options();
-        var transformMatrix =
-            Matrix.CreateScale(cameraTransform.Scale.X, cameraTransform.Scale.Y, 1)
-            * Matrix.CreateTranslation(-cameraTransform.Position.X, -cameraTransform.Position.Y, 0);
+        var cameraRect = camera.AsWorldRectangleF().Location;
+        var transformMatrix = Matrix.CreateTranslation(-cameraRect.X, -cameraRect.Y, 0);
 
         Scene.Game.GraphicsDevice.SetRenderTarget(_renderTarget);
         Scene.Game.GraphicsDevice.Clear(Color.CornflowerBlue);

@@ -11,7 +11,7 @@ public partial class Sprite
     /// Origin in pixel units. Note that origin refers to the top-left corner of the specified
     /// pixel, not the center of the pixel.
     /// </summary>
-    public Vector2 Origin { get; set; } = Vector2.Zero;
+    public Vector2 Origin { get; set; } = default;
 
     /// <summary>
     /// 0 anchors to the left/top, 0.5 anchors to the center, and 1 anchors to the right/bottom.

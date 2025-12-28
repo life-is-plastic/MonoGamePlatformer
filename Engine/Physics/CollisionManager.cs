@@ -120,7 +120,7 @@ public partial class CollisionManager : Component
         Vector2 normal;
         if (overlap.Width < overlap.Height)
         {
-            if (a.AsWorldRect().Center.X < overlap.Center.X)
+            if (a.AsWorldRectangleF().Center.X < overlap.Center.X)
             {
                 normal = new Vector2(-1, 0);
             }
@@ -131,7 +131,7 @@ public partial class CollisionManager : Component
         }
         else
         {
-            if (a.AsWorldRect().Center.Y < overlap.Center.Y)
+            if (a.AsWorldRectangleF().Center.Y < overlap.Center.Y)
             {
                 normal = new Vector2(0, -1);
             }

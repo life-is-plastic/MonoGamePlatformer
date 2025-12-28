@@ -77,10 +77,10 @@ public readonly record struct RectangleF
     public Rectangle ToRectangle()
     {
         return new Rectangle(
-            (int)Math.Round(Left),
-            (int)Math.Round(Top),
-            (int)Math.Round(Width),
-            (int)Math.Round(Height)
+            (int)MathF.Round(Left),
+            (int)MathF.Round(Top),
+            (int)MathF.Round(Width),
+            (int)MathF.Round(Height)
         );
     }
 }
