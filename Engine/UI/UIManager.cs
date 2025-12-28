@@ -74,7 +74,7 @@ public partial class UIManager : IRenderer
 {
     public int DrawOrder => 100;
     public bool IsVisible { get; set; } = true;
-    public IRenderer.DrawOptions DrawOpts => new() { Batch = false };
+    public IRenderer.Options RendererOptions => new() { Batch = false };
 
     void IRenderer.Draw(SpriteBatch spriteBatch)
     {

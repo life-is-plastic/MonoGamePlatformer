@@ -9,7 +9,7 @@ namespace Engine.Util.Collections;
 public readonly partial record struct DictionaryView<TKey, TValue>
     where TKey : notnull
 {
-    private static readonly Dictionary<TKey, TValue> s_emptyDict = new();
+    private static readonly Dictionary<TKey, TValue> s_empty = new();
 
     private readonly Dictionary<TKey, TValue> _dict;
 
@@ -19,7 +19,7 @@ public readonly partial record struct DictionaryView<TKey, TValue>
     public TValue this[TKey key] => _dict[key];
 
     public DictionaryView()
-        : this(s_emptyDict) { }
+        : this(s_empty) { }
 
     public DictionaryView(Dictionary<TKey, TValue> dict)
     {

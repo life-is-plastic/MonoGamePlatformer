@@ -8,13 +8,13 @@ namespace Engine.Graphics;
 /// </summary>
 public interface IRenderer : IComponent
 {
-    public record struct DrawOptions
+    public record struct Options
     {
         public bool Batch = true;
         public SamplerState? SamplerState = SamplerState.PointClamp;
         public Effect? Effect = null;
 
-        public DrawOptions() { }
+        public Options() { }
 
         public readonly void Begin(SpriteBatch spriteBatch)
         {
@@ -37,7 +37,7 @@ public interface IRenderer : IComponent
     /// <summary>
     /// Configures sprite batch <c>Begin()</c>.
     /// </summary>
-    public DrawOptions DrawOpts => new();
+    public Options RendererOptions => new();
 
     /// <summary>
     /// Draws the component.

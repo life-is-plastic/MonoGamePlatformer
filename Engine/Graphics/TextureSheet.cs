@@ -29,7 +29,7 @@ public readonly record struct TextureSheet
             new Rectangle(rc.Column * FrameWidth, rc.Row * FrameHeight, FrameWidth, FrameHeight)
         );
 
-    public TextureSheet(TextureRegion textureRegion, int rows, int columns)
+    public TextureSheet(in TextureRegion textureRegion, int rows, int columns)
     {
         _grid = new(rows, columns);
         TextureRegion = textureRegion;

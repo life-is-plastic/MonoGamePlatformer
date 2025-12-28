@@ -48,14 +48,14 @@ public partial class RenderManager : Component
     private void DrawToRenderTarget(Transform cameraTransform)
     {
         _renderers.Sort(s_drawOrderComparison);
-        var rendererDrawOptions = new IRenderer.DrawOptions();
+        var rendererOptions = new IRenderer.Options();
         var transformMatrix =
             Matrix.CreateScale(cameraTransform.Scale.X, cameraTransform.Scale.Y, 1)
             * Matrix.CreateTranslation(-cameraTransform.Position.X, -cameraTransform.Position.Y, 0);
 
         Scene.Game.GraphicsDevice.SetRenderTarget(_renderTarget);
         Scene.Game.GraphicsDevice.Clear(Color.CornflowerBlue);
-        _spriteBatch.Begin(rendererDrawOptions, transformMatrix);
+        _spriteBatch.Begin(rendererOptions, transformMatrix);
 
         foreach (var renderer in _renderers)
         {
@@ -63,11 +63,11 @@ public partial class RenderManager : Component
             {
                 continue;
             }
-            if (!renderer.DrawOpts.Batch || renderer.DrawOpts != rendererDrawOptions)
+            if (!renderer.RendererOptions.Batch || renderer.RendererOptions != rendererOptions)
             {
                 _spriteBatch.End();
-                _spriteBatch.Begin(renderer.DrawOpts, transformMatrix);
-                rendererDrawOptions = renderer.DrawOpts;
+                _spriteBatch.Begin(renderer.RendererOptions, transformMatrix);
+                rendererOptions = renderer.RendererOptions;
             }
             renderer.Draw(_spriteBatch);
         }
@@ -86,7 +86,7 @@ public partial class RenderManager : Component
         var renderTargetScreenSize = Math.Min(scale.X, scale.Y) * camera.Size.ToVector2();
         var renderTargetScreenPosition = (screenSize - renderTargetScreenSize) / 2;
 
-        _spriteBatch.Begin(new IRenderer.DrawOptions());
+        _spriteBatch.Begin(new IRenderer.Options());
         _spriteBatch.Draw(
             _renderTarget,
             destinationRectangle: new Rectangle(

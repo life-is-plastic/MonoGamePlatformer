@@ -22,7 +22,7 @@ public partial class DrawableRenderer<T> : IRenderer
 {
     public int DrawOrder { get; init; } = 0;
     public bool IsVisible { get; set; } = true;
-    public IRenderer.DrawOptions DrawOpts { get; init; } = new();
+    public IRenderer.Options RendererOptions { get; init; } = new();
 
     void IRenderer.Draw(SpriteBatch spriteBatch)
     {

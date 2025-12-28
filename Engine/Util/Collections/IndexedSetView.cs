@@ -8,7 +8,7 @@ namespace Engine.Util.Collections;
 public readonly partial record struct IndexedSetView<T>
     where T : notnull
 {
-    private static readonly IndexedSet<T> s_emptyIndexedSet = new();
+    private static readonly IndexedSet<T> s_empty = new();
 
     private readonly IndexedSet<T> _indexedSet;
 
@@ -16,7 +16,7 @@ public readonly partial record struct IndexedSetView<T>
     public T this[int index] => _indexedSet[index];
 
     public IndexedSetView()
-        : this(s_emptyIndexedSet) { }
+        : this(s_empty) { }
 
     public IndexedSetView(IndexedSet<T> indexedSet)
     {

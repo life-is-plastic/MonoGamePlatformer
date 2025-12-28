@@ -19,6 +19,9 @@ public readonly record struct GridArray<T>
     public ref T this[int row, int column] => ref _array[_grid[row, column]];
     public ref T this[(int Row, int Column) rc] => ref this[rc.Row, rc.Column];
 
+    public GridArray()
+        : this(0, 0) { }
+
     public GridArray(int rows, int columns)
         : this(rows, columns, rows * columns == 0 ? Array.Empty<T>() : new T[rows * columns]) { }
 

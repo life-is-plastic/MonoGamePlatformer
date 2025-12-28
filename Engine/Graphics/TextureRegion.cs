@@ -35,7 +35,7 @@ public readonly record struct TextureRegion
     /// Creates a texture region from another texture region. <c>region</c> is relative to the input
     /// texture region rather than the underlying source texture.
     /// </summary>
-    public TextureRegion(TextureRegion textureRegion, Rectangle region)
+    public TextureRegion(in TextureRegion textureRegion, Rectangle region)
         : this(
             textureRegion.Texture,
             new Rectangle(textureRegion.Region.Location + region.Location, region.Size)

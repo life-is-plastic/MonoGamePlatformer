@@ -23,7 +23,7 @@ public partial class Sprite
         set => Origin = value * TextureRegion.Region.Size.ToVector2();
     }
 
-    public Sprite(TextureRegion textureRegion)
+    public Sprite(in TextureRegion textureRegion)
     {
         TextureRegion = textureRegion;
     }
