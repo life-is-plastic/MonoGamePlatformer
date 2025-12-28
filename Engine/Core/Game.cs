@@ -7,9 +7,9 @@ public class Game : Microsoft.Xna.Framework.Game
 {
     private Scene? _scene;
 
-    public Scene? NextScene { get; set; }
+    public ISceneDefinition? NextSceneDefinition { get; set; }
 
-    public Game(Scene initialScene)
+    public Game(ISceneDefinition initialSceneDefinition)
     {
         _ = new GraphicsDeviceManager(this);
 
@@ -19,20 +19,21 @@ public class Game : Microsoft.Xna.Framework.Game
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
 
-        NextScene = initialScene;
+        NextSceneDefinition = initialSceneDefinition;
     }
 
     protected override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
 
-        if (NextScene is not null)
+        if (NextSceneDefinition is not null)
         {
             IDisposable? oldScene = _scene;
-            (_scene, NextScene) = (NextScene, null);
             oldScene?.Dispose();
+            _scene = null;
             GC.Collect();
-            _scene.Initialize(this, gameTime);
+            _scene = new Scene(NextSceneDefinition, this, gameTime);
+            NextSceneDefinition = null;
         }
         _scene!.Update(gameTime);
     }

@@ -11,20 +11,27 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Library.Scenes;
 
-public class DevScene : Scene
+public class DevSceneDefinition : ISceneDefinition
 {
-    public override string Name => nameof(DevScene);
+    public static DevSceneDefinition Instance { get; } = new();
 
-    public override void Initialize()
+    private DevSceneDefinition() { }
+
+    string ISceneDefinition.Name()
     {
-        Singletons.StageAttach(new DevSceneController());
+        return nameof(DevSceneDefinition);
+    }
 
-        EntityChangelist
-            .StageCreate(nameof(RectRenderer))
+    void ISceneDefinition.Initialize(Scene scene)
+    {
+        scene.Singletons.StageAttach(new DevSceneController());
+
+        scene
+            .EntityChangelist.StageCreate(nameof(RectRenderer))
             .StageAttach(new RectRenderer())
             .StageAttach(new RectRenderer() { ComponentIndex = 0 });
 
-        foreach (var entity in Entities)
+        foreach (var entity in scene.Entities)
         {
             if (entity.Has<Camera>())
             {
@@ -33,7 +40,9 @@ public class DevScene : Scene
             }
         }
 
-        Singletons.Get<AudioManager>().Play(Content.Load<SoundEffect>("Audio/Theme"), loop: true);
+        scene
+            .Singletons.Get<AudioManager>()
+            .Play(scene.Content.Load<SoundEffect>("Audio/Theme"), loop: true);
     }
 }
 
@@ -59,36 +68,6 @@ internal class CameraController : Component, IUpdatable
         if (inputManager.IsDown(Keys.S))
         {
             transform.Position.Y += Speed * Scene.DeltaTime;
-        }
-    }
-}
-
-internal class DevSceneController : Component, IUpdatable
-{
-    bool IUpdatable.Pause()
-    {
-        return false;
-    }
-
-    void IUpdatable.Update()
-    {
-        var inputManager = Scene.Singletons.Get<InputManager>();
-        if (inputManager.IsPressed(Keys.Escape))
-        {
-            Scene.ShouldPause = !Scene.IsPaused;
-        }
-        if (inputManager.IsPressed(Keys.D1))
-        {
-            Scene
-                .EntityChangelist.StageCreate(nameof(RectRenderer))
-                .StageAttach(new RectRenderer());
-        }
-        if (inputManager.IsPressed(Keys.D2))
-        {
-            foreach (var (_, entity) in Scene.Find<RectRenderer>())
-            {
-                Console.Out.WriteLine(entity);
-            }
         }
     }
 }
@@ -129,5 +108,39 @@ internal class RectRenderer : Component, IRenderer
             _rotation
         );
         _drawUtil.DrawLine(spriteBatch, Color.DarkOrchid, new Vector2(2, 2), new Vector2(40, 40));
+    }
+}
+
+internal class DevSceneController : Component, IUpdatable
+{
+    bool IUpdatable.Pause()
+    {
+        return false;
+    }
+
+    void IUpdatable.Update()
+    {
+        var inputManager = Scene.Singletons.Get<InputManager>();
+        if (inputManager.IsPressed(Keys.Escape))
+        {
+            Scene.ShouldPause = !Scene.IsPaused;
+        }
+        if (inputManager.IsPressed(Keys.R))
+        {
+            Scene.Game.NextSceneDefinition = DevSceneDefinition.Instance;
+        }
+        if (inputManager.IsPressed(Keys.D1))
+        {
+            Scene
+                .EntityChangelist.StageCreate(nameof(RectRenderer))
+                .StageAttach(new RectRenderer());
+        }
+        if (inputManager.IsPressed(Keys.D2))
+        {
+            foreach (var (_, entity) in Scene.Find<RectRenderer>())
+            {
+                Console.Out.WriteLine(entity);
+            }
+        }
     }
 }

@@ -10,23 +10,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Engine.Core;
 
-// Abstract members.
-public abstract partial class Scene
-{
-    /// <summary>
-    /// Human readable name for debugging.
-    /// </summary>
-    public abstract string Name { get; }
-
-    /// <summary>
-    /// Called at the end of <c>Initialize(Game, GameTime)</c>. Initial scene entities should be
-    /// created here.
-    /// </summary>
-    public abstract void Initialize();
-}
-
-// Core members.
-public abstract partial class Scene
+public partial class Scene
 {
     private readonly IndexedSet<Entity> _entities = new();
     private readonly EntityUpdater _entityUpdater = new();
@@ -34,23 +18,60 @@ public abstract partial class Scene
     public IndexedSetView<Entity> Entities => new(_entities);
     public bool IsPaused => _entityUpdater.IsPaused;
     public bool ShouldPause { get; set; } = false;
+    public float DeltaTime => (float)GameTime.ElapsedGameTime.TotalSeconds;
+    public float TotalTime => (float)GameTime.TotalGameTime.TotalSeconds;
 
-    public Game Game { get; private set; } = null!;
-    public ContentManager Content { get; private set; } = null!;
-    public EntityChangelist EntityChangelist { get; private set; } = null!;
+    /// <summary>
+    /// Human readable name for debugging.
+    /// </summary>
+    public string Name { get; }
+
+    public Game Game { get; }
+
+    /// <summary>
+    /// Game time forwarded from <c>Game.Update()</c>. Non-MonoGame code must not mutate this
+    /// object.
+    /// </summary>
+    public GameTime GameTime { get; private set; }
+
+    public ContentManager Content { get; }
+
+    public EntityChangelist EntityChangelist { get; }
 
     /// <summary>
     /// Container entity for singleton components.
     /// </summary>
-    public Entity Singletons { get; private set; } = null!;
+    public Entity Singletons { get; }
 
-    /// <summary>
-    /// Game time forwarded from <c>Game</c>. Non-MonoGame code must not mutate this object.
-    /// </summary>
-    public GameTime GameTime { get; private set; } = null!;
+    public Scene(ISceneDefinition sceneDefinition, Game game, GameTime initialGameTime)
+    {
+        Name = sceneDefinition.Name();
+        Game = game;
+        GameTime = initialGameTime;
+        Content = new ContentManager(game.Content.ServiceProvider)
+        {
+            RootDirectory = game.Content.RootDirectory,
+        };
 
-    public float DeltaTime => (float)GameTime.ElapsedGameTime.TotalSeconds;
-    public float TotalTime => (float)GameTime.TotalGameTime.TotalSeconds;
+        EntityChangelist = new(this);
+        EntityChangelist
+            .StageCreate(nameof(Camera))
+            .StageAttach(new Camera())
+            .StageAttach(new Transform());
+
+        Singletons = EntityChangelist
+            .StageCreate(nameof(Singletons))
+            .StageAttach(new InputManager())
+            .StageAttach(new CollisionManager())
+            .StageAttach(new AudioManager())
+            .StageAttach(new MenuAudioManager())
+            .StageAttach(new RenderManager())
+            .StageAttach(new UIManager());
+
+        Update(initialGameTime);
+
+        sceneDefinition.Initialize(this);
+    }
 
     public override string ToString()
     {
@@ -73,39 +94,6 @@ public abstract partial class Scene
     {
         return new SceneFindEnumerable<T1, T2>(_entities.AsSpan());
     }
-}
-
-// Methods invoked by `Game`.
-public abstract partial class Scene
-{
-    /// <summary>
-    /// Initializes scene fields and creates required entities/components.
-    /// </summary>
-    public void Initialize(Game game, GameTime gameTime)
-    {
-        Game = game;
-        Content = new ContentManager(game.Content.ServiceProvider)
-        {
-            RootDirectory = game.Content.RootDirectory,
-        };
-        EntityChangelist = new(this);
-
-        Singletons = EntityChangelist
-            .StageCreate(nameof(Singletons))
-            .StageAttach(new InputManager())
-            .StageAttach(new CollisionManager())
-            .StageAttach(new AudioManager())
-            .StageAttach(new MenuAudioManager())
-            .StageAttach(new RenderManager())
-            .StageAttach(new UIManager());
-        EntityChangelist
-            .StageCreate(nameof(Camera))
-            .StageAttach(new Camera())
-            .StageAttach(new Transform());
-        Update(gameTime);
-
-        Initialize();
-    }
 
     public void Update(GameTime gameTime)
     {
@@ -122,7 +110,7 @@ public abstract partial class Scene
     }
 }
 
-public abstract partial class Scene : IDisposable
+public partial class Scene : IDisposable
 {
     private bool _isDisposed = false;
 
