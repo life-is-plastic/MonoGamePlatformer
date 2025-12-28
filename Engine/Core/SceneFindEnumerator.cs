@@ -9,8 +9,8 @@ namespace Engine.Core;
 
 public struct SceneFindEnumerator
 {
-    private static readonly ThreadLocal<List<IComponent>> s_componentBuf = new(() => new());
-    private static readonly ThreadLocal<List<Type>> s_typeBuf = new(() => new());
+    private static readonly ThreadLocal<List<IComponent>> s_componentBuf = new(() => new(4));
+    private static readonly ThreadLocal<List<Type>> s_typeBuf = new(() => new(4));
 
     private readonly IndexedSetView<Entity> _entities;
     private readonly List<IComponent> _componentBuf;
@@ -20,7 +20,7 @@ public struct SceneFindEnumerator
     public readonly ReadOnlySpan<IComponent> Current => CollectionsMarshal.AsSpan(_componentBuf);
 
     public SceneFindEnumerator(
-        in IndexedSetView<Entity> entities,
+        IndexedSetView<Entity> entities,
         params ReadOnlySpan<Type> componentTypes
     )
     {

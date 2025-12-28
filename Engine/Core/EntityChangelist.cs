@@ -80,7 +80,7 @@ public class EntityChangelist
     /// Writes staged changes to the given entity set and entity updater, then clears the internal
     /// staging areas.
     /// </summary>
-    public void Apply(in IndexedSet<Entity> entities, EntityUpdater entityUpdater)
+    public void Apply(IndexedSet<Entity> entities, EntityUpdater entityUpdater)
     {
         ProcessRemovals(entities, entityUpdater);
         ProcessAdditions(entities, entityUpdater);
@@ -88,7 +88,7 @@ public class EntityChangelist
         Clear();
     }
 
-    private void ProcessAdditions(in IndexedSet<Entity> entities, EntityUpdater entityUpdater)
+    private void ProcessAdditions(IndexedSet<Entity> entities, EntityUpdater entityUpdater)
     {
         foreach (var entity in _created)
         {
@@ -112,7 +112,7 @@ public class EntityChangelist
         }
     }
 
-    private void ProcessRemovals(in IndexedSet<Entity> entities, EntityUpdater entityUpdater)
+    private void ProcessRemovals(IndexedSet<Entity> entities, EntityUpdater entityUpdater)
     {
         foreach (var component in _detached.Values)
         {

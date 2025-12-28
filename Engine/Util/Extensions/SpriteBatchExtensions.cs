@@ -8,7 +8,7 @@ public static class SpriteBatchExtensions
 {
     extension(SpriteBatch spriteBatch)
     {
-        public void Begin(in IRenderer.DrawOptions drawOptions, in Matrix? transformMatrix = null)
+        public void Begin(IRenderer.DrawOptions drawOptions, in Matrix? transformMatrix = null)
         {
             spriteBatch.Begin(
                 samplerState: drawOptions.SamplerState,

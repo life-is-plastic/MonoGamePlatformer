@@ -57,6 +57,10 @@ public abstract partial class Scene
         return Name;
     }
 
+    /// <summary>
+    /// Finds all entities with a component of type <c>T</c> (at the default component index) and
+    /// yields <c>(T, entity)</c> pairs.
+    /// </summary>
     public SceneFindEnumerable<T> Find<T>()
         where T : IComponent
     {
@@ -68,6 +72,23 @@ public abstract partial class Scene
         where T2 : IComponent
     {
         return new SceneFindEnumerable<T1, T2>(Entities);
+    }
+
+    public SceneFindEnumerable<T1, T2, T3> Find<T1, T2, T3>()
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+    {
+        return new SceneFindEnumerable<T1, T2, T3>(Entities);
+    }
+
+    public SceneFindEnumerable<T1, T2, T3, T4> Find<T1, T2, T3, T4>()
+        where T1 : IComponent
+        where T2 : IComponent
+        where T3 : IComponent
+        where T4 : IComponent
+    {
+        return new SceneFindEnumerable<T1, T2, T3, T4>(Entities);
     }
 }
 

@@ -27,7 +27,7 @@ public readonly partial record struct IndexedSet<T>
         _items = new(capacity);
     }
 
-    public bool Contains(in T item)
+    public bool Contains(T item)
     {
         return _indices.ContainsKey(item);
     }
@@ -41,7 +41,7 @@ public readonly partial record struct IndexedSet<T>
     /// Returns true if the item was successfully added, and false if the item already existed
     /// beforehand.
     /// </summary>
-    public bool Add(in T item)
+    public bool Add(T item)
     {
         if (_indices.TryAdd(item, _items.Count))
         {
@@ -54,7 +54,7 @@ public readonly partial record struct IndexedSet<T>
     /// <summary>
     /// Throws an exception if the item already exists.
     /// </summary>
-    public void AddOrDie(in T item)
+    public void AddOrDie(T item)
     {
         var added = Add(item);
         Debug.Assert(added);
@@ -63,7 +63,7 @@ public readonly partial record struct IndexedSet<T>
     /// <summary>
     /// Returns true if the item was successfully removed, and false if the item was not found.
     /// </summary>
-    public bool Remove(in T item)
+    public bool Remove(T item)
     {
         if (!_indices.TryGetValue(item, out var index))
         {
@@ -78,7 +78,7 @@ public readonly partial record struct IndexedSet<T>
     /// <summary>
     /// Throws an exception if the item was not found.
     /// </summary>
-    public void RemoveOrDie(in T item)
+    public void RemoveOrDie(T item)
     {
         var removed = Remove(item);
         Debug.Assert(removed);

@@ -26,17 +26,17 @@ public readonly partial record struct DictionaryView<TKey, TValue>
         _dict = dict;
     }
 
-    public bool ContainsKey(in TKey key)
+    public bool ContainsKey(TKey key)
     {
         return _dict.ContainsKey(key);
     }
 
-    public bool ContainsValue(in TValue value)
+    public bool ContainsValue(TValue value)
     {
         return _dict.ContainsValue(value);
     }
 
-    public bool TryGetValue(in TKey key, [MaybeNullWhen(false)] out TValue value)
+    public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value)
     {
         return _dict.TryGetValue(key, out value);
     }

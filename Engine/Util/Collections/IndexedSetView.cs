@@ -18,12 +18,12 @@ public readonly partial record struct IndexedSetView<T>
     public IndexedSetView()
         : this(s_emptyIndexedSet) { }
 
-    public IndexedSetView(in IndexedSet<T> indexedSet)
+    public IndexedSetView(IndexedSet<T> indexedSet)
     {
         _indexedSet = indexedSet;
     }
 
-    public bool Contains(in T item)
+    public bool Contains(T item)
     {
         return _indexedSet.Contains(item);
     }

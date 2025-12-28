@@ -12,7 +12,7 @@ public partial class DrawableRenderer<T> : Component
     public T Drawable { get; }
     public SpriteEffects SpriteEffects { get; set; } = SpriteEffects.None;
 
-    public DrawableRenderer(in T drawable)
+    public DrawableRenderer(T drawable)
     {
         Drawable = drawable;
     }
