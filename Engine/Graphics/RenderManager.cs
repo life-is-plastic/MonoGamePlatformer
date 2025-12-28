@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Engine.Core;
 using Engine.Util.Collections;
 using Engine.Util.Extensions;
@@ -15,18 +16,18 @@ internal sealed partial class RenderManager : Component
     private readonly IndexedSet<IRenderer> _renderers = new();
     private RenderTarget2D _renderTarget = null!;
     private SpriteBatch _spriteBatch = null!;
-    private EntityHandle _cameraEntity;
+    private EntityHandle _cameraHandle;
 
     protected override void Begin()
     {
-        foreach (var (camera, _, entity) in Scene.Find<Camera, Transform>())
+        foreach (var (camera, entity) in Scene.Find<Camera>())
         {
-            _cameraEntity = new(entity);
+            _cameraHandle = new(entity);
             _renderTarget = new(Scene.Game.GraphicsDevice, camera.Width, camera.Height);
             _spriteBatch = new SpriteBatch(Scene.Game.GraphicsDevice);
-            return;
+            break;
         }
-        throw new InvalidOperationException($"unable to find ${typeof(Camera)}");
+        Debug.Assert(_cameraHandle.MaybeDeref() is not null);
     }
 
     protected override void End()
@@ -36,7 +37,7 @@ internal sealed partial class RenderManager : Component
 
     public void Draw()
     {
-        var camera = _cameraEntity.Deref().Get<Camera>();
+        var camera = _cameraHandle.Deref().Get<Camera>();
         DrawToRenderTarget(camera);
         DrawRenderTargetToScreen(camera);
     }
@@ -73,13 +74,9 @@ internal sealed partial class RenderManager : Component
 
     private void DrawRenderTargetToScreen(Camera camera)
     {
-        var screenSize = new Vector2(
-            Scene.Game.GraphicsDevice.Viewport.Width,
-            Scene.Game.GraphicsDevice.Viewport.Height
-        );
-        var scale = screenSize / camera.Size.ToVector2();
-        var renderTargetScreenSize = Math.Min(scale.X, scale.Y) * camera.Size.ToVector2();
-        var renderTargetScreenPosition = (screenSize - renderTargetScreenSize) / 2;
+        var renderTargetScreenSize = camera.ViewportScale * camera.Size.ToVector2();
+        var renderTargetScreenPosition =
+            (Scene.Game.ViewportSize.ToVector2() - renderTargetScreenSize) / 2;
 
         _spriteBatch.Begin(new IRenderer.Options());
         _spriteBatch.Draw(

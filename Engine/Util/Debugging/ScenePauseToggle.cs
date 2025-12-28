@@ -23,7 +23,8 @@ public partial class ScenePauseToggle : IUpdatable
 
     void IUpdatable.Update()
     {
-        if (Scene.Singletons.Get<InputManager>().IsPressed(_button))
+        var inputManager = Scene.Singletons.Get<InputManager>();
+        if (inputManager.IsPressed(_button))
         {
             Scene.ShouldPause = !Scene.IsPaused;
         }

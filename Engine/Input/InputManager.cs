@@ -1,10 +1,25 @@
+using System.Diagnostics;
 using Engine.Core;
+using Engine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace Engine.Input;
 
-public partial class InputManager : Component { }
+public partial class InputManager : Component
+{
+    private EntityHandle _cameraHandle;
+
+    protected override void Begin()
+    {
+        foreach (var (_, entity) in Scene.Find<Camera>())
+        {
+            _cameraHandle = new(entity);
+            break;
+        }
+        Debug.Assert(_cameraHandle.MaybeDeref() is not null);
+    }
+}
 
 public partial class InputManager : IUpdatable
 {
@@ -18,10 +33,8 @@ public partial class InputManager : IUpdatable
 
     void IUpdatable.Update()
     {
-        _kbPreviousState = _kbCurrentState;
-        _kbCurrentState = Keyboard.GetState();
-
-        _mouseInfo.Update();
+        UpdateKeyboard();
+        UpdateMouse();
     }
 }
 
@@ -39,14 +52,31 @@ public partial class InputManager
     public bool IsHeld(Keys button) => IsDown(button) && _kbPreviousState.IsKeyDown(button);
 
     public bool IsReleased(Keys button) => IsUp(button) && _kbPreviousState.IsKeyDown(button);
+
+    private void UpdateKeyboard()
+    {
+        _kbPreviousState = _kbCurrentState;
+        _kbCurrentState = Keyboard.GetState();
+    }
 }
 
 public partial class InputManager
 {
     private readonly MouseInfo _mouseInfo = new();
 
-    public Point MouseScreenPosition => _mouseInfo.CurrentMouseState.Position;
     public int MouseWheelDelta => _mouseInfo.CurrentWheelDelta;
+    public Point MouseScreenPosition => _mouseInfo.CurrentMouseState.Position;
+    public Vector2 MouseWorldPosition { get; private set; }
+
+    public Vector2 GetMouseWorldPosition()
+    {
+        var camera = _cameraHandle.Deref().Get<Camera>();
+        var cameraTransform = camera.Entity.Get<Transform>();
+
+        var mouseScreenPositionRelCenter =
+            MouseScreenPosition.ToVector2() - Scene.Game.ViewportSize.ToVector2() / 2;
+        return cameraTransform.Position + mouseScreenPositionRelCenter / camera.ViewportScale;
+    }
 
     public bool IsDown(MouseButton button) => _mouseInfo.IsCurrentlyDown(button);
 
@@ -59,4 +89,16 @@ public partial class InputManager
 
     public bool IsReleased(MouseButton button) =>
         IsUp(button) && _mouseInfo.IsPreviouslyDown(button);
+
+    private void UpdateMouse()
+    {
+        _mouseInfo.Update();
+
+        var camera = _cameraHandle.Deref().Get<Camera>();
+        var cameraTransform = camera.Entity.Get<Transform>();
+        var screenPosWrtScreenCenter =
+            MouseScreenPosition.ToVector2() - Scene.Game.ViewportSize.ToVector2() / 2;
+        MouseWorldPosition =
+            cameraTransform.Position + screenPosWrtScreenCenter / camera.ViewportScale;
+    }
 }

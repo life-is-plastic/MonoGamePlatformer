@@ -8,6 +8,7 @@ public sealed class Game : Microsoft.Xna.Framework.Game
     private Scene? _scene;
 
     public ISceneDefinition? NextSceneDefinition { get; set; }
+    public Point ViewportSize => new(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 
     public Game(ISceneDefinition initialSceneDefinition)
     {

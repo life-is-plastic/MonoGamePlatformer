@@ -26,9 +26,10 @@ public class DefaultSceneDefinition : ISceneDefinition
     void ISceneDefinition.Initialize(Scene scene)
     {
         scene
-            .Singletons.StageAttach(new SceneLoadOnPress(Instance))
+            .Singletons.StageAttach(new DevSceneController())
+            .StageAttach(new SceneLoadOnPress(Instance))
             .StageAttach(new ScenePauseToggle())
-            .StageAttach(new DevSceneController());
+            .StageAttach(new MouseDragsCamera());
 
         scene
             .EntityChangelist.StageCreate(nameof(RectRenderer))
