@@ -12,7 +12,6 @@ namespace Engine.Core;
 public sealed class EntityChangelist
 {
     private int _nextEntityId = 1;
-    private readonly Scene _scene;
     private readonly IndexedSet<IEntitySyncer> _syncers = new();
 
     private readonly IndexedSet<Entity> _created = new();
@@ -25,27 +24,14 @@ public sealed class EntityChangelist
     public DictionaryView<(Entity, Type, int), IComponent> Attached => new(_attached);
     public DictionaryView<(Entity, Type, int), IComponent> Detached => new(_detached);
 
-    public EntityChangelist(Scene scene)
+    internal Entity StageCreate(Scene scene, string name)
     {
-        _scene = scene;
-    }
-
-    /// <summary>
-    /// Creates an entity and stages it to become part of the scene at the beginning of the next
-    /// frame.
-    /// </summary>
-    public Entity StageCreate(string name)
-    {
-        var entity = new Entity(_scene, _nextEntityId++, name);
+        var entity = new Entity(scene, _nextEntityId++, name);
         _created.AddOrDie(entity);
         return entity;
     }
 
-    /// <summary>
-    /// Stages an entity to be destroyed at the beginning of the next frame. This method is
-    /// idempotent when called multiple times in the same frame.
-    /// </summary>
-    public void StageDestroy(Entity entity)
+    internal void StageDestroy(Entity entity)
     {
         _destroyed.Add(entity);
         foreach (var (_, component) in entity)
@@ -54,23 +40,14 @@ public sealed class EntityChangelist
         }
     }
 
-    /// <summary>
-    /// Stages the given component to be attached at the beginning of the next frame. If multiple
-    /// components of the same (type, index) are staged during the same frame, the final component
-    /// will be the one actually attached.
-    /// </summary>
-    public void StageAttach(Entity entity, IComponent component)
+    internal void StageAttach(Entity entity, IComponent component)
     {
         Debug.Assert(!entity.Has(component.GetType(), component.ComponentIndex));
         _attached[(entity, component.GetType(), component.ComponentIndex)] = component;
         component.SetEntity(entity);
     }
 
-    /// <summary>
-    /// Stages the given component to be detached at the beginning of the next frame. This method is
-    /// idempotent when called multiple times in the same frame.
-    /// </summary>
-    public void StageDetach(Entity entity, IComponent component)
+    internal void StageDetach(Entity entity, IComponent component)
     {
         Debug.Assert(entity.Get(component.GetType(), component.ComponentIndex) == component);
         _detached[(entity, component.GetType(), component.ComponentIndex)] = component;

@@ -65,7 +65,7 @@ public partial class UIManager : IUpdatable
     {
         if (IsVisible)
         {
-            GumService.Update(Scene.GameTime);
+            GumService.Update(Scene._gameTime);
         }
     }
 }

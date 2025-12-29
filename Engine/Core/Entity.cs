@@ -126,27 +126,37 @@ public sealed class Entity
         return _components.TryGetValue((type, index), out var component) ? component : null;
     }
 
+    /// <summary>
+    /// Stages the given component to be attached at the beginning of the next frame. If multiple
+    /// components of the same (type, index) are staged during the same frame, the final component
+    /// will be the one actually attached.
+    /// </summary>
     public Entity StageAttach(IComponent component)
     {
-        Scene.EntityChangelist.StageAttach(this, component);
-        return this;
-    }
-
-    public Entity StageDetach(IComponent component)
-    {
-        Scene.EntityChangelist.StageDetach(this, component);
-        return this;
-    }
-
-    public Entity StageDestroy()
-    {
-        Scene.EntityChangelist.StageDestroy(this);
+        Scene._entityChangelist.StageAttach(this, component);
         return this;
     }
 
     /// <summary>
-    /// Only called by <c>EntityChangelist.Apply()</c>.
+    /// Stages the given component to be detached at the beginning of the next frame. This method is
+    /// idempotent when called multiple times in the same frame.
     /// </summary>
+    public Entity StageDetach(IComponent component)
+    {
+        Scene._entityChangelist.StageDetach(this, component);
+        return this;
+    }
+
+    /// <summary>
+    /// Stages an entity to be destroyed at the beginning of the next frame. This method is
+    /// idempotent when called multiple times in the same frame.
+    /// </summary>
+    public Entity StageDestroy()
+    {
+        Scene._entityChangelist.StageDestroy(this);
+        return this;
+    }
+
     internal void ImmediatelyAttach(IComponent component)
     {
         Debug.Assert(component.Entity == this);
@@ -157,9 +167,6 @@ public sealed class Entity
         );
     }
 
-    /// <summary>
-    /// Only called by <c>EntityChangelist.Apply()</c>.
-    /// </summary>
     internal void ImmediatelyDetach(IComponent component)
     {
         Debug.Assert(Get(component.GetType(), component.ComponentIndex) == component);

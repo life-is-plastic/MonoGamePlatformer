@@ -3,6 +3,7 @@ using Engine.Audio;
 using Engine.Core;
 using Engine.Graphics;
 using Engine.Input;
+using Engine.Physics;
 using Engine.Util;
 using Engine.Util.Debugging;
 using Microsoft.Xna.Framework;
@@ -34,7 +35,7 @@ public class DefaultSceneDefinition : ISceneDefinition
             .StageAttach(new DrawHelper());
 
         scene
-            .EntityChangelist.StageCreate(nameof(RectRenderer))
+            .StageCreate(nameof(RectRenderer))
             .StageAttach(new RectRenderer())
             .StageAttach(new RectRenderer() { ComponentIndex = 0 });
 
@@ -56,9 +57,7 @@ internal class DevSceneController : Component, IUpdatable
         var inputManager = Scene.Singletons.Get<InputManager>();
         if (inputManager.IsPressed(Keys.D1))
         {
-            Scene
-                .EntityChangelist.StageCreate(nameof(RectRenderer))
-                .StageAttach(new RectRenderer());
+            Scene.StageCreate(nameof(RectRenderer)).StageAttach(new RectRenderer());
         }
         if (inputManager.IsPressed(Keys.D2))
         {
@@ -107,5 +106,18 @@ internal class RectRenderer : Component, IRenderer
         drawHelper.DrawLine(spriteBatch, Color.DarkOrchid, new Vector2(2, 2), new Vector2(40, 40));
 
         _rotation += Scene.IsPaused ? 0 : _rotationSpeed * Scene.DeltaTime;
+    }
+}
+
+internal class Floor : Component, ICollisionHandler
+{
+    public static Entity CreateEntity(Scene scene)
+    {
+        return null!;
+    }
+
+    void ICollisionHandler.OnCollisionStay(in ContactInfo contact)
+    {
+        // contact.Other.Entity.Get<Transform>()
     }
 }

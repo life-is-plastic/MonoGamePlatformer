@@ -14,29 +14,29 @@ public sealed partial class Scene
 {
     private readonly IndexedSet<Entity> _entities = new();
     private readonly EntityUpdater _entityUpdater = new();
+    internal readonly EntityChangelist _entityChangelist = new();
+    internal GameTime _gameTime;
 
     public IndexedSetView<Entity> Entities => new(_entities);
+    public float DeltaTime => (float)_gameTime.ElapsedGameTime.TotalSeconds;
+    public float TotalTime => (float)_gameTime.TotalGameTime.TotalSeconds;
     public bool IsPaused => _entityUpdater.IsPaused;
     public bool ShouldPause { get; set; } = false;
-    public float DeltaTime => (float)GameTime.ElapsedGameTime.TotalSeconds;
-    public float TotalTime => (float)GameTime.TotalGameTime.TotalSeconds;
 
     /// <summary>
     /// Human readable name for debugging.
     /// </summary>
     public string Name { get; }
 
+    /// <summary>
+    /// The game instance owning this scene.
+    /// </summary>
     public Game Game { get; }
 
     /// <summary>
-    /// Game time forwarded from <c>Game.Update()</c>. Non-MonoGame code must not mutate this
-    /// object.
+    /// The content manager specific to this scene.
     /// </summary>
-    public GameTime GameTime { get; private set; }
-
     public ContentManager Content { get; }
-
-    public EntityChangelist EntityChangelist { get; }
 
     /// <summary>
     /// Container entity for singleton components.
@@ -47,20 +47,11 @@ public sealed partial class Scene
     {
         Name = sceneDefinition.Name();
         Game = game;
-        GameTime = initialGameTime;
         Content = new ContentManager(game.Content.ServiceProvider)
         {
             RootDirectory = game.Content.RootDirectory,
         };
-
-        EntityChangelist = new(this);
-        EntityChangelist
-            .StageCreate(nameof(Camera))
-            .StageAttach(new Camera())
-            .StageAttach(new Transform());
-
-        Singletons = EntityChangelist
-            .StageCreate(nameof(Singletons))
+        Singletons = StageCreate(nameof(Singletons))
             .StageAttach(new InputManager())
             .StageAttach(new CollisionManager())
             .StageAttach(new AudioManager())
@@ -68,6 +59,9 @@ public sealed partial class Scene
             .StageAttach(new RenderManager())
             .StageAttach(new UIManager());
 
+        StageCreate(nameof(Camera)).StageAttach(new Camera()).StageAttach(new Transform());
+
+        _gameTime = initialGameTime;
         Update(initialGameTime);
 
         sceneDefinition.Initialize(this);
@@ -76,6 +70,15 @@ public sealed partial class Scene
     public override string ToString()
     {
         return Name;
+    }
+
+    /// <summary>
+    /// Creates an entity and stages it to become part of the scene at the beginning of the next
+    /// frame.
+    /// </summary>
+    public Entity StageCreate(string name)
+    {
+        return _entityChangelist.StageCreate(this, name);
     }
 
     public FindEntityEnumerable Find<T>()
@@ -102,8 +105,8 @@ public sealed partial class Scene
     internal void Update(GameTime gameTime)
     {
         var shouldPause = ShouldPause;
-        GameTime = gameTime;
-        EntityChangelist.Apply(_entities, _entityUpdater);
+        _gameTime = gameTime;
+        _entityChangelist.Apply(_entities, _entityUpdater);
         _entityUpdater.ProcessPausing(shouldPause);
         _entityUpdater.Update();
     }
@@ -138,12 +141,12 @@ public sealed partial class Scene : IDisposable
 
         if (disposing)
         {
-            EntityChangelist.Apply(_entities, _entityUpdater);
+            _entityChangelist.Apply(_entities, _entityUpdater);
             foreach (var entity in _entities)
             {
-                EntityChangelist.StageDestroy(entity);
+                _entityChangelist.StageDestroy(entity);
             }
-            EntityChangelist.Apply(_entities, _entityUpdater);
+            _entityChangelist.Apply(_entities, _entityUpdater);
 
             Content.Dispose();
         }

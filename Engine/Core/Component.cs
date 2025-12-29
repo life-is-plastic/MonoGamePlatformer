@@ -20,8 +20,17 @@ public abstract class Component : IComponent
         return $"[{Entity} -> ({GetType().Name}, {ComponentIndex})]";
     }
 
+    /// <summary>
+    /// Invoked when this component is formally attached to its owning entity. Useful for
+    /// post-construction initialization of data that depends on having access to the containing
+    /// scene.
+    /// </summary>
     protected virtual void Begin() { }
 
+    /// <summary>
+    /// Invoked on scene disposal or when detaching this component from its owning entity. Useful
+    /// for cleaning up data that should not wait for the garbage collector.
+    /// </summary>
     protected virtual void End() { }
 
     void IComponent.Begin()
