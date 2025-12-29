@@ -4,8 +4,7 @@ namespace Engine.Core;
 
 /// <summary>
 /// Base class for all components.
-/// <para>Do not cache component references. Always access components via their owning
-/// entity.</para>
+/// <para>Do not cache component references for more than one frame.</para>
 /// </summary>
 public abstract class Component : IComponent
 {
