@@ -34,17 +34,10 @@ public class DefaultSceneDefinition : ISceneDefinition
             .StageAttach(new DefaultSceneHelper())
             .StageAttach(new DrawHelper());
 
+        Player.MakeEntity(scene);
         DefaultSceneHelper
             .MakeRect(scene, new(0, 60), new(400, 10), Color.SaddleBrown)
             .StageAttach(new StaticGeometry());
-
-        scene
-            .StageCreate(nameof(Player))
-            .StageAttach(new Player())
-            .StageAttach(new Transform())
-            .StageAttach(new Velocity())
-            .StageAttach(new Collider(20, 20) { NormalizedOrigin = new(0.5f, 0.5f) })
-            .StageAttach(new RectangleRenderer() { Size = new(20, 20), Color = Color.DarkGray });
 
         scene
             .Singletons.Get<AudioManager>()
@@ -137,39 +130,53 @@ internal class StaticGeometry : Component, ICollisionHandler
         }
         var otherTransform = contact.Other.Entity.Get<Transform>();
         otherTransform.Position -= contact.Normal * contact.Overlap.Size;
+        if (contact.Other.Entity.MaybeGet<Velocity>() is { } velocity)
+        {
+            // Zero out the velocity component parallel to the normal.
+            var v = contact.Normal;
+            v.Rotate(MathHelper.PiOver2);
+            v *= v;
+            velocity.Linear *= v;
+        }
     }
 }
 
-internal class Player : Component, IUpdatable, ICollisionHandler
+internal class Player : Component, IUpdatable
 {
+    public static Entity MakeEntity(Scene scene)
+    {
+        return scene
+            .StageCreate(nameof(Player))
+            .StageAttach(new Player())
+            .StageAttach(new Transform())
+            .StageAttach(new Velocity())
+            .StageAttach(new Collider(20, 20) { NormalizedOrigin = new(0.5f, 0.5f) })
+            .StageAttach(new RectangleRenderer() { Size = new(20, 20), Color = Color.DarkGray });
+    }
+
     void IUpdatable.Update()
     {
         var inputManager = Scene.Singletons.Get<InputManager>();
         var velocity = Entity.Get<Velocity>();
 
-        velocity.Linear.Y += 1500 * Scene.DeltaTime;
+        velocity.Linear.Y += 500 * Scene.DeltaTime;
         if (inputManager.IsPressed(Keys.Space))
         {
-            velocity.Linear.Y = -400;
+            velocity.Linear.Y = -200;
         }
 
-        velocity.Linear.X = 0;
-        if (inputManager.IsDown(Keys.A))
+        var dv = 300;
+        if (!(inputManager.IsDown(Keys.A) ^ inputManager.IsDown(Keys.D)))
         {
-            velocity.Linear.X -= 200;
+            velocity.Linear.X = 0;
         }
-        if (inputManager.IsDown(Keys.D))
+        else if (inputManager.IsDown(Keys.A))
         {
-            velocity.Linear.X += 200;
+            velocity.Linear.X = -dv;
         }
-    }
-
-    void ICollisionHandler.OnCollisionStay(in ContactInfo contact)
-    {
-        if (contact.Normal == new Vector2(0, -1))
+        else if (inputManager.IsDown(Keys.D))
         {
-            var velocity = Entity.Get<Velocity>();
-            velocity.Linear.Y = 0;
+            velocity.Linear.X = dv;
         }
     }
 }
