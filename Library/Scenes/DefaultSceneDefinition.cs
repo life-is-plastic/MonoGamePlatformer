@@ -35,9 +35,10 @@ public class DefaultSceneDefinition : ISceneDefinition
             .StageAttach(new DrawHelper());
 
         Player.MakeEntity(scene);
-        DefaultSceneHelper
-            .MakeRect(scene, new(0, 60), new(400, 10), Color.SaddleBrown)
-            .StageAttach(new StaticGeometry());
+        World.MakeEntity(scene, 300, 180);
+        // DefaultSceneHelper
+        //     .MakeRect(scene, new(0, 60), new(400, 10), Color.SaddleBrown)
+        //     .StageAttach(new StaticGeometry());
 
         scene
             .Singletons.Get<AudioManager>()
@@ -178,5 +179,39 @@ internal class Player : Component, IUpdatable
         {
             velocity.Linear.X = dv;
         }
+    }
+}
+
+internal class World : Component
+{
+    public static Entity MakeEntity(Scene scene, float width, float height)
+    {
+        var margin = 64;
+
+        return scene
+            .StageCreate(nameof(World))
+            .StageAttach(new World())
+            .StageAttach(new Transform())
+            .StageAttach(new StaticGeometry())
+            .StageAttach(
+                new Collider(width + 2 * margin, margin)
+                {
+                    Origin = new(margin, margin),
+                    ComponentIndex = -1,
+                }
+            )
+            .StageAttach(
+                new Collider(width + 2 * margin, margin)
+                {
+                    Origin = new(margin, -height),
+                    ComponentIndex = -2,
+                }
+            )
+            .StageAttach(
+                new Collider(margin, height) { Origin = new(margin, 0), ComponentIndex = -3 }
+            )
+            .StageAttach(
+                new Collider(margin, height) { Origin = new(-width, 0), ComponentIndex = -4 }
+            );
     }
 }
