@@ -28,6 +28,7 @@ internal sealed partial class RenderManager : Component
 
     protected override void End()
     {
+        _renderTarget.Dispose();
         _spriteBatch.Dispose();
     }
 

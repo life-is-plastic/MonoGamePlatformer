@@ -6,7 +6,7 @@ namespace Engine.Util;
 /// <summary>
 /// Models an arbitrary row-major 2D grid.
 /// </summary>
-public readonly record struct Grid
+public readonly record struct GridHelper
 {
     public int Rows { get; }
     public int Columns { get; }
@@ -40,7 +40,7 @@ public readonly record struct Grid
 
     public int this[(int Row, int Column) rc] => this[rc.Row, rc.Column];
 
-    public Grid(int rows, int columns)
+    public GridHelper(int rows, int columns)
     {
         Debug.Assert(rows >= 0);
         Debug.Assert(columns >= 0);

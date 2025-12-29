@@ -9,14 +9,19 @@ namespace Engine.Util;
 /// <summary>
 /// Helper for drawing various shapes.
 /// </summary>
-public readonly struct DrawUtil
+public class DrawHelper : Component
 {
-    private readonly Texture2D _pixel;
+    private Texture2D _pixel = null!;
 
-    public DrawUtil(Scene scene)
+    protected override void Begin()
     {
-        _pixel = new Texture2D(scene.Game.GraphicsDevice, 1, 1);
+        _pixel = new Texture2D(Scene.Game.GraphicsDevice, 1, 1);
         _pixel.SetData([Color.White]);
+    }
+
+    protected override void End()
+    {
+        _pixel.Dispose();
     }
 
     public void DrawLine(SpriteBatch spriteBatch, Color color, Vector2 position1, Vector2 position2)
