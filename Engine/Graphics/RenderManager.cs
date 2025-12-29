@@ -42,9 +42,18 @@ internal sealed partial class RenderManager : Component
     private void DrawToRenderTarget(Camera camera)
     {
         _renderers.Sort(s_drawOrderComparison);
+
         var rendererOptions = new IRenderer.Options();
-        var cameraRect = camera.AsWorldRectangleF().Location;
-        var transformMatrix = Matrix.CreateTranslation(-cameraRect.X, -cameraRect.Y, 0);
+
+        var cameraRect = camera.AsWorldRectangleF();
+        var cameraTransform = camera.Entity.Get<Transform>();
+        var transformMatrix =
+            Matrix.CreateScale(cameraTransform.Scale.X, cameraTransform.Scale.Y, 1)
+            * Matrix.CreateTranslation(
+                -cameraRect.X * cameraTransform.Scale.X,
+                -cameraRect.Y * cameraTransform.Scale.Y,
+                0
+            );
 
         Scene.Game.GraphicsDevice.SetRenderTarget(_renderTarget);
         Scene.Game.GraphicsDevice.Clear(Color.CornflowerBlue);
@@ -71,7 +80,7 @@ internal sealed partial class RenderManager : Component
 
     private void DrawRenderTargetToScreen(Camera camera)
     {
-        var renderTargetScreenSize = camera.ViewportScale * camera.Size.ToVector2();
+        var renderTargetScreenSize = camera.ScreenScale * camera.Size.ToVector2();
         var renderTargetScreenPosition =
             (Scene.Game.ViewportSize.ToVector2() - renderTargetScreenSize) / 2;
 

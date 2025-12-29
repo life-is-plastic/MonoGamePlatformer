@@ -69,7 +69,7 @@ public partial class InputManager
 
         var mouseScreenPositionRelCenter =
             MouseScreenPosition.ToVector2() - Scene.Game.ViewportSize.ToVector2() / 2;
-        return cameraTransform.Position + mouseScreenPositionRelCenter / camera.ViewportScale;
+        return cameraTransform.Position + mouseScreenPositionRelCenter / camera.ScreenScale;
     }
 
     public bool IsDown(MouseButton button) => _mouseInfo.IsCurrentlyDown(button);
@@ -93,6 +93,6 @@ public partial class InputManager
         var screenPosWrtScreenCenter =
             MouseScreenPosition.ToVector2() - Scene.Game.ViewportSize.ToVector2() / 2;
         MouseWorldPosition =
-            cameraTransform.Position + screenPosWrtScreenCenter / camera.ViewportScale;
+            cameraTransform.Position + screenPosWrtScreenCenter / camera.ScreenScale;
     }
 }

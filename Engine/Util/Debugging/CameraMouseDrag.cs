@@ -10,8 +10,8 @@ public partial class CameraMouseDrag : Component
     private readonly MouseButton _button;
     private EntityHandle _cameraHandle;
     private bool _dragging = false;
-    private Point _initialScreenPos;
-    private Vector2 _initialWorldPos;
+    private Point _initialScreenPos = default;
+    private Vector2 _initialWorldPos = default;
 
     public CameraMouseDrag(MouseButton button = MouseButton.Right)
     {
@@ -55,9 +55,9 @@ public partial class CameraMouseDrag : IUpdatable
             return;
         }
 
-        cameraTransform.Position =
-            _initialWorldPos
-            - (inputManager.MouseScreenPosition.ToVector2() - _initialScreenPos.ToVector2())
-                / camera.ViewportScale;
+        var deltaScreenPos =
+            inputManager.MouseScreenPosition.ToVector2() - _initialScreenPos.ToVector2();
+        var deltaWorldPos = -deltaScreenPos / (camera.ScreenScale * cameraTransform.Scale);
+        cameraTransform.Position = _initialWorldPos + deltaWorldPos;
     }
 }

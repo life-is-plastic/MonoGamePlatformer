@@ -19,16 +19,15 @@ public partial class CameraMouseZoom : IUpdatable
     void IUpdatable.Update()
     {
         var inputManager = Scene.Singletons.Get<InputManager>();
-        var camera = _cameraHandle.Deref().Get<Camera>();
-        var cameraTransform = camera.Entity.Get<Transform>();
-
+        var cameraTransform = _cameraHandle.Deref().Get<Transform>();
+        var mult = 1.25f;
         switch (inputManager.MouseWheelDelta)
         {
             case > 0:
-                // TODO
+                cameraTransform.Scale *= mult;
                 break;
             case < 0:
-                // TODO
+                cameraTransform.Scale /= mult;
                 break;
         }
     }
