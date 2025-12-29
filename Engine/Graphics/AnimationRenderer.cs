@@ -11,8 +11,7 @@ public partial class AnimationRenderer<T> : DrawableRenderer<Animation<T>>
 
 public partial class AnimationRenderer<T> : IUpdatable
 {
-    public const int UpdateOrder = int.MinValue;
-    int IUpdatable.UpdateOrder => UpdateOrder;
+    int IUpdatable.UpdateOrder => UpdateOrderInterval.FrameBegin[0];
 
     void IUpdatable.Update()
     {

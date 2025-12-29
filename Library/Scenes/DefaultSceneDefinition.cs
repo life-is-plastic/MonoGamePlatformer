@@ -62,8 +62,6 @@ internal class DefaultSceneHelper : Component, IUpdatable
             .StageAttach(new Collider(size) { NormalizedOrigin = new(0.5f, 0.5f) });
     }
 
-    private readonly Random _rng = new();
-
     bool IUpdatable.Pause()
     {
         return false;
@@ -78,10 +76,18 @@ internal class DefaultSceneHelper : Component, IUpdatable
             MakeRect(
                     Scene,
                     position: new Vector2(
-                        MathHelper.Lerp(cameraRect.Left, cameraRect.Right, _rng.NextSingle()),
-                        MathHelper.Lerp(cameraRect.Top, cameraRect.Bottom, _rng.NextSingle())
+                        MathHelper.Lerp(
+                            cameraRect.Left,
+                            cameraRect.Right,
+                            Random.Shared.NextSingle()
+                        ),
+                        MathHelper.Lerp(
+                            cameraRect.Top,
+                            cameraRect.Bottom,
+                            Random.Shared.NextSingle()
+                        )
                     ),
-                    size: new Vector2(_rng.NextInt64(40, 80), _rng.NextInt64(20, 60)),
+                    size: new Vector2(Random.Shared.Next(40, 80), Random.Shared.Next(20, 60)),
                     color: Color.SaddleBrown
                 )
                 .StageAttach(new StaticGeometry())
@@ -89,9 +95,9 @@ internal class DefaultSceneHelper : Component, IUpdatable
                     new Velocity
                     {
                         Angular =
-                            (_rng.NextSingle() + 1)
+                            (Random.Shared.NextSingle() + 1)
                             * MathHelper.PiOver2
-                            * (_rng.NextSingle() < 0.5f ? 1 : -1),
+                            * (Random.Shared.NextSingle() < 0.5f ? 1 : -1),
                     }
                 );
         }

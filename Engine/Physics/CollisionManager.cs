@@ -204,8 +204,7 @@ public partial class CollisionManager : Component
 
 public partial class CollisionManager : IUpdatable
 {
-    public const int UpdateOrder = 100;
-    int IUpdatable.UpdateOrder => UpdateOrder;
+    int IUpdatable.UpdateOrder => UpdateOrderInterval.Physics[^1];
 
     void IUpdatable.Update()
     {

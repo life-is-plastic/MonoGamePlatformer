@@ -11,8 +11,7 @@ public partial class Velocity : Component
 
 public partial class Velocity : IUpdatable
 {
-    public const int UpdateOrder = CollisionManager.UpdateOrder - 1;
-    int IUpdatable.UpdateOrder => UpdateOrder;
+    int IUpdatable.UpdateOrder => UpdateOrderInterval.Physics[^2];
 
     void IUpdatable.Update()
     {

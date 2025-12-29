@@ -17,8 +17,7 @@ public partial class InputManager : Component
 
 public partial class InputManager : IUpdatable
 {
-    public const int UpdateOrder = int.MinValue;
-    int IUpdatable.UpdateOrder => UpdateOrder;
+    int IUpdatable.UpdateOrder => UpdateOrderInterval.FrameBegin[0];
 
     bool IUpdatable.Pause()
     {

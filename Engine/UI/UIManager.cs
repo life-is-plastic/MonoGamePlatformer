@@ -53,8 +53,7 @@ public partial class UIManager : Component
 
 public partial class UIManager : IUpdatable
 {
-    public const int UpdateOrder = int.MinValue;
-    int IUpdatable.UpdateOrder => UpdateOrder;
+    int IUpdatable.UpdateOrder => UpdateOrderInterval.FrameBegin[0];
 
     bool IUpdatable.Pause()
     {
