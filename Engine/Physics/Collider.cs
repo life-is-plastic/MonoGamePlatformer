@@ -1,35 +1,51 @@
 using System.Diagnostics;
 using Engine.Core;
 using Engine.Util;
+using Microsoft.Xna.Framework;
 
 namespace Engine.Physics;
 
 /// <summary>
-/// AABB rectangle collider. Collision checking ignores collider pairs on the same entity.
+/// Axis-aligned rectangle collider. Collision checking ignores collider pairs on the same entity.
 /// </summary>
 public class Collider : Component
 {
     public const int AllLayers = 0;
 
+    public Vector2 Size { get; }
+    public float Width => Size.X;
+    public float Height => Size.Y;
+
     /// <summary>
-    /// The collider's base rectangular shape, whose center defines a relative offset from the
-    /// entity's position assuming scale = 1.
+    /// Similar to <c>Sprite.Origin</c>.
     /// </summary>
-    public RectangleF RectangleF { get; }
+    public Vector2 Origin { get; init; } = default;
+
+    /// <summary>
+    /// Similar to <c>Sprite.NormalizedOrigin</c>.
+    /// </summary>
+    public Vector2 NormalizedOrigin
+    {
+        get => Origin / Size;
+        init => Origin = value * Size;
+    }
 
     public int Layer { get; init; } = AllLayers;
 
     /// <summary>
-    /// If false, then collision checks will ignore this collider.
+    /// If true, then collision checks will consider this collider.
     /// </summary>
     public bool IsEnabled { get; set; } = true;
 
-    public Collider(RectangleF rect)
+    public Collider(Vector2 size)
     {
-        Debug.Assert(rect.Width > 0);
-        Debug.Assert(rect.Height > 0);
-        RectangleF = rect;
+        Debug.Assert(size.X > 0);
+        Debug.Assert(size.Y > 0);
+        Size = size;
     }
+
+    public Collider(float width, float height)
+        : this(new(width, height)) { }
 
     /// <summary>
     /// Returns the absolute, world space representation of this collider.
@@ -37,10 +53,10 @@ public class Collider : Component
     public RectangleF AsWorldRectangleF()
     {
         var transform = Entity.Get<Transform>();
-        return RectangleF
-            .ScaleFromCenter(transform.Scale)
-            .WithCenter(RectangleF.Center * transform.Scale)
-            .Translate(transform.Position);
+        return new RectangleF(
+            transform.Position - Origin * transform.Scale,
+            Size * transform.Scale
+        );
     }
 
     public RectangleF? GetOverlap(Collider other)

@@ -43,7 +43,7 @@ public class DefaultSceneDefinition : ISceneDefinition
             .StageAttach(new Player())
             .StageAttach(new Transform())
             .StageAttach(new Velocity())
-            .StageAttach(new Collider(new RectangleF { Size = new(20, 20) }.WithCenter(0, 0)))
+            .StageAttach(new Collider(20, 20) { NormalizedOrigin = new(0.5f, 0.5f) })
             .StageAttach(new RectangleRenderer() { Size = new(20, 20), Color = Color.DarkGray });
 
         scene
@@ -58,9 +58,9 @@ internal class DefaultSceneHelper : Component, IUpdatable
     {
         return scene
             .StageCreate("Rect")
-            .StageAttach(new Transform { Position = position })
-            .StageAttach(new RectangleRenderer { Size = size, Color = color })
-            .StageAttach(new Collider(new RectangleF { Size = size }.WithCenter(0, 0)));
+            .StageAttach(new Transform() { Position = position })
+            .StageAttach(new RectangleRenderer() { Size = size, Color = color })
+            .StageAttach(new Collider(size) { NormalizedOrigin = new(0.5f, 0.5f) });
     }
 
     private readonly Random _rng = new();
@@ -114,7 +114,7 @@ internal class RectangleRenderer : Component, IRenderer
             spriteBatch,
             Color,
             transform.Position,
-            Size,
+            Size * transform.Scale,
             normalizedOrigin: new Vector2(0.5f, 0.5f),
             transform.Rotation
         );
