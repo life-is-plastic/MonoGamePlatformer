@@ -29,15 +29,22 @@ public class DefaultSceneDefinition : ISceneDefinition
         scene
             .Singletons.StageAttach(new SceneLoadOnPress(Instance))
             .StageAttach(new ScenePauseToggle())
-            .StageAttach(new CameraKeyboardPan())
             .StageAttach(new CameraMouseDrag())
-            .StageAttach(new DevSceneController())
+            .StageAttach(new ColliderRenderer(Keys.P))
+            .StageAttach(new DefaultSceneHelper())
             .StageAttach(new DrawHelper());
 
+        DefaultSceneHelper
+            .MakeRect(scene, new(0, 60), new(400, 10), Color.SaddleBrown)
+            .StageAttach(new StaticGeometry());
+
         scene
-            .StageCreate(nameof(RectRenderer))
-            .StageAttach(new RectRenderer())
-            .StageAttach(new RectRenderer() { ComponentIndex = 0 });
+            .StageCreate(nameof(Player))
+            .StageAttach(new Player())
+            .StageAttach(new Transform())
+            .StageAttach(new Velocity())
+            .StageAttach(new Collider(new RectangleF { Size = new(20, 20) }.WithCenter(0, 0)))
+            .StageAttach(new RectangleRenderer() { Size = new(20, 20), Color = Color.DarkGray });
 
         scene
             .Singletons.Get<AudioManager>()
@@ -45,8 +52,19 @@ public class DefaultSceneDefinition : ISceneDefinition
     }
 }
 
-internal class DevSceneController : Component, IUpdatable
+internal class DefaultSceneHelper : Component, IUpdatable
 {
+    public static Entity MakeRect(Scene scene, Vector2 position, Vector2 size, Color color)
+    {
+        return scene
+            .StageCreate("Rect")
+            .StageAttach(new Transform { Position = position })
+            .StageAttach(new RectangleRenderer { Size = size, Color = color })
+            .StageAttach(new Collider(new RectangleF { Size = size }.WithCenter(0, 0)));
+    }
+
+    private readonly Random _rng = new();
+
     bool IUpdatable.Pause()
     {
         return false;
@@ -57,67 +75,101 @@ internal class DevSceneController : Component, IUpdatable
         var inputManager = Scene.Singletons.Get<InputManager>();
         if (inputManager.IsPressed(Keys.D1))
         {
-            Scene.StageCreate(nameof(RectRenderer)).StageAttach(new RectRenderer());
-        }
-        if (inputManager.IsPressed(Keys.D2))
-        {
-            foreach (var entity in Scene.Find<RectRenderer>())
-            {
-                Console.Out.WriteLine(entity);
-            }
+            var cameraRect = Scene.Find<Camera>().First().Get<Camera>().AsWorldRectangleF();
+            MakeRect(
+                    Scene,
+                    position: new Vector2(
+                        MathHelper.Lerp(cameraRect.Left, cameraRect.Right, _rng.NextSingle()),
+                        MathHelper.Lerp(cameraRect.Top, cameraRect.Bottom, _rng.NextSingle())
+                    ),
+                    size: new Vector2(_rng.NextInt64(40, 80), _rng.NextInt64(20, 60)),
+                    color: Color.Orange
+                )
+                .StageAttach(
+                    new Velocity
+                    {
+                        Angular =
+                            (_rng.NextSingle() + 1)
+                            * MathHelper.PiOver2
+                            * (_rng.NextSingle() < 0.5f ? 1 : -1),
+                    }
+                );
         }
     }
 }
 
-internal class RectRenderer : Component, IRenderer
+internal class RectangleRenderer : Component, IRenderer
 {
-    private readonly Random _rng = new();
-    private Vector2 _position;
-    private float _rotation;
-    private float _rotationSpeed;
+    public Vector2 Size { get; set; }
+    public Color Color { get; set; } = Color.Orange;
 
     public int DrawOrder => 0;
     public bool IsVisible { get; set; } = true;
 
-    protected override void Begin()
-    {
-        _rotation = _rng.NextSingle() * MathHelper.TwoPi;
-        _rotationSpeed =
-            (_rng.NextSingle() + 1) * MathHelper.PiOver2 * (_rng.NextSingle() < 0.5f ? 1 : -1);
-
-        var cameraRect = Scene.Find<Camera>().First().Get<Camera>().AsWorldRectangleF();
-        _position = new Vector2(
-            MathHelper.Lerp(cameraRect.Left, cameraRect.Right, _rng.NextSingle()),
-            MathHelper.Lerp(cameraRect.Top, cameraRect.Bottom, _rng.NextSingle())
-        );
-    }
-
     public void Draw(SpriteBatch spriteBatch)
     {
         var drawHelper = Scene.Singletons.Get<DrawHelper>();
+        var transform = Entity.Get<Transform>();
         drawHelper.DrawRectangle(
             spriteBatch,
-            Color.DarkOrange,
-            _position,
-            size: new Vector2(60, 40),
+            Color,
+            transform.Position,
+            Size,
             normalizedOrigin: new Vector2(0.5f, 0.5f),
-            _rotation
+            transform.Rotation
         );
-        drawHelper.DrawLine(spriteBatch, Color.DarkOrchid, new Vector2(2, 2), new Vector2(40, 40));
-
-        _rotation += Scene.IsPaused ? 0 : _rotationSpeed * Scene.DeltaTime;
     }
 }
 
-internal class Floor : Component, ICollisionHandler
+internal class StaticGeometry : Component, ICollisionHandler
 {
-    public static Entity CreateEntity(Scene scene)
+    void ICollisionHandler.OnCollisionEnter(in ContactInfo contact)
     {
-        return null!;
+        ICollisionHandler handler = this;
+        handler.OnCollisionStay(contact);
     }
 
     void ICollisionHandler.OnCollisionStay(in ContactInfo contact)
     {
-        // contact.Other.Entity.Get<Transform>()
+        if (contact.Other.Entity.Has<StaticGeometry>())
+        {
+            return;
+        }
+        var otherTransform = contact.Other.Entity.Get<Transform>();
+        otherTransform.Position -= contact.Normal * contact.Overlap.Size;
+    }
+}
+
+internal class Player : Component, IUpdatable, ICollisionHandler
+{
+    void IUpdatable.Update()
+    {
+        var inputManager = Scene.Singletons.Get<InputManager>();
+        var velocity = Entity.Get<Velocity>();
+
+        velocity.Linear.Y += 1500 * Scene.DeltaTime;
+        if (inputManager.IsPressed(Keys.Space))
+        {
+            velocity.Linear.Y = -400;
+        }
+
+        velocity.Linear.X = 0;
+        if (inputManager.IsDown(Keys.A))
+        {
+            velocity.Linear.X -= 200;
+        }
+        if (inputManager.IsDown(Keys.D))
+        {
+            velocity.Linear.X += 200;
+        }
+    }
+
+    void ICollisionHandler.OnCollisionStay(in ContactInfo contact)
+    {
+        if (contact.Normal == new Vector2(0, -1))
+        {
+            var velocity = Entity.Get<Velocity>();
+            velocity.Linear.Y = 0;
+        }
     }
 }

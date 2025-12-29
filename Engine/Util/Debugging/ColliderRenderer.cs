@@ -1,14 +1,12 @@
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Engine.Core;
 using Engine.Graphics;
 using Engine.Input;
-using Engine.Util.Collections;
+using Engine.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace Engine.Physics;
+namespace Engine.Util.Debugging;
 
 /// <summary>
 /// For debug collider visualization.
@@ -33,11 +31,6 @@ public partial class ColliderRenderer : Component
     {
         _pixel.Dispose();
     }
-
-    [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_colliders")]
-    private static extern ref Dictionary<int, IndexedSet<Collider>> GetColliders(
-        CollisionManager collisionManager
-    );
 }
 
 public partial class ColliderRenderer : IUpdatable
@@ -65,7 +58,7 @@ public partial class ColliderRenderer : IRenderer
     void IRenderer.Draw(SpriteBatch spriteBatch)
     {
         var collisionManager = Scene.Singletons.Get<CollisionManager>();
-        foreach (var colliders in GetColliders(collisionManager).Values)
+        foreach (var colliders in collisionManager._colliders.Values)
         {
             foreach (var collider in colliders)
             {

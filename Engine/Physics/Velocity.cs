@@ -6,6 +6,7 @@ namespace Engine.Physics;
 public partial class Velocity : Component
 {
     public Vector2 Linear;
+    public float Angular;
 }
 
 public partial class Velocity : IUpdatable
@@ -15,6 +16,8 @@ public partial class Velocity : IUpdatable
 
     void IUpdatable.Update()
     {
-        Entity.Get<Transform>().Position += Linear * Scene.DeltaTime;
+        var transform = Entity.Get<Transform>();
+        transform.Position += Linear * Scene.DeltaTime;
+        transform.Rotation += Angular * Scene.DeltaTime;
     }
 }

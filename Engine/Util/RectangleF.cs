@@ -9,8 +9,8 @@ namespace Engine.Util;
 /// </summary>
 public readonly record struct RectangleF
 {
-    public Vector2 Location { get; }
-    public Vector2 Size { get; }
+    public Vector2 Location { get; init; }
+    public Vector2 Size { get; init; }
     public Vector2 Center => Location + Size / 2;
     public float X => Location.X;
     public float Y => Location.Y;

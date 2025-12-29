@@ -13,7 +13,7 @@ namespace Engine.Physics;
 public partial class CollisionManager : Component
 {
     private readonly List<(int, int)> _collidableLayers = new();
-    private readonly Dictionary<int, IndexedSet<Collider>> _colliders = new();
+    internal readonly Dictionary<int, IndexedSet<Collider>> _colliders = new();
     private readonly Dictionary<Entity, IndexedSet<ICollisionHandler>> _handlers = new();
     private Dictionary<(Collider, Collider), ContactInfo> _contacts = new();
     private Dictionary<(Collider, Collider), ContactInfo> _previousContacts = new();

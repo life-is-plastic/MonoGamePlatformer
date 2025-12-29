@@ -8,7 +8,7 @@ public interface IDrawable
 {
     public void Draw(SpriteBatch spriteBatch, Transform transform, SpriteEffects effects)
     {
-        Draw(spriteBatch, transform.Position, 0, transform.Scale, effects);
+        Draw(spriteBatch, transform.Position, transform.Rotation, transform.Scale, effects);
     }
 
     public void Draw(

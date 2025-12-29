@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Engine.Core;
 using Engine.Util;
 
@@ -25,6 +26,8 @@ public class Collider : Component
 
     public Collider(RectangleF rect)
     {
+        Debug.Assert(rect.Width > 0);
+        Debug.Assert(rect.Height > 0);
         RectangleF = rect;
     }
 
