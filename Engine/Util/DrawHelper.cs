@@ -24,15 +24,56 @@ public class DrawHelper : Component
         _pixel.Dispose();
     }
 
-    public void DrawLine(SpriteBatch spriteBatch, Color color, Vector2 position1, Vector2 position2)
+    public void DrawLine(
+        SpriteBatch spriteBatch,
+        Color color,
+        Vector2 position1,
+        Vector2 position2,
+        float thickness = 1
+    )
     {
         var diff = position2 - position1;
         var len = diff.Length();
         var rotation = diff.Rotation();
-        DrawRectangle(spriteBatch, color, position1, new(len, 1), rotation: rotation);
+        spriteBatch.Draw(
+            _pixel,
+            position1,
+            sourceRectangle: null,
+            color,
+            rotation,
+            origin: default,
+            scale: new Vector2(len, thickness),
+            SpriteEffects.None,
+            layerDepth: 0
+        );
     }
 
     public void DrawRectangle(
+        SpriteBatch spriteBatch,
+        Color color,
+        Vector2 position,
+        Vector2 size,
+        Vector2 normalizedOrigin = default,
+        float rotation = 0,
+        float thickness = 1
+    )
+    {
+        var rect = new RectangleF(position - size * normalizedOrigin, size);
+        var tl = new Vector2(rect.Left, rect.Top);
+        var tr = new Vector2(rect.Right, rect.Top);
+        var bl = new Vector2(rect.Left, rect.Bottom);
+        var br = new Vector2(rect.Right, rect.Bottom);
+        tl.RotateAround(position, rotation);
+        tr.RotateAround(position, rotation);
+        bl.RotateAround(position, rotation);
+        br.RotateAround(position, rotation);
+        DrawLine(spriteBatch, color, tl, tr, thickness);
+        DrawLine(spriteBatch, color, tr, br, thickness);
+        DrawLine(spriteBatch, color, tl, bl, thickness);
+        DrawLine(spriteBatch, color, bl, br, thickness);
+    }
+
+    public void DrawFilledRectangle(
         SpriteBatch spriteBatch,
         Color color,
         Vector2 position,
@@ -50,10 +91,10 @@ public class DrawHelper : Component
                 (int)MathF.Round(size.X),
                 (int)MathF.Round(size.Y)
             ),
-            sourceRectangle: new Rectangle(0, 0, 1, 1),
+            sourceRectangle: null,
             color,
             rotation,
-            origin: normalizedOrigin,
+            normalizedOrigin,
             SpriteEffects.None,
             layerDepth: 0
         );

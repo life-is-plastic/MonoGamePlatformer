@@ -30,15 +30,13 @@ public class DefaultSceneDefinition : ISceneDefinition
             .Singletons.StageAttach(new SceneLoadOnPress(Instance))
             .StageAttach(new ScenePauseToggle())
             .StageAttach(new CameraMouseDrag())
+            .StageAttach(new CameraMouseZoom())
             .StageAttach(new ColliderRenderer(Keys.P))
             .StageAttach(new DefaultSceneHelper())
             .StageAttach(new DrawHelper());
 
         Player.MakeEntity(scene);
         World.MakeEntity(scene, 300, 180);
-        // DefaultSceneHelper
-        //     .MakeRect(scene, new(0, 60), new(400, 10), Color.SaddleBrown)
-        //     .StageAttach(new StaticGeometry());
 
         scene
             .Singletons.Get<AudioManager>()
@@ -53,7 +51,14 @@ internal class DefaultSceneHelper : Component, IUpdatable
         return scene
             .StageCreate("Rect")
             .StageAttach(new Transform() { Position = position })
-            .StageAttach(new RectangleRenderer() { Size = size, Color = color })
+            .StageAttach(
+                new RectangleRenderer()
+                {
+                    Size = size,
+                    Color = color,
+                    Filled = true,
+                }
+            )
             .StageAttach(new Collider(size) { NormalizedOrigin = new(0.5f, 0.5f) });
     }
 
@@ -77,8 +82,9 @@ internal class DefaultSceneHelper : Component, IUpdatable
                         MathHelper.Lerp(cameraRect.Top, cameraRect.Bottom, _rng.NextSingle())
                     ),
                     size: new Vector2(_rng.NextInt64(40, 80), _rng.NextInt64(20, 60)),
-                    color: Color.Orange
+                    color: Color.SaddleBrown
                 )
+                .StageAttach(new StaticGeometry())
                 .StageAttach(
                     new Velocity
                     {
@@ -96,6 +102,7 @@ internal class RectangleRenderer : Component, IRenderer
 {
     public Vector2 Size { get; set; }
     public Color Color { get; set; } = Color.Orange;
+    public bool Filled = false;
 
     public int DrawOrder => 0;
     public bool IsVisible { get; set; } = true;
@@ -104,14 +111,28 @@ internal class RectangleRenderer : Component, IRenderer
     {
         var drawHelper = Scene.Singletons.Get<DrawHelper>();
         var transform = Entity.Get<Transform>();
-        drawHelper.DrawRectangle(
-            spriteBatch,
-            Color,
-            transform.Position,
-            Size * transform.Scale,
-            normalizedOrigin: new Vector2(0.5f, 0.5f),
-            transform.Rotation
-        );
+        if (Filled)
+        {
+            drawHelper.DrawFilledRectangle(
+                spriteBatch,
+                Color,
+                transform.Position,
+                Size * transform.Scale,
+                normalizedOrigin: new Vector2(0.5f, 0.5f),
+                transform.Rotation
+            );
+        }
+        else
+        {
+            drawHelper.DrawRectangle(
+                spriteBatch,
+                Color,
+                transform.Position,
+                Size * transform.Scale,
+                normalizedOrigin: new Vector2(0.5f, 0.5f),
+                transform.Rotation
+            );
+        }
     }
 }
 
@@ -152,7 +173,14 @@ internal class Player : Component, IUpdatable
             .StageAttach(new Transform())
             .StageAttach(new Velocity())
             .StageAttach(new Collider(20, 20) { NormalizedOrigin = new(0.5f, 0.5f) })
-            .StageAttach(new RectangleRenderer() { Size = new(20, 20), Color = Color.DarkGray });
+            .StageAttach(
+                new RectangleRenderer()
+                {
+                    Size = new(20, 20),
+                    Color = Color.DarkGray,
+                    Filled = true,
+                }
+            );
     }
 
     void IUpdatable.Update()

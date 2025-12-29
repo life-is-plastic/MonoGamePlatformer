@@ -14,22 +14,10 @@ namespace Engine.Util.Debugging;
 public partial class ColliderRenderer : Component
 {
     private readonly Keys _toggleKey;
-    private Texture2D _pixel = null!;
 
     public ColliderRenderer(Keys toggleKey = Keys.None)
     {
         _toggleKey = toggleKey;
-    }
-
-    protected override void Begin()
-    {
-        _pixel = new Texture2D(Scene.Game.GraphicsDevice, 1, 1);
-        _pixel.SetData([Color.White]);
-    }
-
-    protected override void End()
-    {
-        _pixel.Dispose();
     }
 }
 
@@ -57,32 +45,14 @@ public partial class ColliderRenderer : IRenderer
 
     void IRenderer.Draw(SpriteBatch spriteBatch)
     {
+        var drawHelper = Scene.Singletons.Get<DrawHelper>();
         var collisionManager = Scene.Singletons.Get<CollisionManager>();
         foreach (var colliders in collisionManager._colliders.Values)
         {
             foreach (var collider in colliders)
             {
-                var rect = collider.AsWorldRectangleF().ToRectangle();
-                spriteBatch.Draw(
-                    _pixel,
-                    new Rectangle(rect.Left, rect.Top, rect.Width, 1),
-                    Color.Orange
-                );
-                spriteBatch.Draw(
-                    _pixel,
-                    new Rectangle(rect.Left, rect.Top, 1, rect.Height),
-                    Color.Orange
-                );
-                spriteBatch.Draw(
-                    _pixel,
-                    new Rectangle(rect.Left, rect.Bottom, rect.Width, 1),
-                    Color.Orange
-                );
-                spriteBatch.Draw(
-                    _pixel,
-                    new Rectangle(rect.Right, rect.Top, 1, rect.Height),
-                    Color.Orange
-                );
+                var rect = collider.AsWorldRectangleF();
+                drawHelper.DrawRectangle(spriteBatch, Color.Orange, rect.Location, rect.Size);
             }
         }
     }
