@@ -7,12 +7,12 @@ namespace Engine.Util.Debugging;
 public partial class SceneLoadOnPress : Component
 {
     private readonly ISceneDefinition _sceneDefinition;
-    private readonly Keys _button;
+    private readonly Button _button;
 
-    public SceneLoadOnPress(ISceneDefinition sceneDefinition, Keys button = Keys.R)
+    public SceneLoadOnPress(ISceneDefinition sceneDefinition, Button? button = null)
     {
         _sceneDefinition = sceneDefinition;
-        _button = button;
+        _button = button ?? Keys.R;
     }
 }
 

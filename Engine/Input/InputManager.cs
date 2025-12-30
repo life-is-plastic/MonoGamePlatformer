@@ -1,3 +1,4 @@
+using System;
 using Engine.Core;
 using Engine.Graphics;
 using Microsoft.Xna.Framework;
@@ -7,11 +8,59 @@ namespace Engine.Input;
 
 public partial class InputManager : Component
 {
+    private readonly MouseInfo _mouseInfo = new();
+    private KeyboardState _kbCurrentState = new();
+    private KeyboardState _kbPreviousState = new();
     private EntityHandle _cameraHandle;
+
+    public int MouseWheelDelta => _mouseInfo.CurrentWheelDelta;
+    public Point MouseScreenPosition => _mouseInfo.CurrentMouseState.Position;
+    public Vector2 MouseWorldPosition { get; private set; }
 
     protected override void Begin()
     {
         _cameraHandle = new(Scene.Find<Camera>().First());
+    }
+
+    private bool IsPreviouslyDown(Button button)
+    {
+        if (button.AsKey() is { } key)
+        {
+            return _kbPreviousState.IsKeyDown(key);
+        }
+        if (button.AsMouseButton() is { } mouseButton)
+        {
+            return _mouseInfo.IsPreviouslyDown(mouseButton);
+        }
+        throw new ArgumentException($"unknown button: {button}");
+    }
+
+    public bool IsDown(Button button)
+    {
+        if (button.AsKey() is { } key)
+        {
+            return _kbCurrentState.IsKeyDown(key);
+        }
+        if (button.AsMouseButton() is { } mouseButton)
+        {
+            return _mouseInfo.IsCurrentlyDown(mouseButton);
+        }
+        throw new ArgumentException($"unknown button: {button}");
+    }
+
+    public bool IsPressed(Button button)
+    {
+        return IsDown(button) && !IsPreviouslyDown(button);
+    }
+
+    public bool IsHeld(Button button)
+    {
+        return IsDown(button) && IsPreviouslyDown(button);
+    }
+
+    public bool IsReleased(Button button)
+    {
+        return !IsDown(button) && IsPreviouslyDown(button);
     }
 }
 
@@ -26,67 +75,10 @@ public partial class InputManager : IUpdatable
 
     void IUpdatable.Update()
     {
-        UpdateKeyboard();
-        UpdateMouse();
-    }
-}
-
-public partial class InputManager
-{
-    private KeyboardState _kbCurrentState = new();
-    private KeyboardState _kbPreviousState = new();
-
-    public bool IsDown(Keys button) => _kbCurrentState.IsKeyDown(button);
-
-    public bool IsUp(Keys button) => _kbCurrentState.IsKeyUp(button);
-
-    public bool IsPressed(Keys button) => IsDown(button) && _kbPreviousState.IsKeyUp(button);
-
-    public bool IsHeld(Keys button) => IsDown(button) && _kbPreviousState.IsKeyDown(button);
-
-    public bool IsReleased(Keys button) => IsUp(button) && _kbPreviousState.IsKeyDown(button);
-
-    private void UpdateKeyboard()
-    {
         _kbPreviousState = _kbCurrentState;
         _kbCurrentState = Keyboard.GetState();
-    }
-}
 
-public partial class InputManager
-{
-    private readonly MouseInfo _mouseInfo = new();
-
-    public int MouseWheelDelta => _mouseInfo.CurrentWheelDelta;
-    public Point MouseScreenPosition => _mouseInfo.CurrentMouseState.Position;
-    public Vector2 MouseWorldPosition { get; private set; }
-
-    public Vector2 GetMouseWorldPosition()
-    {
-        var camera = _cameraHandle.Deref().Get<Camera>();
-        var cameraTransform = camera.Entity.Get<Transform>();
-
-        var mouseScreenPositionRelCenter =
-            MouseScreenPosition.ToVector2() - Scene.Game.ViewportSize.ToVector2() / 2;
-        return cameraTransform.Position + mouseScreenPositionRelCenter / camera.ScreenScale;
-    }
-
-    public bool IsDown(MouseButton button) => _mouseInfo.IsCurrentlyDown(button);
-
-    public bool IsUp(MouseButton button) => !IsDown(button);
-
-    public bool IsPressed(MouseButton button) =>
-        IsDown(button) && !_mouseInfo.IsPreviouslyDown(button);
-
-    public bool IsHeld(MouseButton button) => IsDown(button) && _mouseInfo.IsPreviouslyDown(button);
-
-    public bool IsReleased(MouseButton button) =>
-        IsUp(button) && _mouseInfo.IsPreviouslyDown(button);
-
-    private void UpdateMouse()
-    {
         _mouseInfo.Update();
-
         var camera = _cameraHandle.Deref().Get<Camera>();
         var cameraTransform = camera.Entity.Get<Transform>();
         var screenPosWrtScreenCenter =

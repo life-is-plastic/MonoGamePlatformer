@@ -13,11 +13,11 @@ namespace Engine.Util.Debugging;
 /// </summary>
 public partial class ColliderRenderer : Component
 {
-    private readonly Keys _toggleKey;
+    private readonly Button _toggleButton;
 
-    public ColliderRenderer(Keys toggleKey = Keys.P)
+    public ColliderRenderer(Button? toggleButton = null)
     {
-        _toggleKey = toggleKey;
+        _toggleButton = toggleButton ?? Keys.P;
     }
 }
 
@@ -31,7 +31,7 @@ public partial class ColliderRenderer : IUpdatable
     void IUpdatable.Update()
     {
         var inputManager = Scene.Singletons.Get<InputManager>();
-        if (inputManager.IsPressed(_toggleKey))
+        if (inputManager.IsPressed(_toggleButton))
         {
             IsVisible = !IsVisible;
         }

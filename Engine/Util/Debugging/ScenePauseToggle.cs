@@ -6,11 +6,11 @@ namespace Engine.Util.Debugging;
 
 public partial class ScenePauseToggle : Component
 {
-    private readonly Keys _button;
+    private readonly Button _button;
 
-    public ScenePauseToggle(Keys button = Keys.Escape)
+    public ScenePauseToggle(Button? button = null)
     {
-        _button = button;
+        _button = button ?? Keys.Escape;
     }
 }
 
