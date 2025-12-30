@@ -9,6 +9,6 @@ public class Main
     public static void Run()
     {
         AudioManager.MasterVolume = 0.2f;
-        new Game(DefaultSceneDefinition.Instance).Run();
+        new Game(DefaultScene.Instance).Run();
     }
 }

@@ -15,7 +15,7 @@ public partial class ColliderRenderer : Component
 {
     private readonly Keys _toggleKey;
 
-    public ColliderRenderer(Keys toggleKey = Keys.None)
+    public ColliderRenderer(Keys toggleKey = Keys.P)
     {
         _toggleKey = toggleKey;
     }

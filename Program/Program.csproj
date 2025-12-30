@@ -7,7 +7,6 @@
     <TieredCompilation>false</TieredCompilation>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
@@ -24,19 +23,14 @@
       <LogicalName>Icon.bmp</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
     <MonoGameContentReference Include="Content/Content.mgcb" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.*" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.*" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Contentless" Version="4.2.*" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="../Library/Library.csproj" />
   </ItemGroup>

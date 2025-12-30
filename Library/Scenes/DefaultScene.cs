@@ -15,15 +15,15 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Library.Scenes;
 
-public class DefaultSceneDefinition : ISceneDefinition
+public class DefaultScene : ISceneDefinition
 {
-    public static DefaultSceneDefinition Instance { get; } = new();
+    public static DefaultScene Instance { get; } = new();
 
-    private DefaultSceneDefinition() { }
+    private DefaultScene() { }
 
     string ISceneDefinition.Name()
     {
-        return "DefaultScene";
+        return nameof(DefaultScene);
     }
 
     void ISceneDefinition.Initialize(Scene scene)
@@ -34,7 +34,7 @@ public class DefaultSceneDefinition : ISceneDefinition
             .StageAttach(new CameraMouseZoom())
             // .StageAttach(new CameraMouseDrag())
             .StageAttach(new CameraFollowsPlayer())
-            .StageAttach(new ColliderRenderer(Keys.P))
+            .StageAttach(new ColliderRenderer())
             .StageAttach(new DefaultSceneHelper())
             .StageAttach(new DrawHelper());
 
