@@ -2,10 +2,12 @@ using Engine.Core;
 using Engine.Graphics;
 using Engine.Input;
 using Engine.Physics;
+using Engine.ZDebug.Inputs;
+using Engine.ZDebug.Visuals;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace Engine.Util.Debugging;
+namespace Engine.ZDebug.Scenes;
 
 public class PhysicsSandboxScene : ISceneDefinition
 {

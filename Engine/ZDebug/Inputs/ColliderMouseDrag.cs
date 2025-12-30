@@ -5,7 +5,7 @@ using Engine.Input;
 using Engine.Physics;
 using Microsoft.Xna.Framework;
 
-namespace Engine.Util.Debugging;
+namespace Engine.ZDebug.Inputs;
 
 public partial class ColliderMouseDrag : Component
 {

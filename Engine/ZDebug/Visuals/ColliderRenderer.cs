@@ -6,11 +6,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace Engine.Util.Debugging;
+namespace Engine.ZDebug.Visuals;
 
-/// <summary>
-/// For debug collider visualization.
-/// </summary>
 public partial class ColliderRenderer : Component
 {
     private readonly Button _toggleButton;

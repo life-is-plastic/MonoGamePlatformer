@@ -1,7 +1,6 @@
 using Engine.Audio;
 using Engine.Core;
-using Engine.Util.Debugging;
-using Library.Scenes;
+using Engine.ZDebug.Scenes;
 
 namespace Library;
 

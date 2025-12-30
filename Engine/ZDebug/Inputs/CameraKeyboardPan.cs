@@ -3,7 +3,7 @@ using Engine.Graphics;
 using Engine.Input;
 using Microsoft.Xna.Framework.Input;
 
-namespace Engine.Util.Debugging;
+namespace Engine.ZDebug.Inputs;
 
 public partial class CameraKeyboardPan : Component
 {

@@ -2,7 +2,7 @@ using Engine.Core;
 using Engine.Graphics;
 using Engine.Input;
 
-namespace Engine.Util.Debugging;
+namespace Engine.ZDebug.Inputs;
 
 public partial class CameraMouseZoom : Component
 {

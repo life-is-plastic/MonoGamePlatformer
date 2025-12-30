@@ -2,7 +2,7 @@ using Engine.Core;
 using Engine.Input;
 using Microsoft.Xna.Framework.Input;
 
-namespace Engine.Util.Debugging;
+namespace Engine.ZDebug.Inputs;
 
 public partial class ScenePauseToggle : Component
 {
