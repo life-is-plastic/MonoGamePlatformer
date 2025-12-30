@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 using Engine.Core;
 using Engine.Util;
 using Engine.Util.Collections;
@@ -12,45 +10,19 @@ namespace Engine.Physics;
 
 public partial class CollisionManager : Component
 {
-    private readonly List<(int, int)> _collidableLayers = new();
-    internal readonly Dictionary<int, IndexedSet<Collider>> _colliders = new();
+    internal InlineArray8<IndexedSet<Collider>> _layerToColliders;
     private readonly Dictionary<Entity, IndexedSet<ICollisionHandler>> _handlers = new();
     private Dictionary<(Collider, Collider), ContactInfo> _contacts = new();
     private Dictionary<(Collider, Collider), ContactInfo> _previousContacts = new();
 
-    // Used for computing layer pairwise combinations.
-    private readonly List<int> _layerBuf = new();
+    public CollisionLayers Layers { get; } = new();
 
-    /// <summary>
-    /// AllLayers is special-cased and their presence/absence from this collection does not matter.
-    /// </summary>
-    public ReadOnlySpan<(int, int)> CollidableLayers =>
-        CollectionsMarshal.AsSpan(_collidableLayers);
-
-    public void MarkLayersCollidable(int layer1, int layer2)
+    public CollisionManager()
     {
-        Debug.Assert(layer1 != Collider.AllLayers && layer2 != Collider.AllLayers);
-        var pair = (Math.Min(layer1, layer2), Math.Max(layer1, layer2));
-        if (!_collidableLayers.Contains(pair))
+        for (var layer = 0; layer < _layerToColliders.Length; layer++)
         {
-            _collidableLayers.Add(pair);
+            _layerToColliders[layer] = new IndexedSet<Collider>();
         }
-    }
-
-    public void MarkLayersNoncollidable(int layer1, int layer2)
-    {
-        Debug.Assert(layer1 != Collider.AllLayers && layer2 != Collider.AllLayers);
-        var pair = (Math.Min(layer1, layer2), Math.Max(layer1, layer2));
-        _collidableLayers.Remove(pair);
-    }
-
-    private bool LayersAreCollidable(int layer1, int layer2)
-    {
-        if (layer1 == Collider.AllLayers || layer2 == Collider.AllLayers)
-        {
-            return true;
-        }
-        return _collidableLayers.Contains((Math.Min(layer1, layer2), Math.Max(layer1, layer2)));
     }
 
     private void CheckContacts()
@@ -59,13 +31,13 @@ public partial class CollisionManager : Component
         _contacts.Clear();
 
         // Check same layer collisions.
-        foreach (var layer in _colliders.Keys)
+        for (var layer = 0; layer < _layerToColliders.Length; layer++)
         {
-            if (!LayersAreCollidable(layer, layer))
+            if (!Layers.IsCollidable(layer, layer))
             {
                 continue;
             }
-            var colliders = _colliders[layer];
+            var colliders = _layerToColliders[layer];
             for (var i = 0; i < colliders.Count - 1; i++)
             {
                 for (var j = i + 1; j < colliders.Count; j++)
@@ -76,24 +48,17 @@ public partial class CollisionManager : Component
         }
 
         // Check cross-layer collisions.
-        _layerBuf.Clear();
-        foreach (var layer in _colliders.Keys)
+        for (var l1 = 0; l1 < _layerToColliders.Length - 1; l1++)
         {
-            _layerBuf.Add(layer);
-        }
-        for (var i = 0; i < _layerBuf.Count - 1; i++)
-        {
-            var l1 = _layerBuf[i];
-            for (var j = i + 1; j < _layerBuf.Count; j++)
+            for (var l2 = l1 + 1; l2 < _layerToColliders.Length; l2++)
             {
-                var l2 = _layerBuf[j];
-                if (!LayersAreCollidable(l1, l2))
+                if (!Layers.IsCollidable(l1, l2))
                 {
                     continue;
                 }
-                foreach (var c1 in _colliders[l1])
+                foreach (var c1 in _layerToColliders[l1])
                 {
-                    foreach (var c2 in _colliders[l2])
+                    foreach (var c2 in _layerToColliders[l2])
                     {
                         CheckContactBetween(c1, c2);
                     }
@@ -221,7 +186,7 @@ public partial class CollisionManager : IEntitySyncer
         {
             if (component is Collider collider)
             {
-                _colliders[collider.Layer].RemoveOrDie(collider);
+                _layerToColliders[collider.Layer].RemoveOrDie(collider);
             }
             if (component is ICollisionHandler handler)
             {
@@ -232,7 +197,7 @@ public partial class CollisionManager : IEntitySyncer
         {
             if (component is Collider collider)
             {
-                _colliders.GetOrAddNew(collider.Layer).AddOrDie(collider);
+                _layerToColliders[collider.Layer].AddOrDie(collider);
             }
             if (component is ICollisionHandler handler)
             {

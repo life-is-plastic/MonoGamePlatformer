@@ -5,7 +5,7 @@ namespace Engine.Util.Collections;
 /// <summary>
 /// A read-only view of an <c>IndexedSet</c>.
 /// </summary>
-public readonly partial record struct IndexedSetView<T>
+public readonly record struct IndexedSetView<T>
     where T : notnull
 {
     private static readonly IndexedSet<T> s_empty = new();

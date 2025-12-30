@@ -10,7 +10,7 @@ namespace Engine.Util.Collections;
 /// are stored contiguously in memory to enable fast iteration. Insertions always append to the end
 /// of the set. Deletions do not preserve order.
 /// </summary>
-public readonly partial record struct IndexedSet<T>
+public readonly record struct IndexedSet<T>
     where T : notnull
 {
     private readonly Dictionary<T, int> _indices;

@@ -30,7 +30,15 @@ public class Collider : Component
         init => Origin = value * Size;
     }
 
-    public int Layer { get; init; } = AllLayers;
+    public int Layer
+    {
+        get;
+        init
+        {
+            Debug.Assert(value >= 0 && value < CollisionLayers.Count);
+            field = value;
+        }
+    } = CollisionLayers.Default;
 
     /// <summary>
     /// If true, then collision checks will consider this collider.

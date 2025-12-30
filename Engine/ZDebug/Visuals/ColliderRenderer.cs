@@ -44,7 +44,7 @@ public partial class ColliderRenderer : IRenderer
     {
         var drawHelper = Scene.Singletons.Get<DrawHelper>();
         var collisionManager = Scene.Singletons.Get<CollisionManager>();
-        foreach (var colliders in collisionManager._colliders.Values)
+        foreach (var colliders in collisionManager._layerToColliders)
         {
             foreach (var collider in colliders)
             {

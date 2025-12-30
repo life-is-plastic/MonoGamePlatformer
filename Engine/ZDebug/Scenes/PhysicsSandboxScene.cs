@@ -58,7 +58,14 @@ public class PhysicsSandboxScene : ISceneDefinition
                 Scene
                     .StageCreate("Object")
                     .StageAttach(new Transform() { Position = inputManager.MouseWorldPosition })
-                    .StageAttach(new Collider(32, 32) { NormalizedOrigin = new(0.5f, 0.5f) })
+                    .StageAttach(new StaticGeometry())
+                    .StageAttach(
+                        new Collider(32, 32)
+                        {
+                            NormalizedOrigin = new(0.5f, 0.5f),
+                            Layer = CollisionLayers.StaticGeometry,
+                        }
+                    )
                     .StageAttach(
                         new RectangleRenderer()
                         {
@@ -66,8 +73,7 @@ public class PhysicsSandboxScene : ISceneDefinition
                             NormalizedOrigin = new(0.5f, 0.5f),
                             Color = Color.Black,
                         }
-                    )
-                    .StageAttach(new StaticGeometry());
+                    );
             }
         }
     }

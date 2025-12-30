@@ -6,7 +6,7 @@ namespace Engine.Util.Collections;
 /// <summary>
 /// A read-only view of a <c>Dictionary</c>.
 /// </summary>
-public readonly partial record struct DictionaryView<TKey, TValue>
+public readonly record struct DictionaryView<TKey, TValue>
     where TKey : notnull
 {
     private static readonly Dictionary<TKey, TValue> s_empty = new();
