@@ -1,4 +1,7 @@
 using Engine.Core;
+using Engine.Input;
+using Engine.Physics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace Engine.Util.Debugging;
@@ -22,6 +25,7 @@ public class PhysicsSandboxScene : ISceneDefinition
             .StageAttach(new ScenePauseToggle())
             .StageAttach(new CameraMouseZoom())
             .StageAttach(new CameraMouseDrag())
+            .StageAttach(new ColliderMouseDrag(entity => true))
             .StageAttach(new ColliderRenderer(Keys.P))
             .StageAttach(new DrawHelper());
     }
@@ -30,7 +34,23 @@ public class PhysicsSandboxScene : ISceneDefinition
     {
         void IUpdatable.Update()
         {
-            throw new System.NotImplementedException();
+            var inputManager = Scene.Singletons.Get<InputManager>();
+            if (inputManager.IsPressed(Keys.D1))
+            {
+                Scene
+                    .StageCreate("Object")
+                    .StageAttach(new Transform() { Position = inputManager.MouseWorldPosition })
+                    .StageAttach(new Collider(32, 32) { NormalizedOrigin = new(0.5f, 0.5f) })
+                    .StageAttach(
+                        new RectangleRenderer()
+                        {
+                            Size = new(32, 32),
+                            NormalizedOrigin = new(0.5f, 0.5f),
+                            Color = Color.SaddleBrown,
+                            Filled = true,
+                        }
+                    );
+            }
         }
     }
 }

@@ -52,6 +52,11 @@ public readonly record struct RectangleF
 
     public RectangleF ScaleFromCenter(Vector2 scale) => Scale(scale).WithCenter(Center);
 
+    public bool Contains(Vector2 point)
+    {
+        return Left < point.X && point.X < Right && Top < point.Y && point.Y < Bottom;
+    }
+
     public bool Overlaps(RectangleF other)
     {
         return Left < other.Right && other.Left < Right && Top < other.Bottom && other.Top < Bottom;

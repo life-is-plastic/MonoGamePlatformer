@@ -28,10 +28,8 @@ public class Camera : Component
     public Point Size => new(Width, Height);
 
     /// <summary>
-    /// A number that, when multiplied with camera viewport dimensions, stretches the viewport such
-    /// that at least one dimension equals the corresponding screen dimension. In other words, this
-    /// number facilitates stretching the camera viewport to the screen while preserving aspect
-    /// ratio.
+    /// A number that, when multiplied with camera viewport dimensions, stretches the viewport to
+    /// fit the screen while preserving aspect ratio. The result assumes no zooming.
     /// </summary>
     public float ScreenScale =>
         Math.Min(

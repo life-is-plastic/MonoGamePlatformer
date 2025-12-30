@@ -84,6 +84,7 @@ public partial class InputManager : IUpdatable
         var screenPosWrtScreenCenter =
             MouseScreenPosition.ToVector2() - Scene.Game.ViewportSize.ToVector2() / 2;
         MouseWorldPosition =
-            cameraTransform.Position + screenPosWrtScreenCenter / camera.ScreenScale;
+            cameraTransform.Position
+            + screenPosWrtScreenCenter / camera.ScreenScale / cameraTransform.Scale;
     }
 }

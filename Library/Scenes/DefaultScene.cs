@@ -10,7 +10,6 @@ using Library.Environment;
 using Library.Player;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace Library.Scenes;
@@ -53,6 +52,7 @@ public class DefaultScene : ISceneDefinition
                 new RectangleRenderer()
                 {
                     Size = new(20, 20),
+                    NormalizedOrigin = new(0.5f, 0.5f),
                     Color = Color.DarkGray,
                     Filled = true,
                 }
@@ -72,6 +72,7 @@ public class DefaultScene : ISceneDefinition
                 new RectangleRenderer()
                 {
                     Size = size,
+                    NormalizedOrigin = new(0.5f, 0.5f),
                     Color = Color.SaddleBrown,
                     Filled = true,
                 }
@@ -118,50 +119,13 @@ internal class DefaultSceneHelper : Component, IUpdatable
                     new RectangleRenderer()
                     {
                         Size = size,
+                        NormalizedOrigin = new(0.5f, 0.5f),
                         Color = Color.SaddleBrown,
                         Filled = true,
                     }
                 )
                 .StageAttach(new Collider(size) { NormalizedOrigin = new(0.5f, 0.5f) })
                 .StageAttach(new StaticGeometry());
-        }
-    }
-}
-
-internal class RectangleRenderer : Component, IRenderer
-{
-    public Vector2 Size { get; set; }
-    public Color Color { get; set; } = Color.Orange;
-    public bool Filled = false;
-
-    public int DrawOrder => 0;
-    public bool IsVisible { get; set; } = true;
-
-    public void Draw(SpriteBatch spriteBatch)
-    {
-        var drawHelper = Scene.Singletons.Get<DrawHelper>();
-        var transform = Entity.Get<Transform>();
-        if (Filled)
-        {
-            drawHelper.DrawFilledRectangle(
-                spriteBatch,
-                Color,
-                transform.Position,
-                Size * transform.Scale,
-                normalizedOrigin: new Vector2(0.5f, 0.5f),
-                transform.Rotation
-            );
-        }
-        else
-        {
-            drawHelper.DrawRectangle(
-                spriteBatch,
-                Color,
-                transform.Position,
-                Size * transform.Scale,
-                normalizedOrigin: new Vector2(0.5f, 0.5f),
-                transform.Rotation
-            );
         }
     }
 }
