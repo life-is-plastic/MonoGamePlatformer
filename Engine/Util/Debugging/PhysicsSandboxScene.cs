@@ -1,4 +1,5 @@
 using Engine.Core;
+using Engine.Graphics;
 using Engine.Input;
 using Engine.Physics;
 using Microsoft.Xna.Framework;
@@ -47,7 +48,6 @@ public class PhysicsSandboxScene : ISceneDefinition
                             Size = new(32, 32),
                             NormalizedOrigin = new(0.5f, 0.5f),
                             Color = Color.SaddleBrown,
-                            Filled = true,
                         }
                     );
             }

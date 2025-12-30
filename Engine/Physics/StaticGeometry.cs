@@ -1,9 +1,10 @@
 using Engine.Core;
-using Engine.Physics;
 
-namespace Library.Environment;
+namespace Engine.Physics;
 
-public class StaticGeometry : Component, ICollisionHandler
+public partial class StaticGeometry : Component { }
+
+public partial class StaticGeometry : ICollisionHandler
 {
     void ICollisionHandler.OnCollisionEnter(in ContactInfo contact)
     {
@@ -13,10 +14,6 @@ public class StaticGeometry : Component, ICollisionHandler
 
     void ICollisionHandler.OnCollisionStay(in ContactInfo contact)
     {
-        if (contact.Other.Entity.Has<StaticGeometry>())
-        {
-            return;
-        }
         var otherTransform = contact.Other.Entity.Get<Transform>();
         otherTransform.Position -= contact.Normal * contact.Overlap.Size;
     }

@@ -4,9 +4,7 @@ using Engine.Core;
 using Engine.Graphics;
 using Engine.Input;
 using Engine.Physics;
-using Engine.Util;
 using Engine.Util.Debugging;
-using Library.Environment;
 using Library.Player;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -54,7 +52,6 @@ public class DefaultScene : ISceneDefinition
                     Size = new(20, 20),
                     NormalizedOrigin = new(0.5f, 0.5f),
                     Color = Color.DarkGray,
-                    Filled = true,
                 }
             );
 
@@ -74,7 +71,6 @@ public class DefaultScene : ISceneDefinition
                     Size = size,
                     NormalizedOrigin = new(0.5f, 0.5f),
                     Color = Color.SaddleBrown,
-                    Filled = true,
                 }
             )
             .StageAttach(new Collider(size) { NormalizedOrigin = new(0.5f, 0.5f) })
@@ -121,7 +117,6 @@ internal class DefaultSceneHelper : Component, IUpdatable
                         Size = size,
                         NormalizedOrigin = new(0.5f, 0.5f),
                         Color = Color.SaddleBrown,
-                        Filled = true,
                     }
                 )
                 .StageAttach(new Collider(size) { NormalizedOrigin = new(0.5f, 0.5f) })

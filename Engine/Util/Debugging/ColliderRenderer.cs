@@ -52,7 +52,7 @@ public partial class ColliderRenderer : IRenderer
             foreach (var collider in colliders)
             {
                 var rect = collider.AsWorldRectangleF();
-                drawHelper.DrawRectangle(spriteBatch, Color.Orange, rect.Location, rect.Size);
+                drawHelper.DrawRectangleBorder(spriteBatch, Color.Orange, rect.Location, rect.Size);
             }
         }
     }
