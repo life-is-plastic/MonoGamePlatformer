@@ -169,7 +169,7 @@ public partial class CollisionManager : Component
 
 public partial class CollisionManager : IUpdatable
 {
-    int IUpdatable.UpdateOrder => UpdateOrderInterval.Physics[^1];
+    int IUpdatable.UpdateOrder => IUpdatable.UpdateOrderPhysics[^1];
 
     void IUpdatable.Update()
     {

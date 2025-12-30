@@ -32,8 +32,8 @@ public readonly record struct GridHelper
     {
         get
         {
-            Debug.Assert(0 <= row && row < Rows);
-            Debug.Assert(0 <= column && column < Columns);
+            Debug.Assert(row >= 0 && row < Rows);
+            Debug.Assert(column >= 0 && column < Columns);
             return row * Columns + column;
         }
     }

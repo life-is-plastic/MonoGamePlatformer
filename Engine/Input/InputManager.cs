@@ -66,7 +66,7 @@ public partial class InputManager : Component
 
 public partial class InputManager : IUpdatable
 {
-    int IUpdatable.UpdateOrder => UpdateOrderInterval.FrameBegin[0];
+    int IUpdatable.UpdateOrder => IUpdatable.UpdateOrderFrameBegin;
 
     bool IUpdatable.Pause()
     {

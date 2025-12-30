@@ -8,23 +8,10 @@ namespace Engine.Graphics;
 /// </summary>
 public interface IRenderer : IComponent
 {
+    // Preset draw orders.
     public const int DrawOrderDefault = 0;
     public const int DrawOrderUI = 1000;
     public const int DrawOrderDebug = 1100;
-
-    public record struct Options
-    {
-        public bool Batch = true;
-        public SamplerState? SamplerState = SamplerState.PointClamp;
-        public Effect? Effect = null;
-
-        public Options() { }
-
-        public readonly void Begin(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Begin(samplerState: SamplerState, effect: Effect);
-        }
-    }
 
     /// <summary>
     /// Determines when this component is drawn. A higher value means this renderer is drawn on top
@@ -50,4 +37,18 @@ public interface IRenderer : IComponent
     /// The scene-global sprite batch owned by <c>RenderManager</c>.
     /// </param>
     public void Draw(SpriteBatch spriteBatch);
+
+    public record struct Options
+    {
+        public bool Batch = true;
+        public SamplerState? SamplerState = SamplerState.PointClamp;
+        public Effect? Effect = null;
+
+        public Options() { }
+
+        public readonly void Begin(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Begin(samplerState: SamplerState, effect: Effect);
+        }
+    }
 }

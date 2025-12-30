@@ -54,7 +54,7 @@ public readonly record struct RectangleF
 
     public bool Contains(Vector2 point)
     {
-        return Left < point.X && point.X < Right && Top < point.Y && point.Y < Bottom;
+        return point.X > Left && point.X < Right && point.Y > Top && point.Y < Bottom;
     }
 
     public RectangleF MinkowskiDifference(RectangleF other)

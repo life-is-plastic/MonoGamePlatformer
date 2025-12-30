@@ -53,7 +53,7 @@ public partial class UIManager : Component
 
 public partial class UIManager : IUpdatable
 {
-    int IUpdatable.UpdateOrder => UpdateOrderInterval.FrameBegin[0];
+    int IUpdatable.UpdateOrder => IUpdatable.UpdateOrderFrameBegin;
 
     bool IUpdatable.Pause()
     {

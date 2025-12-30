@@ -11,7 +11,7 @@ public partial class Velocity : Component
 
 public partial class Velocity : IUpdatable
 {
-    int IUpdatable.UpdateOrder => UpdateOrderInterval.Physics[^2];
+    int IUpdatable.UpdateOrder => IUpdatable.UpdateOrderPhysics[^2];
 
     void IUpdatable.Update()
     {

@@ -17,7 +17,7 @@ public partial class CameraFollowsPlayer : Component
 
 public partial class CameraFollowsPlayer : IUpdatable
 {
-    int IUpdatable.UpdateOrder => UpdateOrderInterval.FrameEnd[0];
+    int IUpdatable.UpdateOrder => IUpdatable.UpdateOrderFrameEnd;
 
     void IUpdatable.Update()
     {
