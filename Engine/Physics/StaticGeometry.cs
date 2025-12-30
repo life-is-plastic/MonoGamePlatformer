@@ -2,6 +2,9 @@ using Engine.Core;
 
 namespace Engine.Physics;
 
+/// <summary>
+/// Pushes other colliders away to eliminate overlaps.
+/// </summary>
 public partial class StaticGeometry : Component { }
 
 public partial class StaticGeometry : ICollisionHandler

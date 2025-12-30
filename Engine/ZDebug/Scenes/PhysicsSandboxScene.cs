@@ -53,6 +53,22 @@ public class PhysicsSandboxScene : ISceneDefinition
                         }
                     );
             }
+            if (inputManager.IsPressed(Keys.D2))
+            {
+                Scene
+                    .StageCreate("Object")
+                    .StageAttach(new Transform() { Position = inputManager.MouseWorldPosition })
+                    .StageAttach(new Collider(32, 32) { NormalizedOrigin = new(0.5f, 0.5f) })
+                    .StageAttach(
+                        new RectangleRenderer()
+                        {
+                            Size = new(32, 32),
+                            NormalizedOrigin = new(0.5f, 0.5f),
+                            Color = Color.Black,
+                        }
+                    )
+                    .StageAttach(new StaticGeometry());
+            }
         }
     }
 }
