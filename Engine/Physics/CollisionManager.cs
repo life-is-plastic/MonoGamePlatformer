@@ -193,6 +193,11 @@ public partial class CollisionManager : IEntitySyncer
                 _handlers[handler.Entity].RemoveOrDie(handler);
             }
         }
+        foreach (var entity in entityChangelist.Destroyed)
+        {
+            _handlers.Remove(entity);
+        }
+
         foreach (var component in entityChangelist.Attached.Values)
         {
             if (component is Collider collider)
@@ -203,11 +208,6 @@ public partial class CollisionManager : IEntitySyncer
             {
                 _handlers.GetOrAddNew(handler.Entity).AddOrDie(handler);
             }
-        }
-
-        foreach (var entity in entityChangelist.Destroyed)
-        {
-            _handlers.Remove(entity);
         }
     }
 }

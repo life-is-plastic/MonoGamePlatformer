@@ -75,7 +75,7 @@ public class DefaultScene : ISceneDefinition
                 }
             )
             .StageAttach(new Collider(size) { NormalizedOrigin = new(0.5f, 0.5f) })
-            .StageAttach(new StaticGeometry());
+            .StageAttach(new StaticGeometryResolver());
     }
 }
 
@@ -121,7 +121,7 @@ internal class DefaultSceneHelper : Component, IUpdatable
                     }
                 )
                 .StageAttach(new Collider(size) { NormalizedOrigin = new(0.5f, 0.5f) })
-                .StageAttach(new StaticGeometry());
+                .StageAttach(new StaticGeometryResolver());
         }
     }
 }
@@ -136,7 +136,7 @@ internal class World : Component
             .StageCreate(nameof(World))
             .StageAttach(new World())
             .StageAttach(new Transform())
-            .StageAttach(new StaticGeometry())
+            .StageAttach(new StaticGeometryResolver())
             .StageAttach(
                 new Collider(width + 2 * margin, margin)
                 {

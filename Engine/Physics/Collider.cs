@@ -10,8 +10,6 @@ namespace Engine.Physics;
 /// </summary>
 public class Collider : Component
 {
-    public const int AllLayers = 0;
-
     public Vector2 Size { get; }
     public float Width => Size.X;
     public float Height => Size.Y;

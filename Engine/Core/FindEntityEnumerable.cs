@@ -9,7 +9,7 @@ namespace Engine.Core;
 public readonly ref struct FindEntityEnumerable
 {
     private readonly ReadOnlySpan<Entity> _entities;
-    private readonly Buffer<Type> _componentTypes;
+    private readonly InlineArray4<Type> _componentTypes;
     private readonly int _componentCount;
 
     public FindEntityEnumerable(
@@ -44,16 +44,10 @@ public readonly ref struct FindEntityEnumerable
         return null;
     }
 
-    [InlineArray(4)]
-    private struct Buffer<T>
-    {
-        private T _element0;
-    }
-
     public ref struct Enumerator
     {
         private readonly ReadOnlySpan<Entity> _entities;
-        private readonly Buffer<Type> _componentTypes;
+        private readonly InlineArray4<Type> _componentTypes;
         private readonly int _componentCount;
         private int _nextEntity = 0;
 

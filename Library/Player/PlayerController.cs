@@ -47,7 +47,7 @@ public partial class PlayerController : Component
 
     private void HandleStaticGeometryCollision(in ContactInfo contact)
     {
-        if (!contact.Other.Entity.Has<StaticGeometry>())
+        if (!contact.Other.Entity.Has<StaticGeometryResolver>())
         {
             return;
         }

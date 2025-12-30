@@ -58,7 +58,7 @@ public class PhysicsSandboxScene : ISceneDefinition
                 Scene
                     .StageCreate("Object")
                     .StageAttach(new Transform() { Position = inputManager.MouseWorldPosition })
-                    .StageAttach(new StaticGeometry())
+                    .StageAttach(new StaticGeometryResolver())
                     .StageAttach(
                         new Collider(32, 32)
                         {

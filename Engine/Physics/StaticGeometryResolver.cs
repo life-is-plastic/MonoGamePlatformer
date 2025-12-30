@@ -5,9 +5,9 @@ namespace Engine.Physics;
 /// <summary>
 /// Pushes other colliders away to eliminate overlaps.
 /// </summary>
-public partial class StaticGeometry : Component { }
+public partial class StaticGeometryResolver : Component { }
 
-public partial class StaticGeometry : ICollisionHandler
+public partial class StaticGeometryResolver : ICollisionHandler
 {
     void ICollisionHandler.OnCollisionEnter(in ContactInfo contact)
     {
