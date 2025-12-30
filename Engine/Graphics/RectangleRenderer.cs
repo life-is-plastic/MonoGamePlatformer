@@ -22,7 +22,7 @@ public partial class RectangleRenderer : Component
         }
     } = new(1, 1);
 
-    public Vector2 Origin { get; set; } = default;
+    public Vector2 Origin { get; set; } = new();
 
     public Vector2 NormalizedOrigin
     {

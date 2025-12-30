@@ -71,7 +71,7 @@ public partial class UIManager : IUpdatable
 
 public partial class UIManager : IRenderer
 {
-    public int DrawOrder => 100;
+    public int DrawOrder => IRenderer.DrawOrderUI;
     public bool IsVisible { get; set; } = true;
     public IRenderer.Options RendererOptions => new() { Batch = false };
 

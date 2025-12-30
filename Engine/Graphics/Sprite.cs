@@ -12,7 +12,7 @@ public partial class Sprite
     /// <para>Note that origin refers to the top-left corner of the specified pixel, not the center
     /// of the pixel.</para>
     /// </summary>
-    public Vector2 Origin { get; set; } = default;
+    public Vector2 Origin { get; set; } = new();
 
     /// <summary>
     /// 0 anchors to the left/top, 0.5 anchors to the center, and 1 anchors to the right/bottom.

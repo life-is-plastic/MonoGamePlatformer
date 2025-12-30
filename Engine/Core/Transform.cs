@@ -4,7 +4,7 @@ namespace Engine.Core;
 
 public class Transform : Component
 {
-    public Vector2 Position = default;
+    public Vector2 Position = new();
 
     /// <summary>
     /// Currently only for drawing. Completedly ignored by physics and camera.

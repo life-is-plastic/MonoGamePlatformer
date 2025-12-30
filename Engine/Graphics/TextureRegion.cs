@@ -45,7 +45,7 @@ public readonly record struct TextureRegion
     {
         public Color Color = Color.White;
         public float Rotation = 0;
-        public Vector2 Origin = default;
+        public Vector2 Origin = new();
         public Vector2 Scale = new(1, 1);
         public SpriteEffects Effects = SpriteEffects.None;
         public float LayerDepth = 0;

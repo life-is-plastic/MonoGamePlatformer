@@ -13,8 +13,8 @@ public partial class ColliderMouseDrag : Component
     private readonly Button _button;
     private EntityHandle _cameraHandle;
     private Entity? _dragged = null;
-    private Point _initialScreenPos = default;
-    private Vector2 _initialWorldPos = default;
+    private Point _initialScreenPos = new();
+    private Vector2 _initialWorldPos = new();
 
     public ColliderMouseDrag(Func<Entity, bool> entityFilter, Button? button = null)
     {

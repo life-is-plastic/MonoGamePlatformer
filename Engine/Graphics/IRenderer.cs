@@ -8,6 +8,10 @@ namespace Engine.Graphics;
 /// </summary>
 public interface IRenderer : IComponent
 {
+    public const int DrawOrderDefault = 0;
+    public const int DrawOrderUI = 1000;
+    public const int DrawOrderDebug = 1100;
+
     public record struct Options
     {
         public bool Batch = true;
@@ -27,12 +31,12 @@ public interface IRenderer : IComponent
     /// of those with lower values. This property must return a fixed value for the lifetime of the
     /// component.
     /// </summary>
-    public int DrawOrder { get; }
+    public int DrawOrder => DrawOrderDefault;
 
     /// <summary>
     /// If false, then <c>Draw()</c> will not be called.
     /// </summary>
-    public bool IsVisible { get; set; }
+    public bool IsVisible => true;
 
     /// <summary>
     /// Configures sprite batch <c>Begin()</c>.

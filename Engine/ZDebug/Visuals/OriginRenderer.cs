@@ -9,10 +9,9 @@ public partial class OriginRenderer : Component { }
 
 public partial class OriginRenderer : IRenderer
 {
-    public int DrawOrder => 100;
-    public bool IsVisible { get; set; } = true;
+    int IRenderer.DrawOrder => IRenderer.DrawOrderDebug;
 
-    public void Draw(SpriteBatch spriteBatch)
+    void IRenderer.Draw(SpriteBatch spriteBatch)
     {
         var color = Color.DarkRed;
         var drawHelper = Scene.Singletons.Get<DrawHelper>();

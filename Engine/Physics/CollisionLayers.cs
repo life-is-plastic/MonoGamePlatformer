@@ -29,7 +29,7 @@ public class CollisionLayers
     /// </summary>
     public const int StaticGeometry = 7;
 
-    private InlineArray8<byte> _layers = default;
+    private InlineArray8<byte> _layers = new();
 
     public CollisionLayers()
     {

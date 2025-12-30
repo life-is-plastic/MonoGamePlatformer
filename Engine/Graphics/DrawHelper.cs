@@ -54,7 +54,7 @@ public class DrawHelper : Component
         Color color,
         Vector2 position,
         Vector2 size,
-        Vector2 normalizedOrigin = default,
+        Vector2 normalizedOrigin = new(),
         float rotation = 0
     )
     {
@@ -81,7 +81,7 @@ public class DrawHelper : Component
         Color color,
         Vector2 position,
         Vector2 size,
-        Vector2 normalizedOrigin = default,
+        Vector2 normalizedOrigin = new(),
         float rotation = 0,
         float borderWidth = 1
     )

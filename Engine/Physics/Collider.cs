@@ -17,7 +17,7 @@ public class Collider : Component
     /// <summary>
     /// Similar to <c>Sprite.Origin</c>.
     /// </summary>
-    public Vector2 Origin { get; init; } = default;
+    public Vector2 Origin { get; init; } = new();
 
     /// <summary>
     /// Similar to <c>Sprite.NormalizedOrigin</c>.

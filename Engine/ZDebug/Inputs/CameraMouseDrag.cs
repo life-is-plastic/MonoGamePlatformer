@@ -10,8 +10,8 @@ public partial class CameraMouseDrag : Component
     private readonly Button _button;
     private EntityHandle _cameraHandle;
     private bool _dragging = false;
-    private Point _initialScreenPos = default;
-    private Vector2 _initialWorldPos = default;
+    private Point _initialScreenPos = new();
+    private Vector2 _initialWorldPos = new();
 
     public CameraMouseDrag(Button? button = null)
     {

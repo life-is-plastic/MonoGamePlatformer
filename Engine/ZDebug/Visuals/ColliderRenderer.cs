@@ -37,7 +37,7 @@ public partial class ColliderRenderer : IUpdatable
 
 public partial class ColliderRenderer : IRenderer
 {
-    public int DrawOrder => 100;
+    int IRenderer.DrawOrder => IRenderer.DrawOrderDebug;
     public bool IsVisible { get; set; } = true;
 
     void IRenderer.Draw(SpriteBatch spriteBatch)
