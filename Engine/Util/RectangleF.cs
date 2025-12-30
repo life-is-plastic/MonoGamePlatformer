@@ -57,6 +57,11 @@ public readonly record struct RectangleF
         return Left < point.X && point.X < Right && Top < point.Y && point.Y < Bottom;
     }
 
+    public RectangleF MinkowskiDifference(RectangleF other)
+    {
+        return new(Left - other.Left, Top - other.Top, Width + other.Width, Height + other.Height);
+    }
+
     public bool Overlaps(RectangleF other)
     {
         return Left < other.Right && other.Left < Right && Top < other.Bottom && other.Top < Bottom;

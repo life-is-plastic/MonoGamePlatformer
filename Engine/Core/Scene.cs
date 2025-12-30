@@ -57,7 +57,8 @@ public sealed partial class Scene
             .StageAttach(new AudioManager())
             .StageAttach(new MenuAudioManager())
             .StageAttach(new RenderManager())
-            .StageAttach(new UIManager());
+            .StageAttach(new UIManager())
+            .StageAttach(new DrawHelper());
 
         StageCreate(nameof(Camera)).StageAttach(new Camera()).StageAttach(new Transform());
 

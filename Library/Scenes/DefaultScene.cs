@@ -33,8 +33,7 @@ public class DefaultScene : ISceneDefinition
             // .StageAttach(new CameraMouseDrag())
             .StageAttach(new CameraFollowsPlayer())
             .StageAttach(new ColliderRenderer())
-            .StageAttach(new DefaultSceneHelper())
-            .StageAttach(new DrawHelper());
+            .StageAttach(new DefaultSceneHelper());
 
         World.MakeEntity(scene, 300, 180);
         MakeStaticGeometry(scene, new(200, 140), new(60, 20));

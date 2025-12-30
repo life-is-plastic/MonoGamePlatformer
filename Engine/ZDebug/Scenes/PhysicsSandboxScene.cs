@@ -30,7 +30,7 @@ public class PhysicsSandboxScene : ISceneDefinition
             .StageAttach(new CameraMouseDrag())
             .StageAttach(new ColliderMouseDrag(entity => true))
             .StageAttach(new ColliderRenderer(Keys.P))
-            .StageAttach(new DrawHelper());
+            .StageAttach(new OriginRenderer());
     }
 
     private class Controller : Component, IUpdatable
