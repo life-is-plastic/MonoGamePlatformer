@@ -43,6 +43,9 @@ public sealed class EntityChangelist
     internal void StageAttach(Entity entity, IComponent component)
     {
         Debug.Assert(!entity.Has(component.GetType(), component.ComponentIndex));
+        Debug.Assert(
+            !_attached.ContainsKey((entity, component.GetType(), component.ComponentIndex))
+        );
         _attached[(entity, component.GetType(), component.ComponentIndex)] = component;
         component.SetEntity(entity);
     }

@@ -18,6 +18,6 @@ public partial class StaticGeometryResolver : ICollisionHandler
     void ICollisionHandler.OnCollisionStay(in ContactInfo contact)
     {
         var otherTransform = contact.Other.Entity.Get<Transform>();
-        otherTransform.Position -= contact.Normal * contact.Overlap.Size;
+        otherTransform.Position += contact.Penetration;
     }
 }

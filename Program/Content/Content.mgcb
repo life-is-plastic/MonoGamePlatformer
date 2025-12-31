@@ -17,3 +17,8 @@
 /importer:OggImporter
 /processor:SoundEffectProcessor
 /build:Audio/Theme.ogg
+
+#begin Fonts/04B_30.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/build:Fonts/04B_30.spritefont

@@ -73,40 +73,27 @@ public partial class CollisionManager : Component
         {
             return;
         }
-        if (a.GetOverlap(b) is not RectangleF overlap)
-        {
-            return;
-        }
         if (a.Entity.Id > b.Entity.Id)
         {
             (a, b) = (b, a);
         }
 
-        Vector2 normal;
-        if (overlap.Width < overlap.Height)
+        var minkowskiDiff = a.AsWorldRectangleF().GetMinkowskiDifference(b.AsWorldRectangleF());
+        if (!minkowskiDiff.Contains(Vector2.Zero))
         {
-            if (a.AsWorldRectangleF().Center.X < overlap.Center.X)
-            {
-                normal = new Vector2(-1, 0);
-            }
-            else
-            {
-                normal = new Vector2(1, 0);
-            }
-        }
-        else
-        {
-            if (a.AsWorldRectangleF().Center.Y < overlap.Center.Y)
-            {
-                normal = new Vector2(0, -1);
-            }
-            else
-            {
-                normal = new Vector2(0, 1);
-            }
+            return;
         }
 
-        _contacts.Add((a, b), new ContactInfo(a, b, overlap, normal));
+        _contacts.Add(
+            (a, b),
+            new ContactInfo()
+            {
+                Mine = a,
+                Other = b,
+                MinkowskiDifference = minkowskiDiff,
+                Penetration = minkowskiDiff.GetMinkowskiPenetrationVector(),
+            }
+        );
     }
 
     private void HandleCollisions()

@@ -64,9 +64,4 @@ public class Collider : Component
             Size * transform.Scale
         );
     }
-
-    public RectangleF? GetOverlap(Collider other)
-    {
-        return AsWorldRectangleF().GetOverlap(other.AsWorldRectangleF());
-    }
 }

@@ -46,13 +46,9 @@ public partial class ColliderMouseDrag : IUpdatable
         {
             if (inputManager.IsPressed(_button))
             {
-                foreach (var entity in Scene.Entities)
+                foreach (var entity in Scene.Find<Collider>())
                 {
-                    var collider = entity.MaybeGet<Collider>();
-                    if (collider is null)
-                    {
-                        continue;
-                    }
+                    var collider = entity.Get<Collider>();
                     if (!_entityFilter(entity))
                     {
                         continue;

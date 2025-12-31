@@ -16,19 +16,23 @@ public abstract class Component : IComponent
 
     public override string ToString()
     {
-        return $"[{Entity} -> ({GetType().Name}, {ComponentIndex})]";
+        return Entity is not null
+            ? $"[{Entity} -> ({GetType().Name}, {ComponentIndex})]"
+            : $"[Unowned -> ({GetType().Name}, {ComponentIndex})]";
     }
 
     /// <summary>
     /// Invoked when this component is formally attached to its owning entity. Useful for
     /// post-construction initialization of data that depends on having access to the containing
     /// scene.
+    /// <para>WARNING: Do not add/remove entities or attach/detach components here.</para>
     /// </summary>
     protected virtual void Begin() { }
 
     /// <summary>
     /// Invoked on scene disposal or when detaching this component from its owning entity. Useful
     /// for cleaning up data that should not wait for the garbage collector.
+    /// <para>WARNING: Do not add/remove entities or attach/detach components here.</para>
     /// </summary>
     protected virtual void End() { }
 

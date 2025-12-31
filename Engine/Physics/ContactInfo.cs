@@ -15,37 +15,35 @@ public readonly struct ContactInfo
     /// to the collision handler's sibling collider (as opposed to <c>Other</c> which belongs to a
     /// different entity).
     /// </summary>
-    public Collider Mine { get; }
+    public Collider Mine { get; init; }
 
     /// <summary>
     /// The other collider involved.
     /// </summary>
-    public Collider Other { get; }
+    public Collider Other { get; init; }
 
     /// <summary>
-    /// The overlapping world-space rectangle between the two colliders.
+    /// The Minkowski difference of <c>Mine</c> - <c>Other</c>.
     /// </summary>
-    public RectangleF Overlap { get; }
+    public RectangleF MinkowskiDifference { get; init; }
 
     /// <summary>
-    /// A directional unit vector corresponding to the <c>Other</c> edge that <c>Mine</c> has
-    /// collided into.
+    /// To what extent <c>Mine</c> is penetrating <c>Other</c>. Subtracting this value from
+    /// <c>Mine</c>'s position will push <c>Mine</c> fully out of <c>Other</c>.
     /// </summary>
-    public Vector2 Normal { get; }
-
-    public ContactInfo(Collider mine, Collider other, RectangleF overlap, Vector2 normal)
-    {
-        Mine = mine;
-        Other = other;
-        Overlap = overlap;
-        Normal = normal;
-    }
+    public Vector2 Penetration { get; init; }
 
     /// <summary>
     /// Returns a new contact info presenting data from the perspective of <c>Other</c>.
     /// </summary>
     public ContactInfo Inverted()
     {
-        return new(Other, Mine, Overlap, -Normal);
+        return new()
+        {
+            Mine = Other,
+            Other = Mine,
+            MinkowskiDifference = MinkowskiDifference.WithCenter(-MinkowskiDifference.Center),
+            Penetration = -Penetration,
+        };
     }
 }

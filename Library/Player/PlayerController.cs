@@ -51,13 +51,13 @@ public partial class PlayerController : Component
         {
             return;
         }
-        if (contact.Normal.Y < 0)
+        if (contact.Penetration.Y > 0)
         {
             _isGrounded = true;
         }
 
         // Zero out vertical velocity component parallel to the normal.
-        if (contact.Normal.Y != 0)
+        if (contact.Penetration.Y != 0)
         {
             _velocity.Linear *= new Vector2(1, 0);
         }
