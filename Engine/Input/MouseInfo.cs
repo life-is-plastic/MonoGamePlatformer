@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Xna.Framework.Input;
 
-namespace Engine.Input;
+namespace Engine;
 
 public class MouseInfo
 {

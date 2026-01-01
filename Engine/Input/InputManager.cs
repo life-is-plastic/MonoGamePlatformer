@@ -1,10 +1,8 @@
 using System;
-using Engine.Core;
-using Engine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace Engine.Input;
+namespace Engine;
 
 public partial class InputManager : Component
 {

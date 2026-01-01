@@ -1,6 +1,4 @@
-using Engine.Core;
-using Engine.Input;
-using Engine.Physics;
+using Engine;
 using Microsoft.Xna.Framework.Input;
 
 namespace Library;

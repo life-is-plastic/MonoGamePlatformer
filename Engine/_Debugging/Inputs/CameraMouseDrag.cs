@@ -1,9 +1,6 @@
-using Engine.Core;
-using Engine.Graphics;
-using Engine.Input;
 using Microsoft.Xna.Framework;
 
-namespace Engine.ZDebug.Inputs;
+namespace Engine.Debugging;
 
 public partial class CameraMouseDrag : Component
 {

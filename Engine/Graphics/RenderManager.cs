@@ -1,11 +1,9 @@
 using System;
-using Engine.Core;
-using Engine.Util.Collections;
-using Engine.Util.Extensions;
+using Engine.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Engine.Graphics;
+namespace Engine;
 
 internal sealed partial class RenderManager : Component
 {

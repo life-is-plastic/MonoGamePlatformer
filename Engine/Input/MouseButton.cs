@@ -1,4 +1,4 @@
-namespace Engine.Input;
+namespace Engine;
 
 public enum MouseButton
 {

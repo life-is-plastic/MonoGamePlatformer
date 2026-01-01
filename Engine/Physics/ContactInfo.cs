@@ -1,7 +1,7 @@
 using Engine.Util;
 using Microsoft.Xna.Framework;
 
-namespace Engine.Physics;
+namespace Engine;
 
 /// <summary>
 /// Information about the contact between two colliders in a particular frame. As a collision

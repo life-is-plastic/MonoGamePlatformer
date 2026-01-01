@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace Engine.Core;
+namespace Engine;
 
 /// <summary>
 /// Base class for all components.

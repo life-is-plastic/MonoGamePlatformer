@@ -1,7 +1,6 @@
-using Engine.Core;
 using Microsoft.Xna.Framework;
 
-namespace Engine.Physics;
+namespace Engine;
 
 public partial class Velocity : Component
 {

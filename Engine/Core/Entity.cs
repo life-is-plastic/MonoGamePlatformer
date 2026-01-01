@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Engine.Util.Collections;
-using Engine.Util.Extensions;
+using Engine.Util;
 
-namespace Engine.Core;
+namespace Engine;
 
 /// <summary>
 /// A dictionary of components, keyed by (concrete type, index) pairs. Index facilitates attaching

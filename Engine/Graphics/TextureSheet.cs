@@ -1,7 +1,7 @@
 using Engine.Util;
 using Microsoft.Xna.Framework;
 
-namespace Engine.Graphics;
+namespace Engine;
 
 public readonly record struct TextureSheet
 {

@@ -1,4 +1,4 @@
-namespace Engine.Audio;
+namespace Engine;
 
 /// <summary>
 /// Plays sounds even when paused. Disposes all sounds on unpause.

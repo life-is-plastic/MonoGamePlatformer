@@ -1,12 +1,9 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using Engine.Core;
 using Engine.Util;
-using Engine.Util.Collections;
-using Engine.Util.Extensions;
 using Microsoft.Xna.Framework;
 
-namespace Engine.Physics;
+namespace Engine;
 
 public partial class CollisionManager : Component
 {

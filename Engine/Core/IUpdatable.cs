@@ -1,6 +1,6 @@
 using System;
 
-namespace Engine.Core;
+namespace Engine;
 
 /// <summary>
 /// Interface for components that update every frame.

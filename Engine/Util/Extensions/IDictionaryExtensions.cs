@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Engine.Util.Extensions;
+namespace Engine.Util;
 
 public static class IDictionaryExtensions
 {

@@ -1,16 +1,11 @@
 using System;
-using Engine.Audio;
-using Engine.Core;
-using Engine.Graphics;
-using Engine.Input;
-using Engine.Physics;
-using Engine.ZDebug.Inputs;
-using Engine.ZDebug.Visuals;
+using Engine;
+using Engine.Debugging;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Input;
 
-namespace Library.Scenes;
+namespace Library;
 
 public class DefaultScene : ISceneDefinition
 {

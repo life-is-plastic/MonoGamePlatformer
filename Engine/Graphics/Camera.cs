@@ -1,10 +1,9 @@
 using System;
 using System.Diagnostics;
-using Engine.Core;
 using Engine.Util;
 using Microsoft.Xna.Framework;
 
-namespace Engine.Graphics;
+namespace Engine;
 
 /// <summary>
 /// Zoom is determined by the sibling transform component's scale. Scale > 1 means zoom in (i.e.

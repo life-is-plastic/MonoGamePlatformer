@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics;
 
-namespace Engine.Util.Collections;
+namespace Engine.Util;
 
 /// <summary>
 /// A row-major 2D matrix stored as a 1D array and indexable via row-column pairs.

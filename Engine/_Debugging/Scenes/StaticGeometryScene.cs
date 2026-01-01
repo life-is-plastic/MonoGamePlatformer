@@ -1,20 +1,16 @@
-using Engine.Core;
-using Engine.Graphics;
-using Engine.Input;
-using Engine.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace Engine.ZDebug.Scenes;
+namespace Engine.Debugging;
 
 /// <summary>
 /// Spawn rectangles and see how they interact.
 /// </summary>
-public class StaticGeometryResolution : BaseSceneDefinition
+public class StaticGeometryScene : BaseSceneDefinition
 {
-    public static StaticGeometryResolution Instance { get; } = new();
+    public static StaticGeometryScene Instance { get; } = new();
 
-    private StaticGeometryResolution() { }
+    private StaticGeometryScene() { }
 
     public override void Initialize(Scene scene)
     {

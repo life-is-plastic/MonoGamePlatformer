@@ -1,8 +1,6 @@
-using System;
-using Engine.Core;
 using Microsoft.Xna.Framework;
 
-namespace Engine.Physics;
+namespace Engine;
 
 /// <summary>
 /// Pushes other colliders away to eliminate overlaps.

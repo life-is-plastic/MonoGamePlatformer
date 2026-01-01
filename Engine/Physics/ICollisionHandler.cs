@@ -1,6 +1,4 @@
-using Engine.Core;
-
-namespace Engine.Physics;
+namespace Engine;
 
 /// <summary>
 /// Executes in response to collisions involving a collider sibling of this handler component.

@@ -1,6 +1,6 @@
 using System;
 
-namespace Engine.Core;
+namespace Engine;
 
 /// <summary>
 /// Container for a cached entity reference.

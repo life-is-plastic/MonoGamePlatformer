@@ -1,6 +1,6 @@
 using System;
 
-namespace Engine.Util.Collections;
+namespace Engine.Util;
 
 /// <summary>
 /// A read-only view of an <c>IndexedSet</c>.

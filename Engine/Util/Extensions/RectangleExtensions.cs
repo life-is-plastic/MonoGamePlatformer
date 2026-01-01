@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace Engine.Util.Extensions;
+namespace Engine.Util;
 
 public static class RectangleExtenions
 {

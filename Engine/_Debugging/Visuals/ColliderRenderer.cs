@@ -1,12 +1,8 @@
-using Engine.Core;
-using Engine.Graphics;
-using Engine.Input;
-using Engine.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace Engine.ZDebug.Visuals;
+namespace Engine.Debugging;
 
 public partial class ColliderRenderer : Component
 {

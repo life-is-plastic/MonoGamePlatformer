@@ -1,10 +1,6 @@
-using Engine.Core;
-using Engine.Graphics;
-using Engine.ZDebug.Inputs;
-using Engine.ZDebug.Visuals;
 using Microsoft.Xna.Framework.Input;
 
-namespace Engine.ZDebug.Scenes;
+namespace Engine.Debugging;
 
 public abstract class BaseSceneDefinition : ISceneDefinition
 {

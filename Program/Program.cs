@@ -1,7 +1,4 @@
-﻿using Engine.Audio;
-using Engine.Core;
+﻿Engine.AudioManager.MasterVolume = 0.2f;
 
-AudioManager.MasterVolume = 0.2f;
-
-// new Game(Engine.ZDebug.Scenes.MinkowskiDifferenceVisualization.Instance).Run();
-new Game(Library.Scenes.DefaultScene.Instance).Run();
+new Engine.Game(Engine.Debugging.MinkowskiDifferenceScene.Instance).Run();
+// new Engine.Game(Library.DefaultScene.Instance).Run();

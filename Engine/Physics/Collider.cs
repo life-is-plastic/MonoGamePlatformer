@@ -1,9 +1,8 @@
 using System.Diagnostics;
-using Engine.Core;
 using Engine.Util;
 using Microsoft.Xna.Framework;
 
-namespace Engine.Physics;
+namespace Engine;
 
 /// <summary>
 /// Axis-aligned rectangle collider. Collision checking ignores collider pairs on the same entity.

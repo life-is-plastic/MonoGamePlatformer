@@ -3,7 +3,7 @@ using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Engine.Graphics;
+namespace Engine;
 
 public partial class Animation<T>
     where T : IDrawable

@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 
-namespace Engine.Core;
+namespace Engine;
 
 public sealed class Game : Microsoft.Xna.Framework.Game
 {

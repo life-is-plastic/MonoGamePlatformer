@@ -1,9 +1,7 @@
-using Engine.Core;
-using Engine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Engine.ZDebug.Visuals;
+namespace Engine.Debugging;
 
 public partial class OriginRenderer : Component { }
 

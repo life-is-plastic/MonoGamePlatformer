@@ -2,7 +2,7 @@ using Engine.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Engine.Graphics;
+namespace Engine;
 
 public readonly record struct TextureRegion
 {

@@ -1,9 +1,9 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using Engine.Util.Extensions;
+using Engine.Util;
 
-namespace Engine.Physics;
+namespace Engine;
 
 /// <summary>
 /// Defines collision layer relationships. By default:

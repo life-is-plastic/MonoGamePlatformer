@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Engine.Util.Collections;
+namespace Engine.Util;
 
 /// <summary>
 /// A read-only view of a <c>Dictionary</c>.

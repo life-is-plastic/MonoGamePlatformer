@@ -1,11 +1,9 @@
-using Engine.Core;
-using Engine.Graphics;
 using Gum.Forms.Controls;
 using Gum.Wireframe;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGameGum;
 
-namespace Engine.UI;
+namespace Engine;
 
 /// <summary>
 /// Component wrapper around a GumService instance.

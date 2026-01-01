@@ -1,14 +1,9 @@
 using System;
-using Engine.Audio;
-using Engine.Graphics;
-using Engine.Input;
-using Engine.Physics;
-using Engine.UI;
-using Engine.Util.Collections;
+using Engine.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 
-namespace Engine.Core;
+namespace Engine;
 
 public sealed partial class Scene
 {

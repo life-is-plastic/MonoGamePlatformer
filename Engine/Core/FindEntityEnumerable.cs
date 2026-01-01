@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 
-namespace Engine.Core;
+namespace Engine;
 
 /// <summary>
 /// Yields all entities with the given component types (all at the default component index).

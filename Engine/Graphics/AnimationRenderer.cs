@@ -1,6 +1,4 @@
-using Engine.Core;
-
-namespace Engine.Graphics;
+namespace Engine;
 
 public partial class AnimationRenderer<T> : DrawableRenderer<Animation<T>>
     where T : IDrawable

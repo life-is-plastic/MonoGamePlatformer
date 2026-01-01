@@ -1,7 +1,6 @@
-using Engine.Core;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Engine.Graphics;
+namespace Engine;
 
 /// <summary>
 /// Interface for renderer components.

@@ -1,9 +1,8 @@
 using System.Diagnostics;
-using Engine.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Engine.Graphics;
+namespace Engine;
 
 /// <summary>
 /// Simple rectangle renderer.

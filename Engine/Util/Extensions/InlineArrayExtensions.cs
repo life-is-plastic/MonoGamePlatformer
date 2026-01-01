@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace Engine.Util.Extensions;
+namespace Engine.Util;
 
 public static class InlineArrayExtensions
 {

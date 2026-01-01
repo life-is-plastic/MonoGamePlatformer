@@ -1,18 +1,15 @@
-using Engine.Core;
-using Engine.Graphics;
-using Engine.Physics;
 using Microsoft.Xna.Framework;
 
-namespace Engine.ZDebug.Scenes;
+namespace Engine.Debugging;
 
 /// <summary>
 /// See the Minkowski difference between two rectangles.
 /// </summary>
-public class MinkowskiDifferenceVisualization : BaseSceneDefinition
+public class MinkowskiDifferenceScene : BaseSceneDefinition
 {
-    public static MinkowskiDifferenceVisualization Instance { get; } = new();
+    public static MinkowskiDifferenceScene Instance { get; } = new();
 
-    private MinkowskiDifferenceVisualization() { }
+    private MinkowskiDifferenceScene() { }
 
     public override void Initialize(Scene scene)
     {

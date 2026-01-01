@@ -1,8 +1,7 @@
-using Engine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Engine.Util.Extensions;
+namespace Engine.Util;
 
 public static class SpriteBatchExtensions
 {

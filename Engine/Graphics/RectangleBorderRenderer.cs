@@ -1,7 +1,6 @@
-using Engine.Core;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Engine.Graphics;
+namespace Engine;
 
 /// <summary>
 /// Simple rectangle border renderer.

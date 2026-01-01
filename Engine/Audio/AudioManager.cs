@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Engine.Core;
 using Microsoft.Xna.Framework.Audio;
 
-namespace Engine.Audio;
+namespace Engine;
 
 public partial class AudioManager : Component
 {

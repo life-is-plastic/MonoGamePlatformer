@@ -1,4 +1,4 @@
-namespace Engine.Core;
+namespace Engine;
 
 public interface ISceneDefinition
 {

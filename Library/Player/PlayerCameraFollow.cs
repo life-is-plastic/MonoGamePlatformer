@@ -1,5 +1,4 @@
-using Engine.Core;
-using Engine.Graphics;
+using Engine;
 
 namespace Library;
 

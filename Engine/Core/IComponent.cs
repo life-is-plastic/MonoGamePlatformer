@@ -1,4 +1,4 @@
-namespace Engine.Core;
+namespace Engine;
 
 /// <summary>
 /// Base interface for all components. This exists separately from the <c>Component</c> class to be

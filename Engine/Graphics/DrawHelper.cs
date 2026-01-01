@@ -1,11 +1,9 @@
 using System;
-using Engine.Core;
 using Engine.Util;
-using Engine.Util.Extensions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Engine.Graphics;
+namespace Engine;
 
 /// <summary>
 /// Helper singleton component for drawing various primitive shapes.
