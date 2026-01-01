@@ -1,6 +1,7 @@
 ﻿using Engine.Audio;
 using Engine.Core;
-using Engine.ZDebug.Scenes;
 
 AudioManager.MasterVolume = 0.2f;
-new Game(PhysicsSandboxScene.Instance).Run();
+
+// new Game(Engine.ZDebug.Scenes.MinkowskiDifferenceVisualization.Instance).Run();
+new Game(Library.Scenes.DefaultScene.Instance).Run();

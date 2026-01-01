@@ -31,7 +31,9 @@ public class DefaultScene : ISceneDefinition
             .StageAttach(new ScenePauseToggle())
             .StageAttach(new CameraMouseZoom())
             // .StageAttach(new CameraMouseDrag())
+            .StageAttach(new ColliderMouseDrag(entity => !entity.Has<PlayerMarker>()))
             .StageAttach(new CameraFollowsPlayer())
+            .StageAttach(new DrawHelper())
             .StageAttach(new ColliderRenderer())
             .StageAttach(new DefaultSceneHelper());
 
@@ -45,12 +47,12 @@ public class DefaultScene : ISceneDefinition
             .StageAttach(new PlayerController())
             .StageAttach(new Transform() { Position = new(50, 50) })
             .StageAttach(new Velocity())
-            .StageAttach(new Collider(20, 20) { NormalizedOrigin = new(0.5f, 0.5f) })
+            .StageAttach(new Collider(20, 20) { NormalizedOrigin = new(0.5f) })
             .StageAttach(
                 new RectangleRenderer()
                 {
                     Size = new(20, 20),
-                    NormalizedOrigin = new(0.5f, 0.5f),
+                    NormalizedOrigin = new(0.5f),
                     Color = Color.DarkGray,
                 }
             );
@@ -69,11 +71,11 @@ public class DefaultScene : ISceneDefinition
                 new RectangleRenderer()
                 {
                     Size = size,
-                    NormalizedOrigin = new(0.5f, 0.5f),
+                    NormalizedOrigin = new(0.5f),
                     Color = Color.SaddleBrown,
                 }
             )
-            .StageAttach(new Collider(size) { NormalizedOrigin = new(0.5f, 0.5f) })
+            .StageAttach(new Collider(size) { NormalizedOrigin = new(0.5f) })
             .StageAttach(new StaticGeometryResolver());
     }
 }
@@ -115,11 +117,11 @@ internal class DefaultSceneHelper : Component, IUpdatable
                     new RectangleRenderer()
                     {
                         Size = size,
-                        NormalizedOrigin = new(0.5f, 0.5f),
+                        NormalizedOrigin = new(0.5f),
                         Color = Color.SaddleBrown,
                     }
                 )
-                .StageAttach(new Collider(size) { NormalizedOrigin = new(0.5f, 0.5f) })
+                .StageAttach(new Collider(size) { NormalizedOrigin = new(0.5f) })
                 .StageAttach(new StaticGeometryResolver());
         }
     }

@@ -16,9 +16,9 @@ public partial class ColliderMouseDrag : Component
     private Point _initialScreenPos = new();
     private Vector2 _initialWorldPos = new();
 
-    public ColliderMouseDrag(Func<Entity, bool> entityFilter, Button? button = null)
+    public ColliderMouseDrag(Func<Entity, bool>? entityFilter = null, Button? button = null)
     {
-        _entityFilter = entityFilter;
+        _entityFilter = entityFilter ?? (entity => true);
         _button = button ?? MouseButton.Left;
     }
 
