@@ -35,21 +35,7 @@ public class DefaultScene : ISceneDefinition
         MakeStaticGeometry(scene, new(200, 140), new(60, 20));
         MakeStaticGeometry(scene, new(100, 152), new(60, 20));
 
-        scene
-            .StageCreate(nameof(Player))
-            .StageAttach(new Player())
-            .StageAttach(new PlayerController())
-            .StageAttach(new Transform() { Position = new(50, 50) })
-            .StageAttach(new Velocity())
-            .StageAttach(new Collider(20, 20) { NormalizedOrigin = new(0.5f) })
-            .StageAttach(
-                new RectangleRenderer()
-                {
-                    Size = new(20, 20),
-                    NormalizedOrigin = new(0.5f),
-                    Color = Color.DarkSlateGray,
-                }
-            );
+        Player.MakeEntity(scene);
 
         scene
             .Singletons.Get<AudioManager>()
@@ -70,7 +56,7 @@ public class DefaultScene : ISceneDefinition
                 }
             )
             .StageAttach(new Collider(size) { NormalizedOrigin = new(0.5f) })
-            .StageAttach(new StaticGeometryResolver());
+            .StageAttach(new StaticGeometry());
     }
 }
 
@@ -116,7 +102,7 @@ internal class DefaultSceneHelper : Component, IUpdatable
                     }
                 )
                 .StageAttach(new Collider(size) { NormalizedOrigin = new(0.5f) })
-                .StageAttach(new StaticGeometryResolver());
+                .StageAttach(new StaticGeometry());
         }
     }
 }
@@ -131,7 +117,7 @@ internal class World : Component
             .StageCreate(nameof(World))
             .StageAttach(new World())
             .StageAttach(new Transform())
-            .StageAttach(new StaticGeometryResolver())
+            .StageAttach(new StaticGeometry())
             .StageAttach(
                 new Collider(width + 2 * margin, margin)
                 {

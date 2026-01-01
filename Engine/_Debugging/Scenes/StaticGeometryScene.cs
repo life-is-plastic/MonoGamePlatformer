@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 namespace Engine.Debugging;
 
 /// <summary>
-/// Spawn rectangles and see how they interact.
+/// Spawn rectangles and observe them pushing against each other.
 /// </summary>
 public class StaticGeometryScene : BaseSceneDefinition
 {
@@ -45,7 +45,7 @@ public class StaticGeometryScene : BaseSceneDefinition
                 Scene
                     .StageCreate("Object")
                     .StageAttach(new Transform() { Position = inputManager.MouseWorldPosition })
-                    .StageAttach(new StaticGeometryResolver())
+                    .StageAttach(new StaticGeometry())
                     .StageAttach(
                         new Collider(s_dims)
                         {
@@ -62,6 +62,25 @@ public class StaticGeometryScene : BaseSceneDefinition
                         }
                     );
             }
+        }
+    }
+
+    public class StaticGeometry : Component, ICollisionHandler
+    {
+        private static void PushOther(in ContactInfo contact)
+        {
+            var transform = contact.Other.Entity.Get<Transform>();
+            transform.Position += contact.Penetration;
+        }
+
+        void ICollisionHandler.OnCollisionEnter(in ContactInfo contact)
+        {
+            PushOther(contact);
+        }
+
+        void ICollisionHandler.OnCollisionStay(in ContactInfo contact)
+        {
+            PushOther(contact);
         }
     }
 }

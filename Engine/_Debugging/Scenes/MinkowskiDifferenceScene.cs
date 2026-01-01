@@ -19,14 +19,12 @@ public class MinkowskiDifferenceScene : BaseSceneDefinition
 
     private class Controller : Component, IUpdatable
     {
-        private static readonly Vector2 s_dims = new(32, 32);
-
         private Entity _a = null!;
         private Entity _b = null!;
         private Entity _ab_diff = null!;
         private Entity _ba_diff = null!;
 
-        private Entity MakeCollider(Color color, Vector2 initialPosition)
+        private Entity MakeCollider(Color color, Vector2 size, Vector2 initialPosition)
         {
             return Scene
                 .StageCreate("Object")
@@ -34,12 +32,12 @@ public class MinkowskiDifferenceScene : BaseSceneDefinition
                 .StageAttach(
                     new RectangleRenderer()
                     {
-                        Size = s_dims,
+                        Size = size,
                         NormalizedOrigin = new(0.5f),
                         Color = color * 0.5f,
                     }
                 )
-                .StageAttach(new Collider(s_dims) { NormalizedOrigin = new(0.5f) });
+                .StageAttach(new Collider(size) { NormalizedOrigin = new(0.5f) });
         }
 
         private Entity MakeDiffRepr(Color color)
@@ -47,22 +45,15 @@ public class MinkowskiDifferenceScene : BaseSceneDefinition
             return Scene
                 .StageCreate("Object")
                 .StageAttach(new Transform())
-                .StageAttach(
-                    new RectangleRenderer()
-                    {
-                        Size = s_dims,
-                        NormalizedOrigin = new(0.5f),
-                        Color = color * 0.25f,
-                    }
-                );
+                .StageAttach(new RectangleRenderer() { Color = color * 0.25f });
         }
 
         void IUpdatable.Update()
         {
             if (_a is null)
             {
-                _a = MakeCollider(Color.Red, initialPosition: new(-50, -50));
-                _b = MakeCollider(Color.Green, initialPosition: new(50, -50));
+                _a = MakeCollider(Color.Red, size: new(20, 4), initialPosition: new(-50, -50));
+                _b = MakeCollider(Color.Green, size: new(32, 32), initialPosition: new(50, -50));
                 _ab_diff = MakeDiffRepr(Color.Blue);
                 _ba_diff = MakeDiffRepr(Color.Black);
                 return;
