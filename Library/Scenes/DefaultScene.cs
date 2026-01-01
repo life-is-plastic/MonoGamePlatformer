@@ -6,7 +6,6 @@ using Engine.Input;
 using Engine.Physics;
 using Engine.ZDebug.Inputs;
 using Engine.ZDebug.Visuals;
-using Library.Player;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Input;
@@ -31,8 +30,8 @@ public class DefaultScene : ISceneDefinition
             .StageAttach(new ScenePauseToggle())
             .StageAttach(new CameraMouseZoom())
             // .StageAttach(new CameraMouseDrag())
-            .StageAttach(new ColliderMouseDrag(entity => !entity.Has<PlayerMarker>()))
-            .StageAttach(new CameraFollowsPlayer())
+            .StageAttach(new ColliderMouseDrag(entity => !entity.Has<Player>()))
+            .StageAttach(new PlayerCameraFollow())
             .StageAttach(new DrawHelper())
             .StageAttach(new ColliderRenderer())
             .StageAttach(new DefaultSceneHelper());
@@ -43,7 +42,7 @@ public class DefaultScene : ISceneDefinition
 
         scene
             .StageCreate(nameof(Player))
-            .StageAttach(new PlayerMarker())
+            .StageAttach(new Player())
             .StageAttach(new PlayerController())
             .StageAttach(new Transform() { Position = new(50, 50) })
             .StageAttach(new Velocity())
@@ -53,7 +52,7 @@ public class DefaultScene : ISceneDefinition
                 {
                     Size = new(20, 20),
                     NormalizedOrigin = new(0.5f),
-                    Color = Color.DarkGray,
+                    Color = Color.DarkSlateGray,
                 }
             );
 

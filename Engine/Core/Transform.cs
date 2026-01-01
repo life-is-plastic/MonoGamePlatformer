@@ -15,5 +15,5 @@ public class Transform : Component
         set => field = MathHelper.WrapAngle(value);
     }
 
-    public Vector2 Scale = new(1, 1);
+    public Vector2 Scale = new(1);
 }

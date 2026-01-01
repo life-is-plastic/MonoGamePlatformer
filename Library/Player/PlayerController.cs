@@ -1,10 +1,9 @@
 using Engine.Core;
 using Engine.Input;
 using Engine.Physics;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace Library.Player;
+namespace Library;
 
 public partial class PlayerController : Component
 {
@@ -24,10 +23,10 @@ public partial class PlayerController : Component
 
     private void ApplyGravity()
     {
-        // if (_isGrounded)
-        // {
-        //     return;
-        // }
+        if (_isGrounded)
+        {
+            return;
+        }
         _velocity.Linear.Y += Gravity * Scene.DeltaTime;
     }
 
@@ -51,15 +50,9 @@ public partial class PlayerController : Component
         {
             return;
         }
-        if (contact.Penetration.Y > 0)
+        if (contact.Penetration.Y > 0 && Entity.Get<Velocity>().Linear.Y > 0)
         {
             _isGrounded = true;
-        }
-
-        // Zero out vertical velocity component parallel to the normal.
-        if (contact.Penetration.Y != 0)
-        {
-            _velocity.Linear *= new Vector2(1, 0);
         }
     }
 }

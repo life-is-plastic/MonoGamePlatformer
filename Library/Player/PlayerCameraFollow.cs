@@ -1,21 +1,21 @@
 using Engine.Core;
 using Engine.Graphics;
 
-namespace Library.Player;
+namespace Library;
 
-public partial class CameraFollowsPlayer : Component
+public partial class PlayerCameraFollow : Component
 {
     private EntityHandle _playerHandle;
     private EntityHandle _cameraHandle;
 
     protected override void Begin()
     {
-        _playerHandle = new(Scene.Find<PlayerMarker>().First());
+        _playerHandle = new(Scene.Find<Player>().First());
         _cameraHandle = new(Scene.Find<Camera>().First());
     }
 }
 
-public partial class CameraFollowsPlayer : IUpdatable
+public partial class PlayerCameraFollow : IUpdatable
 {
     int IUpdatable.UpdateOrder => IUpdatable.UpdateOrderFrameEnd;
 

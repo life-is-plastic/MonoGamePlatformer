@@ -1,8 +1,8 @@
 using Engine.Core;
 
-namespace Library.Player;
+namespace Library;
 
 /// <summary>
 /// Marker component for the player entity.
 /// </summary>
-public class PlayerMarker : Component { }
+public class Player : Component { }
