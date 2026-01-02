@@ -81,7 +81,6 @@ public readonly record struct RectangleF
         {
             return null;
         }
-
         var left = Math.Max(Left, other.Left);
         var top = Math.Max(Top, other.Top);
         var right = Math.Min(Right, other.Right);
