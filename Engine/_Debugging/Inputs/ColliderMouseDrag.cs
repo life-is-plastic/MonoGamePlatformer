@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace Engine.Debugging;
 
-public partial class ColliderMouseDrag : Component
+public class ColliderMouseDrag : Component, IUpdatable
 {
     private readonly Func<Entity, bool> _entityFilter;
     private readonly Button _button;
@@ -22,10 +22,7 @@ public partial class ColliderMouseDrag : Component
     {
         _cameraHandle = new(Scene.Find<Camera>().First());
     }
-}
 
-public partial class ColliderMouseDrag : IUpdatable
-{
     bool IUpdatable.Pause()
     {
         _dragged = null;

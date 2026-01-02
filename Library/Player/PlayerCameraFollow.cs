@@ -2,7 +2,7 @@ using Engine;
 
 namespace Library;
 
-public partial class PlayerCameraFollow : Component
+public class PlayerCameraFollow : Component, IUpdatable
 {
     private EntityHandle _playerHandle;
     private EntityHandle _cameraHandle;
@@ -12,10 +12,7 @@ public partial class PlayerCameraFollow : Component
         _playerHandle = new(Scene.Find<Player>().First());
         _cameraHandle = new(Scene.Find<Camera>().First());
     }
-}
 
-public partial class PlayerCameraFollow : IUpdatable
-{
     int IUpdatable.UpdateOrder => IUpdatable.UpdateOrderFrameEnd;
 
     void IUpdatable.Update()

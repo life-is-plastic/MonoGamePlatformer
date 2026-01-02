@@ -2,14 +2,11 @@ using Microsoft.Xna.Framework;
 
 namespace Engine;
 
-public partial class Velocity : Component
+public class Velocity : Component, IUpdatable
 {
     public Vector2 Linear;
     public float Angular;
-}
 
-public partial class Velocity : IUpdatable
-{
     int IUpdatable.UpdateOrder => IUpdatable.UpdateOrderPhysics[^2];
 
     void IUpdatable.Update()

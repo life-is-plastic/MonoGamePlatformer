@@ -8,7 +8,7 @@ namespace Engine;
 /// <summary>
 /// Component wrapper around a GumService instance.
 /// </summary>
-public partial class UIManager : Component
+public partial class UIManager : Component, IUpdatable
 {
     private static bool s_gumServiceInitialized = false;
 
@@ -47,10 +47,7 @@ public partial class UIManager : Component
     {
         GumService.Root.Children.Clear();
     }
-}
 
-public partial class UIManager : IUpdatable
-{
     int IUpdatable.UpdateOrder => IUpdatable.UpdateOrderFrameBegin;
 
     bool IUpdatable.Pause()
@@ -69,9 +66,9 @@ public partial class UIManager : IUpdatable
 
 public partial class UIManager : IRenderer
 {
-    public int DrawOrder => IRenderer.DrawOrderUI;
+    int IRenderer.DrawOrder => IRenderer.DrawOrderUI;
     public bool IsVisible { get; set; } = true;
-    public IRenderer.Options RendererOptions => new() { Batch = false };
+    IRenderer.Options IRenderer.RendererOptions => new() { Batch = false };
 
     void IRenderer.Draw(SpriteBatch spriteBatch)
     {

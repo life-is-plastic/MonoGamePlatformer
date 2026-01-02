@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Engine.Debugging;
 
-public partial class CameraKeyboardPan : Component
+public class CameraKeyboardPan : Component, IUpdatable
 {
     private readonly float _panSpeed;
     private readonly Keys _left;
@@ -30,10 +30,7 @@ public partial class CameraKeyboardPan : Component
     {
         _cameraHandle = new(Scene.Find<Camera>().First());
     }
-}
 
-public partial class CameraKeyboardPan : IUpdatable
-{
     void IUpdatable.Update()
     {
         var inputManager = Scene.Singletons.Get<InputManager>();

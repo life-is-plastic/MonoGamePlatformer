@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Engine.Debugging;
 
-public partial class SceneLoadOnPress : Component
+public class SceneLoadOnPress : Component, IUpdatable
 {
     private readonly ISceneDefinition _sceneDefinition;
     private readonly Button _button;
@@ -12,10 +12,7 @@ public partial class SceneLoadOnPress : Component
         _sceneDefinition = sceneDefinition;
         _button = button ?? Keys.R;
     }
-}
 
-public partial class SceneLoadOnPress : IUpdatable
-{
     bool IUpdatable.Pause()
     {
         return false;

@@ -1,14 +1,11 @@
 namespace Engine;
 
-public partial class AnimationRenderer<T> : DrawableRenderer<Animation<T>>
+public class AnimationRenderer<T> : DrawableRenderer<Animation<T>>, IUpdatable
     where T : IDrawable
 {
     public AnimationRenderer(Animation<T> animation)
         : base(animation) { }
-}
 
-public partial class AnimationRenderer<T> : IUpdatable
-{
     int IUpdatable.UpdateOrder => IUpdatable.UpdateOrderFrameBegin;
 
     void IUpdatable.Update()

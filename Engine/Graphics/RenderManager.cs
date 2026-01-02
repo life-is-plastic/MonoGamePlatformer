@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Engine;
 
-internal sealed partial class RenderManager : Component
+internal sealed class RenderManager : Component, IEntitySyncer
 {
     private static readonly Comparison<IRenderer> s_drawOrderComparison = (a, b) =>
         (a.DrawOrder, a.Entity.Id).CompareTo((b.DrawOrder, b.Entity.Id));
@@ -95,10 +95,7 @@ internal sealed partial class RenderManager : Component
         );
         _spriteBatch.End();
     }
-}
 
-internal sealed partial class RenderManager : IEntitySyncer
-{
     void IEntitySyncer.Sync(EntityChangelist entityChangelist)
     {
         foreach (var component in entityChangelist.Detached.Values)

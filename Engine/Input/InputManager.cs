@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Engine;
 
-public partial class InputManager : Component
+public class InputManager : Component, IUpdatable
 {
     private readonly MouseInfo _mouseInfo = new();
     private KeyboardState _kbCurrentState = new();
@@ -60,10 +60,7 @@ public partial class InputManager : Component
     {
         return !IsDown(button) && IsPreviouslyDown(button);
     }
-}
 
-public partial class InputManager : IUpdatable
-{
     int IUpdatable.UpdateOrder => IUpdatable.UpdateOrderFrameBegin;
 
     bool IUpdatable.Pause()

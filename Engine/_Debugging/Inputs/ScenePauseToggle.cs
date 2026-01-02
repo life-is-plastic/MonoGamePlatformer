@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Engine.Debugging;
 
-public partial class ScenePauseToggle : Component
+public class ScenePauseToggle : Component, IUpdatable
 {
     private readonly Button _button;
 
@@ -10,10 +10,7 @@ public partial class ScenePauseToggle : Component
     {
         _button = button ?? Keys.Escape;
     }
-}
 
-public partial class ScenePauseToggle : IUpdatable
-{
     bool IUpdatable.Pause()
     {
         return false;

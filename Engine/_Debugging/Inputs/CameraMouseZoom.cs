@@ -1,6 +1,6 @@
 namespace Engine.Debugging;
 
-public partial class CameraMouseZoom : Component
+public class CameraMouseZoom : Component, IUpdatable
 {
     private EntityHandle _cameraHandle;
 
@@ -8,10 +8,7 @@ public partial class CameraMouseZoom : Component
     {
         _cameraHandle = new(Scene.Find<Camera>().First());
     }
-}
 
-public partial class CameraMouseZoom : IUpdatable
-{
     void IUpdatable.Update()
     {
         var inputManager = Scene.Singletons.Get<InputManager>();

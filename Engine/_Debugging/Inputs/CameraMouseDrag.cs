@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 
 namespace Engine.Debugging;
 
-public partial class CameraMouseDrag : Component
+public class CameraMouseDrag : Component, IUpdatable
 {
     private readonly Button _button;
     private EntityHandle _cameraHandle;
@@ -19,10 +19,7 @@ public partial class CameraMouseDrag : Component
     {
         _cameraHandle = new(Scene.Find<Camera>().First());
     }
-}
 
-public partial class CameraMouseDrag : IUpdatable
-{
     bool IUpdatable.Pause()
     {
         _dragging = false;

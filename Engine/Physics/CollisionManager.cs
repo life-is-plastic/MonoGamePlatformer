@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace Engine;
 
-public partial class CollisionManager : Component
+public class CollisionManager : Component, IUpdatable, IEntitySyncer
 {
     internal InlineArray8<IndexedSet<Collider>> _layerToColliders;
     private readonly Dictionary<Entity, IndexedSet<ICollisionHandler>> _handlers = new();
@@ -149,10 +149,7 @@ public partial class CollisionManager : Component
         }
         return new();
     }
-}
 
-public partial class CollisionManager : IUpdatable
-{
     int IUpdatable.UpdateOrder => IUpdatable.UpdateOrderPhysics[^1];
 
     void IUpdatable.Update()
@@ -160,10 +157,7 @@ public partial class CollisionManager : IUpdatable
         CheckContacts();
         HandleCollisions();
     }
-}
 
-public partial class CollisionManager : IEntitySyncer
-{
     void IEntitySyncer.Sync(EntityChangelist entityChangelist)
     {
         foreach (var component in entityChangelist.Detached.Values)

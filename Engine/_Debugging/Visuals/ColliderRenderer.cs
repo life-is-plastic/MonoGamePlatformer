@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Engine.Debugging;
 
-public partial class ColliderRenderer : Component
+public partial class ColliderRenderer : Component, IUpdatable
 {
     private readonly Button _toggleButton;
 
@@ -12,10 +12,7 @@ public partial class ColliderRenderer : Component
     {
         _toggleButton = toggleButton ?? Keys.P;
     }
-}
 
-public partial class ColliderRenderer : IUpdatable
-{
     bool IUpdatable.Pause()
     {
         return false;

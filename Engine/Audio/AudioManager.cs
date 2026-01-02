@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Audio;
 
 namespace Engine;
 
-public partial class AudioManager : Component
+public class AudioManager : Component, IUpdatable
 {
     public static float MasterVolume
     {
@@ -36,10 +36,7 @@ public partial class AudioManager : Component
     {
         StopAll();
     }
-}
 
-public partial class AudioManager : IUpdatable
-{
     protected virtual bool Pause()
     {
         foreach (var instance in _active)
@@ -49,17 +46,17 @@ public partial class AudioManager : IUpdatable
         return true;
     }
 
-    bool IUpdatable.Pause()
-    {
-        return Pause();
-    }
-
     protected virtual void Unpause()
     {
         foreach (var instance in _active)
         {
             instance.Resume();
         }
+    }
+
+    bool IUpdatable.Pause()
+    {
+        return Pause();
     }
 
     void IUpdatable.Unpause()

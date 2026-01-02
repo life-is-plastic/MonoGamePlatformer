@@ -3,9 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Engine.Debugging;
 
-public partial class OriginRenderer : Component { }
-
-public partial class OriginRenderer : IRenderer
+public class OriginRenderer : Component, IRenderer
 {
     int IRenderer.DrawOrder => IRenderer.DrawOrderDebug;
 
