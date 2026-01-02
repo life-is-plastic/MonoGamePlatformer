@@ -8,10 +8,10 @@ namespace Engine;
 public interface IUpdatable : IComponent
 {
     // Preset update orders.
-    public const int UpdateOrderFrameBegin = -1000;
-    public const int UpdateOrderDefault = 0;
+    public static int UpdateOrderFrameBegin => -1000;
+    public static int UpdateOrderDefault => 0;
     public static UpdateOrderInterval UpdateOrderPhysics { get; } = new(500, 599);
-    public const int UpdateOrderFrameEnd = 1000;
+    public static int UpdateOrderFrameEnd => 1000;
 
     /// <summary>
     /// Controls the order of <c>Update()</c> calls between component instances. All instances of

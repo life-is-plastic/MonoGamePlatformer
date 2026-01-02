@@ -8,9 +8,10 @@ namespace Library;
 /// </summary>
 public class Player : Component
 {
-    public const int PhysicsColliderIndex = 10;
-    public const int GroundCheckColliderIndex = 11;
     private static readonly Vector2 PhysicsSize = new(8, 16);
+
+    public static int PhysicsColliderIndex => 10;
+    public static int GroundCheckColliderIndex => 11;
 
     public bool IsGrounded { get; set; } = false;
     public bool IsJetpacking { get; set; } = false;

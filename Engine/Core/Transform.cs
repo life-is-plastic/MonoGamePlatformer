@@ -7,7 +7,7 @@ public class Transform : Component
     public Vector2 Position = new();
 
     /// <summary>
-    /// Currently only for drawing. Completedly ignored by physics and camera.
+    /// Currently only used for drawing. Completedly ignored by physics and camera.
     /// </summary>
     public float Rotation
     {

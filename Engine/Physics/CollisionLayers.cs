@@ -17,17 +17,17 @@ public class CollisionLayers
     /// <summary>
     /// Number of supported layers. Layer values range from 0 to 1 less than this number.
     /// </summary>
-    public const int Count = 8;
+    public static int Count => 8;
 
     /// <summary>
     /// The predefined default layer.
     /// </summary>
-    public const int Default = 0;
+    public static int Default => 0;
 
     /// <summary>
     /// The predefined layer for static level geometry.
     /// </summary>
-    public const int StaticGeometry = 7;
+    public static int StaticGeometry => 7;
 
     private InlineArray8<byte> _layers = new();
 

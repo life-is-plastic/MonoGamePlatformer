@@ -8,11 +8,11 @@ namespace Engine;
 /// </summary>
 public abstract class Component : IComponent
 {
-    public const int DefaultIndex = int.MinValue;
+    internal static int DefaultIndex => int.MinValue;
 
+    public Scene Scene => Entity.Scene;
     public Entity Entity { get; private set; } = null!;
     public int ComponentIndex { get; init; } = DefaultIndex;
-    protected Scene Scene => Entity.Scene;
 
     public override string ToString()
     {

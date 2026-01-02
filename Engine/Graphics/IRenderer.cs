@@ -8,9 +8,9 @@ namespace Engine;
 public interface IRenderer : IComponent
 {
     // Preset draw orders.
-    public const int DrawOrderDefault = 0;
-    public const int DrawOrderUI = 1000;
-    public const int DrawOrderDebug = 1100;
+    public static int DrawOrderDefault => 0;
+    public static int DrawOrderUI => 1000;
+    public static int DrawOrderDebug => 1100;
 
     /// <summary>
     /// Determines when this component is drawn. A higher value means this renderer is drawn on top

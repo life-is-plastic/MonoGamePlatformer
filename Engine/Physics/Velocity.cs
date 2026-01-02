@@ -4,8 +4,8 @@ namespace Engine;
 
 public class Velocity : Component, IUpdatable
 {
-    public Vector2 Linear;
-    public float Angular;
+    public Vector2 Linear = new();
+    public float Angular = 0;
 
     int IUpdatable.UpdateOrder => IUpdatable.UpdateOrderPhysics[^2];
 
