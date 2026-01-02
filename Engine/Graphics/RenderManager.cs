@@ -45,13 +45,10 @@ internal sealed class RenderManager : Component, IEntitySyncer
 
         var cameraRect = camera.AsWorldRectangleF();
         var cameraTransform = camera.Entity.Get<Transform>();
+        var displacement = Vector2.Round(-cameraRect.Location * cameraTransform.Scale);
         var transformMatrix =
-            Matrix.CreateScale(cameraTransform.Scale.X, cameraTransform.Scale.Y, 1)
-            * Matrix.CreateTranslation(
-                -cameraRect.X * cameraTransform.Scale.X,
-                -cameraRect.Y * cameraTransform.Scale.Y,
-                0
-            );
+            Matrix.CreateScale(new Vector3(cameraTransform.Scale, 1))
+            * Matrix.CreateTranslation(new Vector3(displacement, 0));
 
         Scene.Game.GraphicsDevice.SetRenderTarget(_renderTarget);
         Scene.Game.GraphicsDevice.Clear(Color.CornflowerBlue);
@@ -86,10 +83,8 @@ internal sealed class RenderManager : Component, IEntitySyncer
         _spriteBatch.Draw(
             _renderTarget,
             destinationRectangle: new Rectangle(
-                (int)MathF.Round(renderTargetScreenPosition.X),
-                (int)MathF.Round(renderTargetScreenPosition.Y),
-                (int)MathF.Round(renderTargetScreenSize.X),
-                (int)MathF.Round(renderTargetScreenSize.Y)
+                Vector2.Round(renderTargetScreenPosition).ToPoint(),
+                Vector2.Round(renderTargetScreenSize).ToPoint()
             ),
             Color.White
         );

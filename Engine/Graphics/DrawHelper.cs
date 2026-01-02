@@ -1,4 +1,3 @@
-using System;
 using Engine.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -60,10 +59,8 @@ public class DrawHelper : Component
             _pixel,
             // Destination rectangle's x and y is where the origin gets placed.
             destinationRectangle: new Rectangle(
-                (int)MathF.Round(position.X),
-                (int)MathF.Round(position.Y),
-                (int)MathF.Round(size.X),
-                (int)MathF.Round(size.Y)
+                Vector2.Round(position).ToPoint(),
+                Vector2.Round(size).ToPoint()
             ),
             sourceRectangle: null,
             color,
@@ -86,16 +83,48 @@ public class DrawHelper : Component
     {
         var rect = new RectangleF(position - size * normalizedOrigin, size);
         var tl = new Vector2(rect.Left, rect.Top);
-        var tr = new Vector2(rect.Right, rect.Top);
-        var bl = new Vector2(rect.Left, rect.Bottom);
-        var br = new Vector2(rect.Right, rect.Bottom);
-        tl.RotateAround(position, rotation);
-        tr.RotateAround(position, rotation);
-        bl.RotateAround(position, rotation);
-        br.RotateAround(position, rotation);
-        DrawLine(spriteBatch, color, tl, tr, borderWidth);
-        DrawLine(spriteBatch, color, tr, br, borderWidth);
-        DrawLine(spriteBatch, color, tl, bl, borderWidth);
-        DrawLine(spriteBatch, color, bl, br, borderWidth);
+        var tr = new Vector2(rect.Right - borderWidth, rect.Top);
+        var bl = new Vector2(rect.Left, rect.Bottom - borderWidth);
+        DrawRectangle(
+            spriteBatch,
+            color,
+            tl,
+            size: new Vector2(size.X, borderWidth),
+            rotation: rotation
+        );
+        DrawRectangle(
+            spriteBatch,
+            color,
+            tl,
+            size: new Vector2(borderWidth, size.Y),
+            rotation: rotation
+        );
+        DrawRectangle(
+            spriteBatch,
+            color,
+            tr,
+            size: new Vector2(borderWidth, size.Y),
+            rotation: rotation
+        );
+        DrawRectangle(
+            spriteBatch,
+            color,
+            bl,
+            size: new Vector2(size.X, borderWidth),
+            rotation: rotation
+        );
+
+        // var tl = new Vector2(rect.Left, rect.Top);
+        // var tr = new Vector2(rect.Right, rect.Top);
+        // var bl = new Vector2(rect.Left, rect.Bottom);
+        // var br = new Vector2(rect.Right, rect.Bottom);
+        // tl.RotateAround(position, rotation);
+        // tr.RotateAround(position, rotation);
+        // bl.RotateAround(position, rotation);
+        // br.RotateAround(position, rotation);
+        // DrawLine(spriteBatch, color, tl, tr, borderWidth);
+        // DrawLine(spriteBatch, color, tr, br, borderWidth);
+        // DrawLine(spriteBatch, color, tl, bl, borderWidth);
+        // DrawLine(spriteBatch, color, bl, br, borderWidth);
     }
 }

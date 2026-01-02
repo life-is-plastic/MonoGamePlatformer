@@ -17,9 +17,8 @@ public class PlayerCameraFollow : Component, IUpdatable
 
     void IUpdatable.Update()
     {
-        _cameraHandle.Deref().Get<Transform>().Position = _playerHandle
-            .Deref()
-            .Get<Transform>()
-            .Position;
+        var playerTransform = _playerHandle.Deref().Get<Transform>();
+        var cameraTransform = _cameraHandle.Deref().Get<Transform>();
+        cameraTransform.Position = playerTransform.Position;
     }
 }

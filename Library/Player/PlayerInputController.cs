@@ -8,6 +8,7 @@ public class PlayerInputController : Component, IUpdatable
     private const float Gravity = 500;
     private const float JumpSpeed = 200;
     private const float LateralSpeed = 100;
+
     private InputManager _inputManager = null!;
     private Player _player = null!;
     private Velocity _velocity = null!;

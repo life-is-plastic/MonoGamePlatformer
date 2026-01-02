@@ -54,12 +54,7 @@ public readonly record struct RectangleF
 
     public Rectangle ToRectangle()
     {
-        return new Rectangle(
-            (int)MathF.Round(Left),
-            (int)MathF.Round(Top),
-            (int)MathF.Round(Width),
-            (int)MathF.Round(Height)
-        );
+        return new(Vector2.Round(Location).ToPoint(), Vector2.Round(Size).ToPoint());
     }
 
     public bool Contains(Vector2 point)

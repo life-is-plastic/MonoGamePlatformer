@@ -10,13 +10,12 @@ public class Player : Component
 {
     public const int PhysicsColliderIndex = 10;
     public const int GroundCheckColliderIndex = 11;
+    private static readonly Vector2 PhysicsSize = new(8, 16);
 
     public bool IsGrounded { get; set; } = false;
 
     public static Entity MakeEntity(Scene scene)
     {
-        var size = new Vector2(8, 16);
-
         return scene
             .StageCreate(nameof(Player))
             .StageAttach(new Player())
@@ -25,23 +24,23 @@ public class Player : Component
             .StageAttach(new Transform() { Position = new(50, 50) })
             .StageAttach(new Velocity())
             .StageAttach(
-                new Collider(size)
+                new Collider(PhysicsSize)
                 {
                     NormalizedOrigin = new(0.5f),
                     ComponentIndex = PhysicsColliderIndex,
                 }
             )
             .StageAttach(
-                new Collider(size.X, 1)
+                new Collider(PhysicsSize.X, 1)
                 {
-                    Origin = new(size.X / 2, -size.Y / 2),
+                    Origin = new(PhysicsSize.X / 2, -PhysicsSize.Y / 2),
                     ComponentIndex = GroundCheckColliderIndex,
                 }
             )
             .StageAttach(
                 new RectangleRenderer()
                 {
-                    Size = size,
+                    Size = PhysicsSize,
                     NormalizedOrigin = new(0.5f),
                     Color = Color.DarkSlateGray,
                 }
