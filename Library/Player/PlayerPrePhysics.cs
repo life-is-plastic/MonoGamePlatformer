@@ -3,12 +3,15 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Library;
 
-public class PlayerInputController : Component, IUpdatable
+public class PlayerPrePhysics : Component, IUpdatable
 {
-    private const float Gravity = 500;
+    private const float Gravity = 800;
     private const float JumpSpeed = 200;
+    private const float JumpJetpackAccel = 400;
+    private const float MaxJetpackTime = 0.4f;
     private const float LateralSpeed = 100;
 
+    private float _jetpackingStart;
     private InputManager _inputManager = null!;
     private Player _player = null!;
     private Velocity _velocity = null!;
@@ -31,15 +34,33 @@ public class PlayerInputController : Component, IUpdatable
 
     private void Jump()
     {
-        if (!_player.IsGrounded)
+        if (_player.IsGrounded)
         {
-            return;
+            if (_inputManager.IsPressed(Keys.Space))
+            {
+                _velocity.Linear.Y = -JumpSpeed;
+                _player.IsJetpacking = true;
+                _jetpackingStart = Scene.TotalTime;
+            }
         }
-        if (!_inputManager.IsPressed(Keys.Space))
+        else
         {
-            return;
+            if (_player.IsJetpacking)
+            {
+                if (Scene.TotalTime - _jetpackingStart > MaxJetpackTime)
+                {
+                    _player.IsJetpacking = false;
+                }
+                else if (_inputManager.IsHeld(Keys.Space))
+                {
+                    _velocity.Linear.Y -= JumpJetpackAccel * Scene.DeltaTime;
+                }
+                else
+                {
+                    _player.IsJetpacking = false;
+                }
+            }
         }
-        _velocity.Linear.Y = -JumpSpeed;
     }
 
     private void MoveLaterally()

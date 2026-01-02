@@ -13,14 +13,16 @@ public class Player : Component
     private static readonly Vector2 PhysicsSize = new(8, 16);
 
     public bool IsGrounded { get; set; } = false;
+    public bool IsJetpacking { get; set; } = false;
 
     public static Entity MakeEntity(Scene scene)
     {
         return scene
             .StageCreate(nameof(Player))
             .StageAttach(new Player())
-            .StageAttach(new PlayerInputController())
-            .StageAttach(new PlayerPhysicsController())
+            .StageAttach(new PlayerPrePhysics())
+            .StageAttach(new PlayerPostPhysics())
+            .StageAttach(new PlayerMisc())
             .StageAttach(new Transform() { Position = new(50, 50) })
             .StageAttach(new Velocity())
             .StageAttach(

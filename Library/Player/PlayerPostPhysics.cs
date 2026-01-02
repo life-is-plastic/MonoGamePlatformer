@@ -5,7 +5,10 @@ using Microsoft.Xna.Framework;
 
 namespace Library;
 
-public class PlayerPhysicsController : Component, IUpdatable, ICollisionHandler
+/// <summary>
+/// Handles responding to collisions.
+/// </summary>
+public class PlayerPostPhysics : Component, IUpdatable, ICollisionHandler
 {
     private readonly List<Collider> _groundColliderOverlaps = new();
 
@@ -29,6 +32,10 @@ public class PlayerPhysicsController : Component, IUpdatable, ICollisionHandler
                 player.IsGrounded = true;
                 break;
             }
+        }
+        if (player.IsGrounded)
+        {
+            player.IsJetpacking = false;
         }
         _groundColliderOverlaps.Clear();
     }
@@ -54,6 +61,8 @@ public class PlayerPhysicsController : Component, IUpdatable, ICollisionHandler
             if (contact.Penetration.Y != 0 && Vector2.Dot(contact.Penetration, velocity.Linear) > 0)
             {
                 velocity.Linear.Y = 0;
+                var player = Entity.Get<Player>();
+                player.IsJetpacking = false;
             }
             return;
         }
