@@ -63,7 +63,7 @@ public sealed class Entity
     /// </returns>
     public bool IsAlive()
     {
-        return Scene.Entities.Contains(this);
+        return Scene._entities.Contains(this);
     }
 
     public bool Has<T>()

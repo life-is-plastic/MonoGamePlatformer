@@ -7,16 +7,10 @@ namespace Engine;
 
 public sealed partial class Scene
 {
-    private readonly IndexedSet<Entity> _entities = new();
-    private readonly EntityUpdater _entityUpdater = new();
-    internal readonly EntityChangelist _entityChangelist = new();
     internal GameTime _gameTime;
-
-    public IndexedSetView<Entity> Entities => new(_entities);
-    public float DeltaTime => (float)_gameTime.ElapsedGameTime.TotalSeconds;
-    public float TotalTime => (float)_gameTime.TotalGameTime.TotalSeconds;
-    public bool IsPaused => _entityUpdater.IsPaused;
-    public bool ShouldPause { get; set; } = false;
+    internal readonly IndexedSet<Entity> _entities = new();
+    internal readonly EntityChangelist _entityChangelist = new();
+    private readonly EntityUpdater _entityUpdater = new();
 
     /// <summary>
     /// Human readable name for debugging.
@@ -37,6 +31,12 @@ public sealed partial class Scene
     /// Container entity for singleton components.
     /// </summary>
     public Entity Singletons { get; }
+
+    public float DeltaTime => (float)_gameTime.ElapsedGameTime.TotalSeconds;
+    public float TotalTime => (float)_gameTime.TotalGameTime.TotalSeconds;
+    public int FrameCount { get; private set; } = 0;
+    public bool IsPaused => _entityUpdater.IsPaused;
+    public bool ShouldPause { get; set; } = false;
 
     public Scene(ISceneDefinition sceneDefinition, Game game, GameTime initialGameTime)
     {
@@ -99,8 +99,9 @@ public sealed partial class Scene
 
     internal void Update(GameTime gameTime)
     {
-        var shouldPause = ShouldPause;
+        FrameCount++;
         _gameTime = gameTime;
+        var shouldPause = ShouldPause;
         _entityChangelist.Apply(_entities, _entityUpdater);
         _entityUpdater.ProcessPausing(shouldPause);
         _entityUpdater.Update();
