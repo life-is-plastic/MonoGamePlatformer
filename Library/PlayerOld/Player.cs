@@ -6,7 +6,7 @@ namespace Library;
 /// <summary>
 /// Container for all player state.
 /// </summary>
-public class Player : Component
+public class PlayerOld : Component
 {
     private static readonly Vector2 PhysicsSize = new(8, 16);
 
@@ -19,8 +19,8 @@ public class Player : Component
     public static Entity MakeEntity(Scene scene)
     {
         return scene
-            .StageCreate(nameof(Player))
-            .StageAttach(new Player())
+            .StageCreate(nameof(PlayerOld))
+            .StageAttach(new PlayerOld())
             .StageAttach(new PlayerPrePhysics())
             .StageAttach(new PlayerPostPhysics())
             .StageAttach(new PlayerMisc())

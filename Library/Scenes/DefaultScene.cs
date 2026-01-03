@@ -25,8 +25,7 @@ public class DefaultScene : ISceneDefinition
             .StageAttach(new ScenePauseToggle())
             .StageAttach(new CameraMouseZoom())
             // .StageAttach(new CameraMouseDrag())
-            .StageAttach(new ColliderMouseDrag(entity => !entity.Has<Player>()))
-            .StageAttach(new PlayerCameraFollow())
+            .StageAttach(new ColliderMouseDrag())
             .StageAttach(new DrawHelper())
             .StageAttach(new ColliderRenderer())
             .StageAttach(new DefaultSceneHelper());
@@ -35,7 +34,7 @@ public class DefaultScene : ISceneDefinition
         MakeStaticGeometry(scene, new(200, 140), new(60, 20));
         MakeStaticGeometry(scene, new(100, 152), new(60, 20));
 
-        Player.MakeEntity(scene);
+        Player.Main.MakeEntity(scene);
 
         scene
             .Singletons.Get<AudioManager>()

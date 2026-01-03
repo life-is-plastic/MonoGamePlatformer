@@ -13,13 +13,13 @@ public class PlayerPrePhysics : Component, IUpdatable
 
     private float _jetpackingStart;
     private InputManager _inputManager = null!;
-    private Player _player = null!;
+    private PlayerOld _player = null!;
     private Velocity _velocity = null!;
 
     private void BeginUpdate()
     {
         _inputManager = Scene.Singletons.Get<InputManager>();
-        _player = Entity.Get<Player>();
+        _player = Entity.Get<PlayerOld>();
         _velocity = Entity.Get<Velocity>();
     }
 

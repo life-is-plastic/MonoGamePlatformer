@@ -6,6 +6,6 @@
   <ItemGroup>
     <PackageReference Include="Gum.MonoGame" Version="2025.12.9.1" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.4" />
-    <PackageReference Include="OneOf" Version="3.0.271" />
+    <PackageReference Include="Stateless" Version="5.20.0" />
   </ItemGroup>
 </Project>

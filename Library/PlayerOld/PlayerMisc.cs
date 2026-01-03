@@ -9,7 +9,7 @@ public class PlayerMisc : Component, IUpdatable
 
     void IUpdatable.Update()
     {
-        var player = Entity.Get<Player>();
+        var player = Entity.Get<PlayerOld>();
         var renderer = Entity.Get<RectangleRenderer>();
         if (player.IsGrounded)
         {

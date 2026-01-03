@@ -1,15 +1,13 @@
 using Engine;
 
-namespace Library;
+namespace Library.Player;
 
-public class PlayerCameraFollow : Component, IUpdatable
+public class CameraFollow : Component, IUpdatable
 {
-    private EntityHandle _playerHandle;
     private EntityHandle _cameraHandle;
 
     protected override void Begin()
     {
-        _playerHandle = new(Scene.Find<Player>().First());
         _cameraHandle = new(Scene.Find<Camera>().First());
     }
 
@@ -17,8 +15,8 @@ public class PlayerCameraFollow : Component, IUpdatable
 
     void IUpdatable.Update()
     {
-        var playerTransform = _playerHandle.Deref().Get<Transform>();
+        var transform = Entity.Get<Transform>();
         var cameraTransform = _cameraHandle.Deref().Get<Transform>();
-        cameraTransform.Position = playerTransform.Position;
+        cameraTransform.Position = transform.Position;
     }
 }
