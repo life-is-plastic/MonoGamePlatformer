@@ -16,9 +16,6 @@ public class Main : Component
     public static int GroundCheckColliderIndex => 11;
     public static Vector2 PhysicsSize => new(8, 16);
 
-    public float LateralSpeed { get; } = 100;
-    public float JumpSpeed { get; } = 300;
-    public float Gravity { get; } = 800;
     public StateMachine<State, StateTrigger> StateMachine;
     public GroundedState GroundedState { get; }
     public AirborneState AirborneState { get; }
@@ -74,6 +71,7 @@ public class Main : Component
                     NormalizedOrigin = new(0.5f),
                     Color = Color.DarkSlateGray,
                 }
-            );
+            )
+            .StageAttach(new DebugVisualization());
     }
 }

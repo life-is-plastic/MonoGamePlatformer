@@ -33,7 +33,7 @@ public sealed partial class Scene
     public Entity Singletons { get; }
 
     public float DeltaTime => (float)_gameTime.ElapsedGameTime.TotalSeconds;
-    public float TotalTime => (float)_gameTime.TotalGameTime.TotalSeconds;
+    public float CurrentTime => (float)_gameTime.TotalGameTime.TotalSeconds;
     public int FrameCount { get; private set; } = 0;
     public bool IsPaused => _entityUpdater.IsPaused;
     public bool ShouldPause { get; set; } = false;

@@ -5,7 +5,10 @@ namespace Library.Player;
 
 public abstract class State
 {
+    public float LateralSpeed { get; init; } = 100;
+
     protected Main Player { get; }
+    protected Scene Scene => Player.Scene;
 
     protected State(Main player)
     {
@@ -24,11 +27,11 @@ public abstract class State
         }
         else if (inputManager.IsDown(Keys.A))
         {
-            velocity.Linear.X = -Player.LateralSpeed;
+            velocity.Linear.X = -LateralSpeed;
         }
         else if (inputManager.IsDown(Keys.D))
         {
-            velocity.Linear.X = Player.LateralSpeed;
+            velocity.Linear.X = LateralSpeed;
         }
     }
 }
