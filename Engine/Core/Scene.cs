@@ -7,7 +7,10 @@ namespace Engine;
 
 public sealed partial class Scene
 {
-    internal GameTime _gameTime;
+    private static readonly GameTime s_initialGameTime = new();
+    private static readonly float s_maxDeltaTime = 0.05f;
+
+    internal GameTime _gameTime = s_initialGameTime;
     internal readonly IndexedSet<Entity> _entities = new();
     internal readonly EntityChangelist _entityChangelist = new();
     private readonly EntityUpdater _entityUpdater = new();
@@ -32,13 +35,13 @@ public sealed partial class Scene
     /// </summary>
     public Entity Singletons { get; }
 
-    public float DeltaTime => (float)_gameTime.ElapsedGameTime.TotalSeconds;
-    public float CurrentTime => (float)_gameTime.TotalGameTime.TotalSeconds;
+    public float DeltaTime { get; private set; } = 0;
+    public float CurrentTime { get; private set; } = 0;
     public int FrameCount { get; private set; } = 0;
     public bool IsPaused => _entityUpdater.IsPaused;
     public bool ShouldPause { get; set; } = false;
 
-    public Scene(ISceneDefinition sceneDefinition, Game game, GameTime initialGameTime)
+    public Scene(ISceneDefinition sceneDefinition, Game game)
     {
         Name = sceneDefinition.Name();
         Game = game;
@@ -55,10 +58,7 @@ public sealed partial class Scene
             .StageAttach(new UIManager());
 
         StageCreate(nameof(Camera)).StageAttach(new Camera()).StageAttach(new Transform());
-
-        _gameTime = initialGameTime;
-        Update(initialGameTime);
-
+        Update();
         sceneDefinition.Initialize(this);
     }
 
@@ -97,10 +97,16 @@ public sealed partial class Scene
         return new FindEntityEnumerable(_entities.AsSpan(), typeof(T1), typeof(T2), typeof(T3));
     }
 
-    internal void Update(GameTime gameTime)
+    internal void PreUpdate(GameTime gameTime)
     {
         FrameCount++;
         _gameTime = gameTime;
+        DeltaTime = Math.Min(s_maxDeltaTime, (float)gameTime.ElapsedGameTime.TotalSeconds);
+        CurrentTime += DeltaTime;
+    }
+
+    internal void Update()
+    {
         var shouldPause = ShouldPause;
         _entityChangelist.Apply(_entities, _entityUpdater);
         _entityUpdater.ProcessPausing(shouldPause);

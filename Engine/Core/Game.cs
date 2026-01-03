@@ -33,10 +33,11 @@ public sealed class Game : Microsoft.Xna.Framework.Game
             oldScene?.Dispose();
             _scene = null;
             GC.Collect();
-            _scene = new Scene(NextSceneDefinition, this, gameTime);
+            _scene = new Scene(NextSceneDefinition, this);
             NextSceneDefinition = null;
         }
-        _scene!.Update(gameTime);
+        _scene!.PreUpdate(gameTime);
+        _scene!.Update();
     }
 
     protected override void Draw(GameTime gameTime)
