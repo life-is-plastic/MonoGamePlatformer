@@ -1,7 +1,7 @@
 using Engine;
 using Microsoft.Xna.Framework.Input;
 
-namespace Library.Player;
+namespace Library.PlayerManagement;
 
 public class GroundedState : State
 {

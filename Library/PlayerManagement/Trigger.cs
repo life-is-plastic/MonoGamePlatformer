@@ -1,4 +1,4 @@
-namespace Library.Player;
+namespace Library.PlayerManagement;
 
 /// <summary>
 /// Triggers with higher values have higher priority.

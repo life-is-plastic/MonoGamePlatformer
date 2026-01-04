@@ -12,7 +12,12 @@ public sealed class Game : Microsoft.Xna.Framework.Game
 
     public Game(ISceneDefinition initialSceneDefinition)
     {
-        _ = new GraphicsDeviceManager(this);
+        var gdm = new GraphicsDeviceManager(this)
+        {
+            PreferredBackBufferWidth = 1920,
+            PreferredBackBufferHeight = 1080,
+        };
+        gdm.ApplyChanges();
 
         Window.Title = "MonoGame Platformer";
         Window.AllowUserResizing = true;

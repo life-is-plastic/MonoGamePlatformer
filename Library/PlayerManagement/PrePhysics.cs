@@ -1,6 +1,6 @@
 using Engine;
 
-namespace Library.Player;
+namespace Library.PlayerManagement;
 
 public class PrePhysics : Component, IUpdatable
 {
@@ -8,7 +8,7 @@ public class PrePhysics : Component, IUpdatable
 
     void IUpdatable.Update()
     {
-        var player = Entity.Get<Main>();
+        var player = Entity.Get<Player>();
         if (player.ProposedTrigger != Trigger.None)
         {
             player.StateMachine.Fire(player.ProposedTrigger);

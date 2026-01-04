@@ -1,6 +1,6 @@
 using Engine;
 
-namespace Library.Player;
+namespace Library.PlayerManagement;
 
 public class CameraFollow : Component, IUpdatable
 {

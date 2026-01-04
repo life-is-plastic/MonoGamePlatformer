@@ -4,12 +4,12 @@ using Engine.Util;
 using Microsoft.Xna.Framework;
 using Stateless;
 
-namespace Library.Player;
+namespace Library.PlayerManagement;
 
 /// <summary>
 /// The central player component.
 /// </summary>
-public class Main : Component
+public class Player : Component
 {
     private static readonly Action s_emptyAction = () => { };
 
@@ -22,7 +22,7 @@ public class Main : Component
     public AirborneState AirborneState { get; }
     public Trigger ProposedTrigger { get; set; } = Trigger.None;
 
-    public Main()
+    public Player()
     {
         GroundedState = new() { Player = this };
         AirborneState = new() { Player = this };
@@ -44,8 +44,8 @@ public class Main : Component
     public static Entity MakeEntity(Scene scene)
     {
         return scene
-            .StageCreate(nameof(Player))
-            .StageAttach(new Main())
+            .StageCreate(nameof(PlayerManagement))
+            .StageAttach(new Player())
             .StageAttach(new PrePhysics())
             .StageAttach(new PostPhysics())
             .StageAttach(new CameraFollow())

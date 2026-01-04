@@ -1,7 +1,7 @@
 using Engine;
 using Microsoft.Xna.Framework;
 
-namespace Library.Player;
+namespace Library.PlayerManagement;
 
 public class DebugVisualization : Component, IUpdatable
 {
@@ -9,7 +9,7 @@ public class DebugVisualization : Component, IUpdatable
 
     void IUpdatable.Update()
     {
-        var player = Entity.Get<Main>();
+        var player = Entity.Get<Player>();
         var renderer = Entity.Get<RectangleRenderer>();
         if (player.StateMachine.State == player.GroundedState)
         {
