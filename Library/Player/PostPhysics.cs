@@ -31,9 +31,7 @@ public class PostPhysics : Component, IUpdatable, ICollisionHandler
         }
 
         var player = Entity.Get<Main>();
-        var proposedTrigger = shouldBeGrounded
-            ? StateTrigger.EnsureGrounded
-            : StateTrigger.EnsureUngrounded;
+        var proposedTrigger = shouldBeGrounded ? Trigger.EnsureGrounded : Trigger.EnsureUngrounded;
         if (proposedTrigger > player.ProposedTrigger)
         {
             player.ProposedTrigger = proposedTrigger;

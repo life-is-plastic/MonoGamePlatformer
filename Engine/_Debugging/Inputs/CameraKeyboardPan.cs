@@ -2,29 +2,15 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Engine.Debugging;
 
-public class CameraKeyboardPan : Component, IUpdatable
+public class CameraButtonPan : Component, IUpdatable
 {
-    private readonly float _panSpeed;
-    private readonly Keys _left;
-    private readonly Keys _right;
-    private readonly Keys _up;
-    private readonly Keys _down;
     private EntityHandle _cameraHandle;
 
-    public CameraKeyboardPan(
-        float panSpeed = 320,
-        Keys left = Keys.A,
-        Keys right = Keys.D,
-        Keys up = Keys.W,
-        Keys down = Keys.S
-    )
-    {
-        _panSpeed = panSpeed;
-        _left = left;
-        _right = right;
-        _up = up;
-        _down = down;
-    }
+    public Button Left { get; init; } = Keys.A;
+    public Button Right { get; init; } = Keys.D;
+    public Button Up { get; init; } = Keys.W;
+    public Button Down { get; init; } = Keys.S;
+    public float PanSpeed { get; init; } = 320;
 
     protected override void Begin()
     {
@@ -35,20 +21,20 @@ public class CameraKeyboardPan : Component, IUpdatable
     {
         var inputManager = Scene.Singletons.Get<InputManager>();
         var transform = _cameraHandle.Deref().Get<Transform>();
-        var displacement = _panSpeed * Scene.DeltaTime;
-        if (inputManager.IsDown(_left))
+        var displacement = PanSpeed * Scene.DeltaTime;
+        if (inputManager.IsDown(Left))
         {
             transform.Position.X -= displacement;
         }
-        if (inputManager.IsDown(_right))
+        if (inputManager.IsDown(Right))
         {
             transform.Position.X += displacement;
         }
-        if (inputManager.IsDown(_up))
+        if (inputManager.IsDown(Up))
         {
             transform.Position.Y -= displacement;
         }
-        if (inputManager.IsDown(_down))
+        if (inputManager.IsDown(Down))
         {
             transform.Position.Y += displacement;
         }

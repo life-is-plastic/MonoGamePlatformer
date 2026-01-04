@@ -21,7 +21,7 @@ public class DefaultScene : ISceneDefinition
     void ISceneDefinition.Initialize(Scene scene)
     {
         scene
-            .Singletons.StageAttach(new SceneLoadOnPress(Instance))
+            .Singletons.StageAttach(new SceneLoadOnPress() { SceneDefinition = Instance })
             .StageAttach(new ScenePauseToggle())
             .StageAttach(new CameraMouseZoom())
             // .StageAttach(new CameraMouseDrag())
@@ -54,7 +54,7 @@ public class DefaultScene : ISceneDefinition
                     Color = Color.SaddleBrown,
                 }
             )
-            .StageAttach(new Collider(size) { NormalizedOrigin = new(0.5f) })
+            .StageAttach(new Collider() { Size = size, NormalizedOrigin = new(0.5f) })
             .StageAttach(new StaticGeometry());
     }
 }
@@ -100,7 +100,7 @@ internal class DefaultSceneHelper : Component, IUpdatable
                         Color = Color.SaddleBrown,
                     }
                 )
-                .StageAttach(new Collider(size) { NormalizedOrigin = new(0.5f) })
+                .StageAttach(new Collider() { Size = size, NormalizedOrigin = new(0.5f) })
                 .StageAttach(new StaticGeometry());
         }
     }
@@ -118,24 +118,36 @@ internal class World : Component
             .StageAttach(new Transform())
             .StageAttach(new StaticGeometry())
             .StageAttach(
-                new Collider(width + 2 * margin, margin)
+                new Collider()
                 {
+                    Size = new Vector2(width + 2 * margin, margin),
                     Origin = new(margin, margin),
                     ComponentIndex = -1,
                 }
             )
             .StageAttach(
-                new Collider(width + 2 * margin, margin)
+                new Collider()
                 {
+                    Size = new Vector2(width + 2 * margin, margin),
                     Origin = new(margin, -height),
                     ComponentIndex = -2,
                 }
             )
             .StageAttach(
-                new Collider(margin, height) { Origin = new(margin, 0), ComponentIndex = -3 }
+                new Collider()
+                {
+                    Size = new Vector2(margin, height),
+                    Origin = new(margin, 0),
+                    ComponentIndex = -3,
+                }
             )
             .StageAttach(
-                new Collider(margin, height) { Origin = new(-width, 0), ComponentIndex = -4 }
+                new Collider()
+                {
+                    Size = new Vector2(margin, height),
+                    Origin = new(-width, 0),
+                    ComponentIndex = -4,
+                }
             );
     }
 }

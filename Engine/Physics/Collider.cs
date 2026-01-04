@@ -9,7 +9,16 @@ namespace Engine;
 /// </summary>
 public class Collider : Component
 {
-    public Vector2 Size { get; }
+    public required Vector2 Size
+    {
+        get;
+        init
+        {
+            Debug.Assert(value.X > 0);
+            Debug.Assert(value.Y > 0);
+            field = value;
+        }
+    }
     public float Width => Size.X;
     public float Height => Size.Y;
 
@@ -42,25 +51,16 @@ public class Collider : Component
     /// </summary>
     public bool IsEnabled { get; set; } = true;
 
-    public Collider(Vector2 size)
-    {
-        Debug.Assert(size.X > 0);
-        Debug.Assert(size.Y > 0);
-        Size = size;
-    }
-
-    public Collider(float width, float height)
-        : this(new(width, height)) { }
-
     /// <summary>
     /// Returns the absolute, world space representation of this collider.
     /// </summary>
     public RectangleF AsWorldRectangleF()
     {
         var transform = Entity.Get<Transform>();
-        return new RectangleF(
-            transform.Position - Origin * transform.Scale,
-            Size * transform.Scale
-        );
+        return new RectangleF()
+        {
+            Location = transform.Position - Origin * transform.Scale,
+            Size = Size * transform.Scale,
+        };
     }
 }

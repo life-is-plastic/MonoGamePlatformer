@@ -4,16 +4,12 @@ namespace Engine.Debugging;
 
 public class CameraMouseDrag : Component, IUpdatable
 {
-    private readonly Button _button;
     private EntityHandle _cameraHandle;
     private bool _dragging = false;
     private Point _initialScreenPos = new();
     private Vector2 _initialWorldPos = new();
 
-    public CameraMouseDrag(Button? button = null)
-    {
-        _button = button ?? MouseButton.Right;
-    }
+    public Button Button { get; init; } = MouseButton.Right;
 
     protected override void Begin()
     {
@@ -34,7 +30,7 @@ public class CameraMouseDrag : Component, IUpdatable
 
         if (!_dragging)
         {
-            if (inputManager.IsPressed(_button))
+            if (inputManager.IsPressed(Button))
             {
                 _initialScreenPos = inputManager.MouseScreenPosition;
                 _initialWorldPos = cameraTransform.Position;
@@ -43,7 +39,7 @@ public class CameraMouseDrag : Component, IUpdatable
             return;
         }
 
-        if (!inputManager.IsDown(_button))
+        if (!inputManager.IsDown(Button))
         {
             _dragging = false;
             return;

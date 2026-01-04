@@ -9,12 +9,17 @@ public readonly record struct TextureRegion
     public Texture2D Texture { get; }
     public Rectangle Region { get; }
     public RectangleF NormalizedRegion =>
-        new(
-            (float)Region.X / Texture.Width,
-            (float)Region.Y / Texture.Height,
-            (float)Region.Width / Texture.Width,
-            (float)Region.Height / Texture.Height
-        );
+        new()
+        {
+            Location = new Vector2(
+                (float)Region.X / Texture.Width,
+                (float)Region.Y / Texture.Height
+            ),
+            Size = new Vector2(
+                (float)Region.Width / Texture.Width,
+                (float)Region.Height / Texture.Height
+            ),
+        };
 
     /// <summary>
     /// Creates a texture region covering the entire texture.

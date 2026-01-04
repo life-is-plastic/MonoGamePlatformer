@@ -20,29 +20,22 @@ public sealed class Entity
     /// <summary>
     /// The scene owning this entity.
     /// </summary>
-    public Scene Scene { get; }
+    public required Scene Scene { get; init; }
 
     /// <summary>
     /// Uniquely identifies this entity within its containing scene.
     /// </summary>
-    public int Id { get; }
+    public required int Id { get; init; }
 
     /// <summary>
     /// Human readable name for debugging.
     /// </summary>
-    public string Name { get; }
+    public required string Name { get; init; }
 
     /// <summary>
     /// All components attached to this entity.
     /// </summary>
     public DictionaryView<(Type, int), IComponent> Components => new(_components);
-
-    public Entity(Scene scene, int id, string name)
-    {
-        Scene = scene;
-        Id = id;
-        Name = name;
-    }
 
     public override string ToString()
     {

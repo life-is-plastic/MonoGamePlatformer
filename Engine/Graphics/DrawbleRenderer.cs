@@ -8,13 +8,8 @@ namespace Engine;
 public partial class DrawableRenderer<T> : Component
     where T : IDrawable
 {
-    public T Drawable { get; }
+    public required T Drawable { get; init; }
     public SpriteEffects SpriteEffects { get; set; } = SpriteEffects.None;
-
-    public DrawableRenderer(T drawable)
-    {
-        Drawable = drawable;
-    }
 }
 
 public partial class DrawableRenderer<T> : IRenderer

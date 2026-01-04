@@ -5,12 +5,21 @@ using Microsoft.Xna.Framework;
 namespace Engine.Util;
 
 /// <summary>
-/// Like <c>Microsoft.Xna.Framework.Rectangle</c> but uses floats underneath.
+/// Like <c>Microsoft.Xna.Framework.Rectangle</c> but stores floats underneath.
 /// </summary>
 public readonly record struct RectangleF
 {
-    public Vector2 Location { get; init; }
-    public Vector2 Size { get; init; }
+    public Vector2 Location { get; init; } = new();
+    public Vector2 Size
+    {
+        get;
+        init
+        {
+            Debug.Assert(value.X >= 0 && value.Y >= 0);
+            field = value;
+        }
+    } = new();
+
     public Vector2 Center => Location + Size / 2;
     public float X => Location.X;
     public float Y => Location.Y;
@@ -21,36 +30,13 @@ public readonly record struct RectangleF
     public float Top => Y;
     public float Bottom => Y + Height;
 
-    public RectangleF(Vector2 location, Vector2 size)
-    {
-        Debug.Assert(size.X >= 0 && size.Y >= 0);
-        Location = location;
-        Size = size;
-    }
+    public RectangleF() { }
 
-    public RectangleF(float x, float y, float width, float height)
-        : this(new Vector2(x, y), new Vector2(width, height)) { }
-
-    public RectangleF WithLocation(Vector2 location) => new(location, Size);
-
-    public RectangleF WithLocation(float? x = null, float? y = null) =>
-        WithLocation(new Vector2(x ?? X, y ?? Y));
-
-    public RectangleF WithSize(Vector2 size) => new(Location, size);
-
-    public RectangleF WithSize(float? width = null, float? height = null) =>
-        WithSize(new Vector2(width ?? Width, height ?? Height));
-
-    public RectangleF WithCenter(Vector2 center) => new(center - Size / 2, Size);
+    public RectangleF WithCenter(Vector2 center) =>
+        new() { Location = center - Size / 2, Size = Size };
 
     public RectangleF WithCenter(float? x = null, float? y = null) =>
         WithCenter(new Vector2(x ?? X, y ?? Y));
-
-    public RectangleF Translate(Vector2 displacement) => new(Location + displacement, Size);
-
-    public RectangleF Scale(Vector2 scale) => new(Location, Size * scale);
-
-    public RectangleF ScaleFromCenter(Vector2 scale) => Scale(scale).WithCenter(Center);
 
     public Rectangle ToRectangle()
     {
@@ -80,17 +66,16 @@ public readonly record struct RectangleF
         var top = Math.Max(Top, other.Top);
         var right = Math.Min(Right, other.Right);
         var bottom = Math.Min(Bottom, other.Bottom);
-        return new(left, top, right - left, bottom - top);
+        return new() { Location = new(left, top), Size = new(right - left, bottom - top) };
     }
 
     public RectangleF GetMinkowskiDifference(RectangleF other)
     {
-        return new(
-            Left - other.Right,
-            Top - other.Bottom,
-            Width + other.Width,
-            Height + other.Height
-        );
+        return new()
+        {
+            Location = new(Left - other.Right, Top - other.Bottom),
+            Size = new(Width + other.Width, Height + other.Height),
+        };
     }
 
     /// <summary>

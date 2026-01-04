@@ -8,7 +8,7 @@ public static class RectangleExtenions
     {
         public RectangleF ToRectangleF()
         {
-            return new(rect.Location.ToVector2(), rect.Size.ToVector2());
+            return new() { Location = rect.Location.ToVector2(), Size = rect.Size.ToVector2() };
         }
     }
 }

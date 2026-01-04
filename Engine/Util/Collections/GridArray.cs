@@ -32,7 +32,7 @@ public readonly record struct GridArray<T>
     public GridArray(int rows, int columns, params T[] array)
     {
         Debug.Assert(rows * columns == array.Length);
-        _gridHelper = new GridHelper(rows, columns);
+        _gridHelper = new() { Rows = rows, Columns = columns };
         _array = array;
     }
 

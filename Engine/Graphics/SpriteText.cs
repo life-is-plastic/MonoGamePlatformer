@@ -5,22 +5,38 @@ namespace Engine;
 
 public partial class SpriteText
 {
-    public SpriteFont SpriteFont { get; }
+    private bool _isSizeDirty = true;
+
+    public required SpriteFont SpriteFont { get; init; }
 
     public string Message
     {
         get;
         set
         {
+            if (field != value)
+            {
+                _isSizeDirty = true;
+            }
             field = value;
-            Size = SpriteFont.MeasureString(value);
         }
     } = "";
 
     /// <summary>
     /// Pixel dimensions of final sprite.
     /// </summary>
-    public Vector2 Size { get; private set; }
+    public Vector2 Size
+    {
+        get
+        {
+            if (_isSizeDirty)
+            {
+                field = SpriteFont.MeasureString(Message);
+                _isSizeDirty = false;
+            }
+            return field;
+        }
+    }
 
     public Color Color { get; set; } = Color.White;
 
@@ -39,11 +55,6 @@ public partial class SpriteText
     /// Pixel offset applied on top of <c>NormalizedOrigin</c> to derive the final origin.
     /// </summary>
     public Vector2 OriginOffset { get; set; } = new();
-
-    public SpriteText(SpriteFont spriteFont)
-    {
-        SpriteFont = spriteFont;
-    }
 }
 
 public partial class SpriteText : IDrawable

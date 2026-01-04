@@ -5,18 +5,13 @@ namespace Engine.Debugging;
 
 public class ColliderMouseDrag : Component, IUpdatable
 {
-    private readonly Func<Entity, bool> _entityFilter;
-    private readonly Button _button;
     private EntityHandle _cameraHandle;
     private Entity? _dragged = null;
     private Point _initialScreenPos = new();
     private Vector2 _initialWorldPos = new();
 
-    public ColliderMouseDrag(Func<Entity, bool>? entityFilter = null, Button? button = null)
-    {
-        _entityFilter = entityFilter ?? (entity => true);
-        _button = button ?? MouseButton.Left;
-    }
+    public Func<Entity, bool> EntityFilter { get; init; } = entity => true;
+    public Button Button { get; init; } = MouseButton.Left;
 
     protected override void Begin()
     {
@@ -37,12 +32,12 @@ public class ColliderMouseDrag : Component, IUpdatable
 
         if (_dragged is null)
         {
-            if (inputManager.IsPressed(_button))
+            if (inputManager.IsPressed(Button))
             {
                 foreach (var entity in Scene.Find<Collider>())
                 {
                     var collider = entity.Get<Collider>();
-                    if (!_entityFilter(entity))
+                    if (!EntityFilter(entity))
                     {
                         continue;
                     }
@@ -60,7 +55,7 @@ public class ColliderMouseDrag : Component, IUpdatable
             return;
         }
 
-        if (!inputManager.IsDown(_button))
+        if (!inputManager.IsDown(Button))
         {
             _dragged = null;
             return;

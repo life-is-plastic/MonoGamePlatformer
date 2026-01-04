@@ -5,17 +5,11 @@ namespace Library.Player;
 
 public abstract class State
 {
+    public required Main Player { get; init; }
+    public Scene Scene => Player.Scene;
     public float LateralSpeed { get; init; } = 100;
 
-    protected Main Player { get; }
-    protected Scene Scene => Player.Scene;
-
-    protected State(Main player)
-    {
-        Player = player;
-    }
-
-    public abstract StateTrigger Update();
+    public abstract Trigger Update();
 
     protected void MoveLaterally()
     {

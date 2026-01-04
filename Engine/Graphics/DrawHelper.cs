@@ -81,7 +81,7 @@ public class DrawHelper : Component
         float borderWidth = 1
     )
     {
-        var rect = new RectangleF(position - size * normalizedOrigin, size);
+        var rect = new RectangleF() { Location = position - size * normalizedOrigin, Size = size };
         var tl = new Vector2(rect.Left, rect.Top);
         var tr = new Vector2(rect.Right - borderWidth, rect.Top);
         var bl = new Vector2(rect.Left, rect.Bottom - borderWidth);

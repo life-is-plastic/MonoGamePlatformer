@@ -5,7 +5,7 @@ namespace Engine;
 
 public partial class Sprite
 {
-    public TextureRegion TextureRegion { get; }
+    public required TextureRegion TextureRegion { get; init; }
 
     /// <summary>
     /// Origin in pixel units.
@@ -22,11 +22,6 @@ public partial class Sprite
     {
         get => Origin / TextureRegion.Region.Size.ToVector2();
         set => Origin = value * TextureRegion.Region.Size.ToVector2();
-    }
-
-    public Sprite(in TextureRegion textureRegion)
-    {
-        TextureRegion = textureRegion;
     }
 }
 

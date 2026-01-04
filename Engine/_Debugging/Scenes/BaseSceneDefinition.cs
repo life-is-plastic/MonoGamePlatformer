@@ -12,7 +12,7 @@ public abstract class BaseSceneDefinition : ISceneDefinition
     public virtual void Initialize(Scene scene)
     {
         scene
-            .Singletons.StageAttach(new SceneLoadOnPress(this))
+            .Singletons.StageAttach(new SceneLoadOnPress() { SceneDefinition = this })
             .StageAttach(new ScenePauseToggle())
             .StageAttach(new CameraMouseZoom())
             .StageAttach(new CameraMouseDrag())

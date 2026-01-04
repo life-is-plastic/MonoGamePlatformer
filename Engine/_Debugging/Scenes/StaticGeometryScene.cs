@@ -30,7 +30,7 @@ public class StaticGeometryScene : BaseSceneDefinition
                 Scene
                     .StageCreate("Object")
                     .StageAttach(new Transform() { Position = inputManager.MouseWorldPosition })
-                    .StageAttach(new Collider(s_dims) { NormalizedOrigin = new(0.5f) })
+                    .StageAttach(new Collider() { Size = s_dims, NormalizedOrigin = new(0.5f) })
                     .StageAttach(
                         new RectangleRenderer()
                         {
@@ -47,8 +47,9 @@ public class StaticGeometryScene : BaseSceneDefinition
                     .StageAttach(new Transform() { Position = inputManager.MouseWorldPosition })
                     .StageAttach(new StaticGeometry())
                     .StageAttach(
-                        new Collider(s_dims)
+                        new Collider()
                         {
+                            Size = s_dims,
                             NormalizedOrigin = new(0.5f),
                             Layer = CollisionLayers.StaticGeometry,
                         }

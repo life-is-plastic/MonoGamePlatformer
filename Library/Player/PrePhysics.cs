@@ -9,7 +9,7 @@ public class PrePhysics : Component, IUpdatable
     void IUpdatable.Update()
     {
         var player = Entity.Get<Main>();
-        if (player.ProposedTrigger != StateTrigger.None)
+        if (player.ProposedTrigger != Trigger.None)
         {
             player.StateMachine.Fire(player.ProposedTrigger);
         }

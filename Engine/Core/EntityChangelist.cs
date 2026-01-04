@@ -26,7 +26,12 @@ public sealed class EntityChangelist
 
     internal Entity StageCreate(Scene scene, string name)
     {
-        var entity = new Entity(scene, _nextEntityId++, name);
+        var entity = new Entity()
+        {
+            Scene = scene,
+            Id = _nextEntityId++,
+            Name = name,
+        };
         _created.AddOrDie(entity);
         return entity;
     }

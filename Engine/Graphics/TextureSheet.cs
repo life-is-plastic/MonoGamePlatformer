@@ -31,7 +31,7 @@ public readonly record struct TextureSheet
 
     public TextureSheet(in TextureRegion textureRegion, int rows, int columns)
     {
-        _gridHelper = new(rows, columns);
+        _gridHelper = new() { Rows = rows, Columns = columns };
         TextureRegion = textureRegion;
     }
 }

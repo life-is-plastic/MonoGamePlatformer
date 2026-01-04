@@ -15,23 +15,23 @@ public readonly struct ContactInfo
     /// to the collision handler's sibling collider (as opposed to <c>Other</c> which belongs to a
     /// different entity).
     /// </summary>
-    public Collider Mine { get; init; }
+    public required Collider Mine { get; init; }
 
     /// <summary>
     /// The other collider involved.
     /// </summary>
-    public Collider Other { get; init; }
+    public required Collider Other { get; init; }
 
     /// <summary>
     /// The Minkowski difference of <c>Mine</c> - <c>Other</c>.
     /// </summary>
-    public RectangleF MinkowskiDifference { get; init; }
+    public required RectangleF MinkowskiDifference { get; init; }
 
     /// <summary>
     /// To what extent <c>Mine</c> is penetrating <c>Other</c>. Subtracting this value from
     /// <c>Mine</c>'s position will push <c>Mine</c> fully out of <c>Other</c>.
     /// </summary>
-    public Vector2 Penetration { get; init; }
+    public required Vector2 Penetration { get; init; }
 
     /// <summary>
     /// Returns a new contact info presenting data from the perspective of <c>Other</c>.

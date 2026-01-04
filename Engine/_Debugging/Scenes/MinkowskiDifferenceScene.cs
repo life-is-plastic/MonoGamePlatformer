@@ -37,7 +37,7 @@ public class MinkowskiDifferenceScene : BaseSceneDefinition
                         Color = color * 0.5f,
                     }
                 )
-                .StageAttach(new Collider(size) { NormalizedOrigin = new(0.5f) });
+                .StageAttach(new Collider() { Size = size, NormalizedOrigin = new(0.5f) });
         }
 
         private Entity MakeDiffRepr(Color color)

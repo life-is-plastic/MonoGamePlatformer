@@ -17,8 +17,8 @@ public readonly record struct Button
         }
     }
 
-    public int Source { get; init; }
-    public int Number { get; init; }
+    public required int Source { get; init; }
+    public required int Number { get; init; }
 
     public Keys? AsKey()
     {

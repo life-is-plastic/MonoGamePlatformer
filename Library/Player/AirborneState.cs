@@ -14,13 +14,10 @@ public class AirborneState : State
     public float JumpSpeed { get; init; } = 250;
     public bool IsHeldJump => _heldJumpEndTime > float.NegativeInfinity;
 
-    public AirborneState(Main player)
-        : base(player) { }
-
-    public void OnEntry(StateMachine<State, StateTrigger>.Transition t)
+    public void OnEntry(StateMachine<State, Trigger>.Transition t)
     {
         _heldJumpEndTime = float.NegativeInfinity;
-        if (t.Trigger == StateTrigger.Jump)
+        if (t.Trigger == Trigger.Jump)
         {
             _heldJumpEndTime = Player.Scene.CurrentTime + MaxHeldJumpTime;
             var velocity = Player.Entity.Get<Velocity>();
@@ -28,7 +25,7 @@ public class AirborneState : State
         }
     }
 
-    public override StateTrigger Update()
+    public override Trigger Update()
     {
         MoveLaterally();
 
@@ -46,6 +43,6 @@ public class AirborneState : State
         }
 
         velocity.Linear.Y += effectiveGravity * Player.Scene.DeltaTime;
-        return StateTrigger.None;
+        return Trigger.None;
     }
 }

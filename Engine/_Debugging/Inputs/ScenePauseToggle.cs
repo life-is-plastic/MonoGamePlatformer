@@ -4,12 +4,7 @@ namespace Engine.Debugging;
 
 public class ScenePauseToggle : Component, IUpdatable
 {
-    private readonly Button _button;
-
-    public ScenePauseToggle(Button? button = null)
-    {
-        _button = button ?? Keys.Escape;
-    }
+    public Button Button { get; init; } = Keys.Escape;
 
     bool IUpdatable.Pause()
     {
@@ -19,7 +14,7 @@ public class ScenePauseToggle : Component, IUpdatable
     void IUpdatable.Update()
     {
         var inputManager = Scene.Singletons.Get<InputManager>();
-        if (inputManager.IsPressed(_button))
+        if (inputManager.IsPressed(Button))
         {
             Scene.ShouldPause = !Scene.IsPaused;
         }

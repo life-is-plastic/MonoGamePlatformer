@@ -8,8 +8,26 @@ namespace Engine.Util;
 /// </summary>
 public readonly record struct GridHelper
 {
-    public int Rows { get; }
-    public int Columns { get; }
+    public required int Rows
+    {
+        get;
+        init
+        {
+            Debug.Assert(value >= 0);
+            field = value;
+        }
+    }
+
+    public required int Columns
+    {
+        get;
+        init
+        {
+            Debug.Assert(value >= 0);
+            field = value;
+        }
+    }
+
     public int Count => Rows * Columns;
 
     /// <summary>
@@ -39,12 +57,4 @@ public readonly record struct GridHelper
     }
 
     public int this[(int Row, int Column) rc] => this[rc.Row, rc.Column];
-
-    public GridHelper(int rows, int columns)
-    {
-        Debug.Assert(rows >= 0);
-        Debug.Assert(columns >= 0);
-        Rows = rows;
-        Columns = columns;
-    }
 }
