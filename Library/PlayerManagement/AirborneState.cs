@@ -6,25 +6,21 @@ namespace Library.PlayerManagement;
 
 public class AirborneState : State
 {
-    private float _heldJumpEndTime;
-
     public LateralMotionHelper LateralMotionHelper { get; init; } = new();
-    public JumpMotionHelper JumpMotionHelper { get; init; } = new();
+    public JumpHelper JumpHelper { get; init; } = JumpHelper.Default;
+    public JumpHelper HeldInputJumpHelper { get; init; } = JumpHelper.HeldInput;
 
     public float HeldJumpGravity { get; init; } = 300;
     public float MaxHeldJumpTime { get; init; } = 0.4f;
-    public bool IsHeldJump => _heldJumpEndTime > float.NegativeInfinity;
+    public bool IsHeldJump { get; private set; } = false;
 
     public void OnEntry(StateMachine<State, Trigger>.Transition t)
     {
-        _heldJumpEndTime = float.NegativeInfinity;
         if (t.Trigger == Trigger.Jump)
         {
-            _heldJumpEndTime = Player.Scene.CurrentTime + MaxHeldJumpTime;
+            IsHeldJump = true;
             var velocity = Player.Entity.Get<Velocity>();
-            velocity.Linear.Y =
-                JumpMotionHelper.InitialVelocity
-                - JumpMotionHelper.Gravity * Player.Scene.DeltaTime;
+            velocity.Linear.Y = JumpHelper.InitialVelocity;
         }
     }
 
@@ -39,17 +35,20 @@ public class AirborneState : State
             Scene.DeltaTime
         );
 
-        var effectiveGravity = JumpMotionHelper.Gravity;
-        if (Player.Scene.CurrentTime < _heldJumpEndTime && inputManager.IsDown(Keys.Space))
+        var gravity = JumpHelper.Gravity;
+        if (IsHeldJump)
         {
-            effectiveGravity = HeldJumpGravity;
-        }
-        else
-        {
-            _heldJumpEndTime = float.NegativeInfinity;
+            if (inputManager.IsDown(Keys.Space) && velocity.Linear.Y < 0)
+            {
+                gravity = HeldInputJumpHelper.Gravity;
+            }
+            else
+            {
+                IsHeldJump = false;
+            }
         }
 
-        velocity.Linear.Y += effectiveGravity * Player.Scene.DeltaTime;
+        velocity.Linear.Y += gravity * Player.Scene.DeltaTime;
         return Trigger.None;
     }
 }

@@ -5,17 +5,17 @@ namespace Library.PlayerManagement;
 
 public readonly record struct LateralMotionHelper
 {
-    public float MaxSpeed { get; init; } = 150;
+    public float MaxSpeed { get; init; } = 80;
 
     /// <summary>
     /// From being stationary.
     /// </summary>
-    public float TimeToMaxSpeed { get; init; } = 0.2f;
+    public float TimeToMaxSpeed { get; init; } = 0.125f;
 
     /// <summary>
     /// From max speed.
     /// </summary>
-    public float TimeToFullStop { get; init; } = 0.1f;
+    public float TimeToFullStop { get; init; } = 0.0625f;
 
     public float SameDirectionAcceleration => MaxSpeed / TimeToMaxSpeed;
     public float OppositeDirectionAcceleration => MaxSpeed / TimeToFullStop;

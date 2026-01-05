@@ -15,7 +15,7 @@ public class Player : Component
 
     public static int PhysicsColliderIndex => 10;
     public static int GroundCheckColliderIndex => 11;
-    public static Vector2 PhysicsSize => new(8, 16);
+    public static Vector2 PhysicsSize => new(16, 32);
 
     public StateMachine<State, Trigger> StateMachine;
     public GroundedState GroundedState { get; }
