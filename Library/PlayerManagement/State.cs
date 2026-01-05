@@ -6,29 +6,21 @@ namespace Library.PlayerManagement;
 public abstract class State
 {
     public required Player Player { get; init; }
-    public Scene Scene => Player.Scene;
-    public LateralMotionHelper LateralMotionHelper = new();
+    protected Scene Scene => Player.Scene;
 
     public abstract Trigger Update();
 
-    protected void MoveLaterally()
+    protected static int GetLateralInput(InputManager inputManager)
     {
-        var inputManager = Player.Scene.Singletons.Get<InputManager>();
-        var normalizedInput = 0f;
+        var input = 0;
         if (inputManager.IsDown(Keys.A))
         {
-            normalizedInput -= 1;
+            input -= 1;
         }
         if (inputManager.IsDown(Keys.D))
         {
-            normalizedInput += 1;
+            input += 1;
         }
-
-        var velocity = Player.Entity.Get<Velocity>();
-        velocity.Linear.X = LateralMotionHelper.NextVelocity(
-            velocity.Linear.X,
-            normalizedInput,
-            Scene.DeltaTime
-        );
+        return input;
     }
 }

@@ -5,41 +5,47 @@ namespace Library.PlayerManagement;
 
 public readonly record struct LateralMotionHelper
 {
-    public static float DefaultMaxSpeed => 150;
+    public float MaxSpeed { get; init; } = 150;
 
-    public float MaxSpeed { get; init; } = DefaultMaxSpeed;
-    public float TimeToMaxSpeed { get; init; } = 0.25f;
-    public float TimeToFullStop { get; init; } = 0.125f;
-    public float Acceleration => MaxSpeed / TimeToMaxSpeed;
-    public float Friction => MaxSpeed / TimeToFullStop;
+    /// <summary>
+    /// From being stationary.
+    /// </summary>
+    public float TimeToMaxSpeed { get; init; } = 0.2f;
+
+    /// <summary>
+    /// From max speed.
+    /// </summary>
+    public float TimeToFullStop { get; init; } = 0.1f;
+
+    public float SameDirectionAcceleration => MaxSpeed / TimeToMaxSpeed;
+    public float OppositeDirectionAcceleration => MaxSpeed / TimeToFullStop;
 
     public LateralMotionHelper() { }
 
-    public float NextVelocity(float currentVelocity, float normalizedInput, float deltaTime)
+    public float NextVelocity(float currentVelocity, int input, float deltaTime)
     {
-        float dv;
-
-        if (Math.Abs(normalizedInput) > 0.005)
+        if (input != 0)
         {
-            dv = currentVelocity * normalizedInput >= 0 ? Acceleration : Friction;
-            dv *= deltaTime;
+            var accel =
+                currentVelocity * input >= 0
+                    ? SameDirectionAcceleration
+                    : OppositeDirectionAcceleration;
             return MathHelper.Clamp(
-                currentVelocity + MathF.CopySign(dv, normalizedInput),
+                currentVelocity + MathF.CopySign(accel * deltaTime, input),
                 -MaxSpeed,
                 MaxSpeed
             );
         }
 
-        dv = Friction * deltaTime;
-        if (dv < Math.Abs(currentVelocity))
+        var dv = OppositeDirectionAcceleration * deltaTime;
+        if (dv >= Math.Abs(currentVelocity))
         {
-            return MathHelper.Clamp(
-                currentVelocity - MathF.CopySign(dv, currentVelocity),
-                -MaxSpeed,
-                MaxSpeed
-            );
+            return 0;
         }
-
-        return 0;
+        return MathHelper.Clamp(
+            currentVelocity - MathF.CopySign(dv, currentVelocity),
+            -MaxSpeed,
+            MaxSpeed
+        );
     }
 }
