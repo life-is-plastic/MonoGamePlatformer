@@ -35,7 +35,7 @@ public class DefaultScene : ISceneDefinition
         MakeStaticGeometry(scene, new(200, 140), new(60, 20));
         MakeStaticGeometry(scene, new(100, 152), new(60, 20));
 
-        PlayerManagement.Player.MakeEntity(scene);
+        Player.PlayerComponent.MakeEntity(scene);
 
         scene
             .Singletons.Get<AudioManager>()

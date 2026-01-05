@@ -1,11 +1,11 @@
 using Engine;
 using Microsoft.Xna.Framework.Input;
 
-namespace Library.PlayerManagement;
+namespace Library.Player;
 
 public abstract class State
 {
-    public required Player Player { get; init; }
+    public required PlayerComponent Player { get; init; }
     protected Scene Scene => Player.Scene;
 
     public abstract Trigger Update();

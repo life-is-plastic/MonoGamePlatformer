@@ -1,9 +1,9 @@
 using System;
 using Microsoft.Xna.Framework;
 
-namespace Library.PlayerManagement;
+namespace Library.Player;
 
-public readonly record struct LateralMotionHelper
+public readonly record struct LateralHelper
 {
     public float MaxSpeed { get; init; } = 80;
 
@@ -20,7 +20,7 @@ public readonly record struct LateralMotionHelper
     public float SameDirectionAcceleration => MaxSpeed / TimeToMaxSpeed;
     public float OppositeDirectionAcceleration => MaxSpeed / TimeToFullStop;
 
-    public LateralMotionHelper() { }
+    public LateralHelper() { }
 
     public float NextVelocity(float currentVelocity, int input, float deltaTime)
     {

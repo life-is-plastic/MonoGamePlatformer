@@ -4,12 +4,12 @@ using Engine.Util;
 using Microsoft.Xna.Framework;
 using Stateless;
 
-namespace Library.PlayerManagement;
+namespace Library.Player;
 
 /// <summary>
 /// The central player component.
 /// </summary>
-public class Player : Component
+public class PlayerComponent : Component, IUpdatable
 {
     private static readonly Action s_emptyAction = () => { };
 
@@ -17,12 +17,12 @@ public class Player : Component
     public static int GroundCheckColliderIndex => 11;
     public static Vector2 PhysicsSize => new(16, 32);
 
-    public StateMachine<State, Trigger> StateMachine;
+    public StateMachine<State, Trigger> StateMachine { get; }
     public GroundedState GroundedState { get; }
     public AirborneState AirborneState { get; }
     public Trigger ProposedTrigger { get; set; } = Trigger.None;
 
-    public Player()
+    public PlayerComponent()
     {
         GroundedState = new() { Player = this };
         AirborneState = new() { Player = this };
@@ -41,13 +41,23 @@ public class Player : Component
         ;
     }
 
+    int IUpdatable.UpdateOrder => 0;
+
+    void IUpdatable.Update()
+    {
+        if (ProposedTrigger != Trigger.None)
+        {
+            StateMachine.Fire(ProposedTrigger);
+        }
+        ProposedTrigger = StateMachine.State.Update();
+    }
+
     public static Entity MakeEntity(Scene scene)
     {
         return scene
-            .StageCreate(nameof(PlayerManagement))
-            .StageAttach(new Player())
-            .StageAttach(new PrePhysics())
-            .StageAttach(new PostPhysics())
+            .StageCreate(nameof(Player))
+            .StageAttach(new PlayerComponent())
+            .StageAttach(new PostPhysicsUpdate())
             .StageAttach(new CameraFollow())
             .StageAttach(new Transform() { Position = new(50, 50) })
             .StageAttach(new Velocity())

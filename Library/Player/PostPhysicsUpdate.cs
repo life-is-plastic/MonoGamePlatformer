@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Engine;
 using Microsoft.Xna.Framework;
 
-namespace Library.PlayerManagement;
+namespace Library.Player;
 
-public class PostPhysics : Component, IUpdatable, ICollisionHandler
+public class PostPhysicsUpdate : Component, IUpdatable, ICollisionHandler
 {
     private readonly List<Collider> _groundColliderOverlaps = new();
 
@@ -13,7 +13,7 @@ public class PostPhysics : Component, IUpdatable, ICollisionHandler
 
     void IUpdatable.Update()
     {
-        var groundCollider = Entity.Get<Collider>(Player.GroundCheckColliderIndex);
+        var groundCollider = Entity.Get<Collider>(PlayerComponent.GroundCheckColliderIndex);
         var groundColliderRect = groundCollider.AsWorldRectangleF();
 
         var shouldBeGrounded = false;
@@ -30,7 +30,7 @@ public class PostPhysics : Component, IUpdatable, ICollisionHandler
             }
         }
 
-        var player = Entity.Get<Player>();
+        var player = Entity.Get<PlayerComponent>();
         var proposedTrigger = shouldBeGrounded ? Trigger.EnsureGrounded : Trigger.EnsureUngrounded;
         if (proposedTrigger > player.ProposedTrigger)
         {
@@ -51,7 +51,7 @@ public class PostPhysics : Component, IUpdatable, ICollisionHandler
             return;
         }
 
-        if (contact.Mine.ComponentIndex == Player.PhysicsColliderIndex)
+        if (contact.Mine.ComponentIndex == PlayerComponent.PhysicsColliderIndex)
         {
             var transform = Entity.Get<Transform>();
             var velocity = Entity.Get<Velocity>();
@@ -63,7 +63,7 @@ public class PostPhysics : Component, IUpdatable, ICollisionHandler
             return;
         }
 
-        if (contact.Mine.ComponentIndex == Player.GroundCheckColliderIndex)
+        if (contact.Mine.ComponentIndex == PlayerComponent.GroundCheckColliderIndex)
         {
             _groundColliderOverlaps.Add(contact.Other);
             return;

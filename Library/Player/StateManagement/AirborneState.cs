@@ -2,13 +2,13 @@ using Engine;
 using Microsoft.Xna.Framework.Input;
 using Stateless;
 
-namespace Library.PlayerManagement;
+namespace Library.Player;
 
 public class AirborneState : State
 {
-    public LateralMotionHelper LateralMotionHelper { get; init; } = new();
+    public LateralHelper LateralHelper { get; init; } = new();
     public JumpHelper JumpHelper { get; init; } = JumpHelper.Default;
-    public JumpHelper HeldInputJumpHelper { get; init; } = JumpHelper.HeldInput;
+    public JumpHelper HeldJumpHelper { get; init; } = JumpHelper.HeldInput;
 
     public float HeldJumpGravity { get; init; } = 300;
     public float MaxHeldJumpTime { get; init; } = 0.4f;
@@ -29,7 +29,7 @@ public class AirborneState : State
         var inputManager = Player.Scene.Singletons.Get<InputManager>();
         var velocity = Player.Entity.Get<Velocity>();
 
-        velocity.Linear.X = LateralMotionHelper.NextVelocity(
+        velocity.Linear.X = LateralHelper.NextVelocity(
             velocity.Linear.X,
             GetLateralInput(inputManager),
             Scene.DeltaTime
@@ -40,7 +40,7 @@ public class AirborneState : State
         {
             if (inputManager.IsDown(Keys.Space) && velocity.Linear.Y < 0)
             {
-                gravity = HeldInputJumpHelper.Gravity;
+                gravity = HeldJumpHelper.Gravity;
             }
             else
             {

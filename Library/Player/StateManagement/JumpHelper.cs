@@ -1,4 +1,4 @@
-namespace Library.PlayerManagement;
+namespace Library.Player;
 
 public readonly record struct JumpHelper
 {
