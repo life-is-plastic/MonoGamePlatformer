@@ -1,4 +1,5 @@
 using Engine;
+using Engine.Util;
 
 namespace Library.PlayerManagement;
 
@@ -17,6 +18,9 @@ public class CameraFollow : Component, IUpdatable
     {
         var transform = Entity.Get<Transform>();
         var cameraTransform = _cameraHandle.Deref().Get<Transform>();
-        cameraTransform.Position = transform.Position;
+        cameraTransform.Position = cameraTransform.Position.SmoothStep(
+            transform.Position,
+            8 * Scene.DeltaTime
+        );
     }
 }

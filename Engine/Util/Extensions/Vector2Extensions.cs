@@ -14,5 +14,11 @@ public static class Vector2Extenions
         public float Rotation() => MathF.Atan2(vector.Y, vector.X);
 
         public float PerpDot(Vector2 other) => vector.X * other.Y - vector.Y * other.X;
+
+        public Vector2 SmoothStep(Vector2 other, float t) =>
+            new(
+                MathHelper.SmoothStep(vector.X, other.X, t),
+                MathHelper.SmoothStep(vector.Y, other.Y, t)
+            );
     }
 }
