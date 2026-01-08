@@ -3,11 +3,12 @@ using System;
 namespace Engine;
 
 /// <summary>
-/// Container for a cached entity reference.
+/// Container for a cached entity reference. DO NOT store as a readonly field.
 /// </summary>
-public readonly struct EntityHandle
+public struct EntityHandle
 {
-    private readonly Entity _entity;
+    private Entity? _entity;
+    private int _checkedFrame = int.MinValue;
 
     public EntityHandle(Entity entity)
     {
@@ -27,6 +28,17 @@ public readonly struct EntityHandle
     /// </summary>
     public Entity? MaybeDeref()
     {
-        return _entity.IsAlive() ? _entity : null;
+        if (_entity is not null && _checkedFrame < _entity.Scene.FrameCount)
+        {
+            if (_entity.IsAlive())
+            {
+                _checkedFrame = _entity.Scene.FrameCount;
+            }
+            else
+            {
+                _entity = null;
+            }
+        }
+        return _entity;
     }
 }
