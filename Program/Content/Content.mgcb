@@ -22,3 +22,8 @@
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /build:Fonts/04B_30.spritefont
+
+#begin Characters/Warrior_SheetnoEffect.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Characters/Warrior_SheetnoEffect.png

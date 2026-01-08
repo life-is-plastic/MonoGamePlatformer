@@ -15,7 +15,7 @@ public class PlayerComponent : Component, IUpdatable
 
     public static int PhysicsColliderIndex => 10;
     public static int GroundCheckColliderIndex => 11;
-    public static Vector2 PhysicsSize => new(16, 32);
+    public static Vector2 PhysicsSize => new(32, 64);
 
     public StateMachine<State, Trigger> StateMachine { get; }
     public GroundedState GroundedState { get; }
